@@ -1,27 +1,27 @@
 package at.ac.hcw.Game;
-import java.util.Scanner;
-import at.ac.hcw.Game.Poker_Chips.ChooseHowManyPlayerP;
-import at.ac.hcw.Game.Black_Jack.BlackjackRules;
 
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public class Choice {
+import java.io.IOException;
 
-    // Startbildschirm und Spielauswahl
-    public static void start() {
-        Scanner sc = new Scanner(System.in);
+public class Choice extends Application {
 
-        System.out.println("Start Blackjack (b) or Pokerchips (p): ");
+    @Override
+    public void start(Stage stage) throws IOException {
+        // This loads the FXML file you created in Step 1
+        FXMLLoader fxmlLoader = new FXMLLoader(Choice.class.getResource("Choice.fxml"));
 
-        String input = sc.nextLine().trim().toLowerCase();
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Casino Game Selection");
+        stage.setScene(scene);
+        stage.show();
+    }
 
-        while (!input.equals("p") && !input.equals("b")) {
-            System.out.println("Bitte 'b' oder 'p' eingeben:");
-            input = sc.nextLine().trim().toLowerCase();
-        }
-
-        switch (input) {
-            case "p" -> new ChooseHowManyPlayerP(sc).run();
-            case "b" -> BlackjackRules.startGame();
-        }
+    public static void main(String[] args) {
+        // This launches the JavaFX lifecycle
+        launch();
     }
 }

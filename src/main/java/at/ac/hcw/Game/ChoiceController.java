@@ -20,6 +20,6 @@ public class ChoiceController {
         System.out.println("Switching to Poker...");
         // Note: You may need to modify ChooseHowManyPlayerP
         // to no longer require a 'Scanner' object
-        new ChooseHowManyPlayerP().run();
+        //new ChooseHowManyPlayerP().run();
     }
 }
