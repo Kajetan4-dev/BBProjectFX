@@ -1,5 +1,6 @@
 package at.ac.hcw.Game.Poker_Chips;
 
+//this class is useless now I belive after PokerSetupController
 import java.util.Scanner;
 
 public class ChooseHowManyPlayerP {
@@ -12,7 +13,7 @@ public class ChooseHowManyPlayerP {
 
     public void run() {
         System.out.println("=== POKERCHIPS WIRD GESTARTET ===");
-        int noPlayer;
+        int noPlayer = 2;
         while (true) {
             System.out.print("Wie viele Spieler? (2–6): ");
             try {
