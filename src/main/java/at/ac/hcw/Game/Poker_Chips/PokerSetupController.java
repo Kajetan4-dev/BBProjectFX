@@ -1,8 +1,14 @@
 package at.ac.hcw.Game.Poker_Chips;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,12 +49,16 @@ public class PokerSetupController {
 
     @FXML
     private void handleStartGame() {
+        int startMoney;
+        int big;
+        int small;
+        String[] names;
         try {
-            int startMoney = Integer.parseInt(startingMoneyField.getText());
-            int big = Integer.parseInt(bigBlindField.getText());
-            int small = Integer.parseInt(smallBlindField.getText());
+             startMoney = Integer.parseInt(startingMoneyField.getText());
+             big = Integer.parseInt(bigBlindField.getText());
+             small = Integer.parseInt(smallBlindField.getText());
 
-            String[] names = nameFields.stream()
+            names = nameFields.stream()
                     .map(tf -> tf.getText().isEmpty() ? tf.getPromptText() : tf.getText())
                     .toArray(String[]::new);
 
@@ -57,10 +67,24 @@ public class PokerSetupController {
             pokerGame.playerSetup(names, startMoney);
 
             System.out.println("Starting Poker with " + names.length + " players...");
-            pokerGame.rounds();
+            pokerGame.startHand();
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/at/ac/hcw/Game/Poker_Chips/poker_table.fxml"));
+            Parent root = loader.load();
+
+            PokerTableController tableController = loader.getController();
+            tableController.setGame(pokerGame);
+
+            Stage stage = (Stage) startingMoneyField.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
 
         } catch (NumberFormatException e) {
             System.out.println("Please enter valid numbers for money and blinds!");
+        }catch (IOException e){
+            System.out.println("Could not load poker_table.fxml!");
+            e.printStackTrace();
         }
     }
 }

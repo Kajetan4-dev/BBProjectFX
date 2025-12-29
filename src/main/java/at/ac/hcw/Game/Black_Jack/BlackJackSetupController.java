@@ -59,7 +59,7 @@ public class BlackJackSetupController {
             pokerGame.playerSetup(names, startMoney);
 
             System.out.println("Starting Poker with " + names.length + " players...");
-            pokerGame.rounds();
+            pokerGame.startHand();
 
         } catch (NumberFormatException e) {
             System.out.println("Please enter valid numbers for money and blinds!");
