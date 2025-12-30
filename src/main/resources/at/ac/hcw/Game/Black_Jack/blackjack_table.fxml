@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="at.ac.hcw.Game.Black_Jack.BlackJackTableController">
+
+    <Label text="Blackjack Tisch" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+
+    <HBox spacing="30" alignment="CENTER">
+        <!-- Player 1 -->
+        <VBox spacing="10" alignment="CENTER">
+            <Label fx:id="player1NameLabel" text="Player 1" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <Label fx:id="player1ChipsLabel" text="Chips: 0"/>
+            <Label fx:id="player1BidLabel" text="Bid: 0"/>
+            <Label fx:id="player1TotalLabel" text="Total: 0"/>
+            <TextField fx:id="player1BidField" promptText="Bid setzen" maxWidth="80"/>
+            <Button fx:id="player1SetBidButton" text="Set Bid" onAction="#handleSetBidPlayer1"/>
+            <Button fx:id="player1HitButton" text="Hit" onAction="#handleHit" disable="true"/>
+            <Button fx:id="player1StandButton" text="Stand" onAction="#handleStand" disable="true"/>
+        </VBox>
+
+        <!-- Player 2 -->
+        <VBox spacing="10" alignment="CENTER">
+            <Label fx:id="player2NameLabel" text="Player 2" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <Label fx:id="player2ChipsLabel" text="Chips: 0"/>
+            <Label fx:id="player2BidLabel" text="Bid: 0"/>
+            <Label fx:id="player2TotalLabel" text="Total: 0"/>
+            <TextField fx:id="player2BidField" promptText="Bid setzen" maxWidth="80"/>
+            <Button fx:id="player2SetBidButton" text="Set Bid" onAction="#handleSetBidPlayer2"/>
+            <Button fx:id="player2HitButton" text="Hit" onAction="#handleHit" disable="true"/>
+            <Button fx:id="player2StandButton" text="Stand" onAction="#handleStand" disable="true"/>
+        </VBox>
+    </HBox>
+
+    <Separator/>
+
+    <VBox spacing="10" alignment="CENTER">
+        <Label text="Dealer" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+        <Label fx:id="dealerTotalLabel" text="Dealer Total: 0"/>
+        <!-- Dealer-Karten-Anzeige hier -->
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+        <Button fx:id="newRoundButton" text="Neue Runde starten" onAction="#handleNewRound" visible="false"/>
+    </VBox>
+
+    <!-- Button für neue Runde unten rechts -->
+    <!--<HBox alignment="BOTTOM_RIGHT">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+        <Button fx:id="newRoundButton" text="Neue Runde starten" onAction="#handleNewRound" visible="false"/>
+    </HBox>-->
+
+
+</VBox>
