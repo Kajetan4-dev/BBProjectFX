@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
@@ -13,7 +14,7 @@
 
     <!-- Oben große Überschrift mit schöner Schrift -->
     <top>
-        <HBox alignment="CENTER" style="-fx-padding: 20;">
+        <HBox alignment="CENTER" style="-fx-padding: 50;">
             <Label text="Spielauswahl"
                    style="-fx-font-family: 'Segoe Script', cursive; -fx-font-size: 48px; -fx-text-fill: white; -fx-font-weight: bold;"/>
         </HBox>
@@ -21,13 +22,24 @@
 
     <!-- Mitte: Buttons für Blackjack und Pokerchips -->
     <center>
-        <VBox spacing="30" alignment="CENTER" style="-fx-padding: 30;">
-            <Button text="Blackjack spielen" fx:id="blackjackBtn" onAction="#handleBlackjackStart"
-                    style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 15; -fx-cursor: hand;"/>
-            <Button text="Poker Chips spielen" fx:id="pokerchipsBtn" onAction="#handlePokerchipsStart"
-                    style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 15; -fx-cursor: hand;"/>
+        <VBox spacing="30" alignment="center" style="-fx-padding: 30;">
+            <HBox spacing="15" alignment="center" style="-fx-pref-width: 100%;">
+
+                <!-- Linke Hälfte: zwei Buttons nebeneinander -->
+                <HBox spacing="15" alignment="center" style="-fx-pref-width: 50%;">
+                    <Button text="Blackjack spielen" fx:id="blackjackBtn" onAction="#handleBlackjackStart"
+                            style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-background-radius: 15; -fx-cursor: hand; -fx-min-width: 400px; -fx-min-height: 60px;"/>
+                    <Button text="Poker Chips spielen" fx:id="pokerchipsBtn" onAction="#handlePokerchipsStart"
+                            style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-background-radius: 15; -fx-cursor: hand; -fx-min-width: 400px; -fx-min-height: 60px;"/>
+                </HBox>
+
+                <!-- Rechte Hälfte leer -->
+                <Region style="-fx-pref-width: 50%;"/>
+            </HBox>
+
+            <!-- Beenden-Button zentriert unter den beiden -->
             <Button text="Beenden" onAction="#handleExit"
-                    style="-fx-font-size: 20px; -fx-background-radius: 15; -fx-cursor: hand;"/>
+                    style="-fx-font-size: 24px; -fx-background-radius: 15; -fx-cursor: hand; -fx-min-width: 150px; -fx-min-height: 50px;"/>
         </VBox>
     </center>
 
