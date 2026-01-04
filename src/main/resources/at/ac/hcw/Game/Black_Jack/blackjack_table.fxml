@@ -4,35 +4,30 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox spacing="20" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+<VBox spacing="10" alignment="TOP_CENTER" prefWidth="1200" prefHeight="800" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="at.ac.hcw.Game.Black_Jack.BlackJackTableController">
 
-    <Label text="Blackjack Tisch" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+    <Label text="Blackjack Table" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-padding: 15 0 0 0; -fx-text-fill: black;"/>
 
-    <!-- Button für neue Runde rechts -->
+    <Label fx:id="roundLabel" text="Round: 1" style="-fx-font-size: 18px; -fx-text-fill: #555; -fx-font-weight: bold;"/>
 
-    <HBox alignment="TOP_RIGHT">
-        <padding>
-            <Insets top="10" right="10" bottom="10" left="10"/>
-        </padding>
-        <Button fx:id="newRoundButton" text="Neue Runde starten" onAction="#handleNewRound" visible="true"/>
-    </HBox>
+    <ScrollPane fitToHeight="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+        <content>
+            <HBox fx:id="playerContainer" spacing="20" alignment="CENTER" style="-fx-padding: 10;" />
+        </content>
+    </ScrollPane>
+
+    <Separator/>
 
     <VBox spacing="10" alignment="CENTER">
-        <Label text="Dealer" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-        <Label fx:id="dealerTotalLabel" text="Dealer Total: 0"/>
-        <!-- Dealer-Karten-Anzeige hier -->
+        <Label text="Dealer" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;"/>
+        <HBox fx:id="dealerCardContainer" spacing="8" alignment="CENTER" style="-fx-min-height: 70;"/>
+        <Label fx:id="dealerTotalLabel" text="Dealer Total: 0" style="-fx-font-size: 16px; -fx-text-fill: black;"/>
+
+        <padding>
+            <Insets top="5" right="10" bottom="20" left="10"/>
+        </padding>
+        <Button fx:id="newRoundButton" text="Start New Round" onAction="#handleNewRound" visible="false"
+                style="-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-padding: 10 25; -fx-cursor: hand;"/>
     </VBox>
-
-    <Separator/>
-
-    <HBox fx:id="playersContainer" spacing="30" alignment="CENTER" />
-
-    <Separator/>
-
-
-
-
-
-
 </VBox>

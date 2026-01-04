@@ -1,209 +1,214 @@
 package at.ac.hcw.Game.Black_Jack;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-
-import java.io.IOException;
+import javafx.scene.layout.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlackJackTableController {
 
     private BlackjackRules game;
+    private int roundCounter = 1; // Zähler für die Runden
 
-    @FXML
-    private HBox playersContainer;
+    @FXML private Label roundLabel;
+    @FXML private HBox playerContainer;
+    @FXML private Label dealerTotalLabel;
+    @FXML private HBox dealerCardContainer;
+    @FXML private Button newRoundButton;
 
-    @FXML
-    private Label dealerTotalLabel;
-
-    @FXML
-    private Button newRoundButton;
-
-    // Hilfsklasse für Spieler-UI Elemente
-    private static class PlayerUI {
-        Label nameLabel;
-        Label chipsLabel;
-        Label bidLabel;
-        Label totalLabel;
-        TextField bidField;
-        Button setBidButton;
-        Button hitButton;
-        Button standButton;
-        HBox cardsContainer;  // *** Geändert: Container für Karten hinzugefügt
-    }
-
-    private final List<PlayerUI> playerUIs = new ArrayList<>();
+    private List<Label> chipsLabels = new ArrayList<>();
+    private List<Label> bidLabels = new ArrayList<>();
+    private List<HBox> cardContainers = new ArrayList<>();
+    private List<Label> totalLabels = new ArrayList<>();
+    private List<TextField> bidFields = new ArrayList<>();
+    private List<Button> setBidButtons = new ArrayList<>();
+    private List<Button> hitButtons = new ArrayList<>();
+    private List<Button> standButtons = new ArrayList<>();
 
     public void setGame(BlackjackRules game) {
         this.game = game;
-        initUI();
-        newRoundButton.setVisible(false);
+        createPlayerUI();
+        updateUI();
     }
 
-    private void initUI() {
-        playersContainer.getChildren().clear();
-        playerUIs.clear();
-
+    private void createPlayerUI() {
+        playerContainer.getChildren().clear();
+        clearLists();
         Player[] players = game.getPlayers();
 
         for (int i = 0; i < players.length; i++) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Black_Jack/player_panel.fxml"));
-                VBox playerPanel = loader.load();
+            final int index = i;
+            VBox pBox = new VBox(5); // Sehr kompaktes Spacing (5 statt 12)
+            pBox.setAlignment(Pos.CENTER);
+            pBox.setMinWidth(170);
+            pBox.setStyle("-fx-border-color: #dcdcdc; -fx-border-width: 2; -fx-border-radius: 15; -fx-background-color: #fcfcfc; -fx-background-radius: 15; -fx-padding: 10;");
 
-                PlayerUI ui = new PlayerUI();
-                ui.nameLabel = (Label) playerPanel.lookup("#playerNameLabel");
-                ui.chipsLabel = (Label) playerPanel.lookup("#playerChipsLabel");
-                ui.bidLabel = (Label) playerPanel.lookup("#playerBidLabel");
-                ui.totalLabel = (Label) playerPanel.lookup("#playerTotalLabel");
-                ui.bidField = (TextField) playerPanel.lookup("#playerBidField");
-                ui.setBidButton = (Button) playerPanel.lookup("#setBidButton");
-                ui.hitButton = (Button) playerPanel.lookup("#hitButton");
-                ui.standButton = (Button) playerPanel.lookup("#standButton");
-                ui.cardsContainer = (HBox) playerPanel.lookup("#cardsContainer"); // *** Geändert: Karten-Container
+            Label name = new Label(players[index].getName());
+            name.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: black;");
 
-                Player player = players[i];
-                ui.nameLabel.setText(player.getName());
-                ui.chipsLabel.setText("Chips: " + player.getChips());
-                ui.bidLabel.setText("Bid: " + player.getBid());
-                ui.totalLabel.setText("Total: " + player.getTotal());
+            Label chips = new Label("Chips: " + players[index].getChips());
+            chips.setStyle("-fx-text-fill: black;");
 
-                ui.hitButton.setDisable(true);
-                ui.standButton.setDisable(true);
+            Label bid = new Label("Bid: 0");
+            bid.setStyle("-fx-text-fill: black;");
 
-                final int playerIndex = i;
+            HBox cardsHBox = new HBox(3);
+            cardsHBox.setAlignment(Pos.CENTER);
+            cardsHBox.setMinHeight(60);
 
-                ui.setBidButton.setOnAction(e -> setBidForPlayer(playerIndex));
-                ui.hitButton.setOnAction(e -> {
-                    game.hit();
-                    updateUI();
-                    checkIfRoundOver();
-                });
-                ui.standButton.setOnAction(e -> {
-                    game.stand();
-                    updateUI();
-                    checkIfRoundOver();
-                });
+            Label total = new Label("Total: 0");
+            total.setStyle("-fx-text-fill: black;");
 
-                playerUIs.add(ui);
-                playersContainer.getChildren().add(playerPanel);
+            TextField bidIn = new TextField();
+            bidIn.setPromptText("Einsatz...");
+            bidIn.setMaxWidth(85);
+            bidIn.setStyle("-fx-alignment: center; -fx-text-fill: black;");
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Button setBtn = createBlackButton("Set Bid");
+            setBtn.setDisable(false);
+            setBtn.setOnAction(e -> setBidForPlayer(index, bidIn));
+
+            Button hitBtn = createBlackButton("Hit");
+            Button standBtn = createBlackButton("Stand");
+
+            hitBtn.setOnAction(e -> { game.hit(); updateUI(); checkIfRoundOver(); });
+            standBtn.setOnAction(e -> { game.stand(); updateUI(); checkIfRoundOver(); });
+
+            chipsLabels.add(chips); bidLabels.add(bid); cardContainers.add(cardsHBox);
+            totalLabels.add(total); bidFields.add(bidIn); setBidButtons.add(setBtn);
+            hitButtons.add(hitBtn); standButtons.add(standBtn);
+
+            pBox.getChildren().addAll(name, chips, bid, cardsHBox, total, bidIn, setBtn, hitBtn, standBtn);
+            playerContainer.getChildren().add(pBox);
         }
-
-        dealerTotalLabel.setText("Dealer Total: " + game.getDealer().getTotal());
     }
 
     private void updateUI() {
+        roundLabel.setText("Round: " + roundCounter);
+        Player[] players = game.getPlayers();
+        Dealer dealer = game.getDealer();
+
+        for (int i = 0; i < players.length; i++) {
+            chipsLabels.get(i).setText("Chips: " + players[i].getChips());
+            bidLabels.get(i).setText("Bid: " + players[i].getBid());
+
+            cardContainers.get(i).getChildren().clear();
+            if (players[i].getBid() > 0) {
+                for (int val : players[i].getCards()) {
+                    if (val != 0) cardContainers.get(i).getChildren().add(createCardUI(val, false));
+                }
+                totalLabels.get(i).setText("Total: " + BlackjackRules.calculatehand(players[i].getCards()));
+            }
+        }
+
+        dealerCardContainer.getChildren().clear();
+        int[] dCards = dealer.getCards();
+        for (int j = 0; j < dCards.length; j++) {
+            if (dCards[j] != 0) {
+                boolean hidden = (game.isRoundActive() && j == 1 && dealer.isCardHidden());
+                dealerCardContainer.getChildren().add(createCardUI(dCards[j], hidden));
+            }
+        }
+        dealerTotalLabel.setText(game.isRoundActive() ? "Dealer Total: ?" : "Dealer Total: " + BlackjackRules.calculatehand(dCards));
+
+        updateButtons();
+    }
+
+    private void updateButtons() {
+        int curr = game.getCurrentPlayerIndex();
+        boolean active = game.isRoundActive();
         Player[] players = game.getPlayers();
 
         for (int i = 0; i < players.length; i++) {
-            Player player = players[i];
-            PlayerUI ui = playerUIs.get(i);
-
-            ui.chipsLabel.setText("Chips: " + player.getChips());
-            ui.bidLabel.setText("Bid: " + player.getBid());
-            ui.totalLabel.setText("Total: " + player.getTotal());
-
-            ui.cardsContainer.getChildren().clear();
-            int[] cards = player.getCards();
-
-            for (Integer card : cards) {
-                if (card != null && card > 0) { // Nur echte Karten anzeigen
-                    String cardStr = convertCardValue(card);
-                    Label cardLabel = new Label(cardStr);
-                    cardLabel.setStyle("-fx-border-color: black; -fx-padding: 5px; -fx-background-color: white; -fx-font-weight: bold;");
-                    ui.cardsContainer.getChildren().add(cardLabel);
-                }
-            }
-
-            int currentPlayerIndex = game.getCurrentPlayerIndex();
-
-            if (currentPlayerIndex == i) {
-                ui.hitButton.setDisable(player.getBid() <= 0 || player.isStand());
-                ui.standButton.setDisable(player.getBid() <= 0 || player.isStand());
-                ui.setBidButton.setDisable(player.getBid() > 0);
-                ui.bidField.setDisable(player.getBid() > 0);
+            // Hit/Stand komplett aus, solange nicht alle geboten haben
+            if (!active) {
+                hitButtons.get(i).setDisable(true);
+                standButtons.get(i).setDisable(true);
             } else {
-                ui.hitButton.setDisable(true);
-                ui.standButton.setDisable(true);
-                ui.setBidButton.setDisable(true);
-                ui.bidField.setDisable(true);
+                hitButtons.get(i).setDisable(i != curr);
+                standButtons.get(i).setDisable(i != curr);
             }
+            setBidButtons.get(i).setDisable(players[i].getBid() > 0);
+            bidFields.get(i).setDisable(players[i].getBid() > 0);
         }
-
-        dealerTotalLabel.setText("Dealer Total: " + game.getDealer().getTotal());
     }
 
-    private void setBidForPlayer(int playerIndex) {
-        PlayerUI ui = playerUIs.get(playerIndex);
+    private void setBidForPlayer(int index, TextField field) {
         try {
-            int bid = Integer.parseInt(ui.bidField.getText());
-            Player player = game.getPlayers()[playerIndex];
-
-            if (bid <= 0) {
-                showAlert("Bitte eine positive Zahl für den Einsatz eingeben.");
-                return;
+            int val = Integer.parseInt(field.getText());
+            Player p = game.getPlayers()[index];
+            if (val > 0 && val <= p.getChips()) {
+                p.setBid(val);
+                boolean allReady = true;
+                for (Player pl : game.getPlayers()) {
+                    if (pl.getBid() <= 0) { allReady = false; break; }
+                }
+                if (allReady && !game.isRoundActive()) game.startRound();
+                updateUI();
             }
-            if (bid > player.getChips()) {
-                showAlert("Du hast nicht genug Chips für diesen Einsatz.");
-                return;
-            }
+        } catch (Exception e) {}
+    }
 
-            player.setBid(bid);
-            updateUI();
+    private Label createCardUI(int value, boolean hidden) {
+        Label card = new Label(hidden ? "?" : String.valueOf(value));
+        card.setPrefSize(35, 50);
+        card.setAlignment(Pos.CENTER);
+        card.setStyle(hidden ?
+                "-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-weight: bold;" :
+                "-fx-background-color: white; -fx-text-fill: black; -fx-border-color: #888; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-weight: bold;");
+        return card;
+    }
 
-        } catch (NumberFormatException e) {
-            showAlert("Bitte eine gültige Zahl eingeben.");
-        }
+    private Button createBlackButton(String text) {
+        Button btn = new Button(text);
+        btn.setMinWidth(100);
+        btn.setStyle("-fx-text-fill: black; -fx-font-weight: bold; -fx-cursor: hand;");
+        btn.setDisable(true);
+        return btn;
     }
 
     private void checkIfRoundOver() {
         if (!game.isRoundActive()) {
-            showAlert("Runde beendet!");
-            disableAllPlayerButtons();
             newRoundButton.setVisible(true);
+            showWinnerAlert();
         }
     }
 
-    private void disableAllPlayerButtons() {
-        for (PlayerUI ui : playerUIs) {
-            ui.hitButton.setDisable(true);
-            ui.standButton.setDisable(true);
-            ui.setBidButton.setDisable(true);
-            ui.bidField.setDisable(true);
+    private void showWinnerAlert() {
+        StringBuilder msg = new StringBuilder("Round " + roundCounter + " Results:\n\n");
+        int dTotal = BlackjackRules.calculatehand(game.getDealer().getCards());
+        for (Player p : game.getPlayers()) {
+            if (p.getBid() <= 0) continue;
+            int pTotal = BlackjackRules.calculatehand(p.getCards());
+            msg.append(p.getName()).append(": ");
+            if (pTotal > 21) msg.append("Bust! -").append(p.getBid()).append(" Chips");
+            else if (dTotal > 21 || pTotal > dTotal) msg.append("Won! +").append(p.getBid()).append(" Chips");
+            else if (pTotal < dTotal) msg.append("Too Low! -").append(p.getBid()).append(" Chips");
+            else msg.append("Push (Tie)");
+            msg.append("\n");
         }
+        showAlert("Round Over", msg.toString());
     }
 
-    @FXML
-    private void handleNewRound() {
+    @FXML private void handleNewRound() {
+        roundCounter++; // Nächste Runde
         game.resetRound();
-        game.startRound();
-        initUI();
+        createPlayerUI();
         newRoundButton.setVisible(false);
+        updateUI();
     }
 
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    private void clearLists() {
+        chipsLabels.clear(); bidLabels.clear(); cardContainers.clear();
+        totalLabels.clear(); bidFields.clear(); setBidButtons.clear();
+        hitButtons.clear(); standButtons.clear();
     }
 
-    // Hilfsmethode, um Kartenzahlen in Strings zu verwandeln
-    private String convertCardValue(int card) {
-        switch (card) {
-            case 1:  return "A";
-            case 11: return "J";
-            case 12: return "Q";
-            case 13: return "K";
-            default: return String.valueOf(card);
-        }
+    private void showAlert(String title, String content) {
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setTitle(title); a.setHeaderText(null); a.setContentText(content);
+        a.showAndWait();
     }
 }
