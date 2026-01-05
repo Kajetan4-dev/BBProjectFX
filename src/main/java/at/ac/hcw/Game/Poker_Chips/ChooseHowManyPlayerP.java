@@ -84,7 +84,7 @@ public class ChooseHowManyPlayerP {
 
 
         pokerGame.playerSetup(names, startingMoney);
-        pokerGame.rounds();
+        pokerGame.startHand();
     }
 }
 

@@ -1,5 +1,4 @@
 package at.ac.hcw.Game.Poker_Chips;
-import java.util.Scanner;
 
 
 public class PokerRules {
@@ -8,6 +7,8 @@ public class PokerRules {
     private final int bigBlind;
     private final int smallBlind;
     private int currentBet;
+    private int currentPlayerIndex;
+    private boolean[] folded;
 
     public PokerRules(int noPlayer, int bigBlind, int smallBlind) {
         this.players = new PokerChipsPlayer[noPlayer];
@@ -15,6 +16,8 @@ public class PokerRules {
         this.bigBlind = bigBlind;
         this.smallBlind = smallBlind;
         this.currentBet = 0;
+        this.folded = new boolean[noPlayer];
+        this.currentPlayerIndex = 0;
         //big blind small blind sind falsch
 
     }
@@ -25,123 +28,138 @@ public class PokerRules {
             players[i] = new PokerChipsPlayer(playerName[i], startingMoney);
         }
         players[0].setBigBlind(0);
-        players[1].setBigBlind(1);
-    }
-
-    public void rounds() {
-        int[] ausgeschieden = new int[players.length];
-        Scanner sc = new Scanner(System.in);
-        boolean preFlop = true;
-        for (int i = 0; i < 4; i++) {
-            switch (i) {
-                case 0:
-                    System.out.println("=== PREFLOP ===");
-                    break;
-                case 1:
-                    System.out.println("=== FLOP ===");
-                    break;
-                case 2:
-                    System.out.println("=== TURN ===");
-                    break;
-                case 3:
-                    System.out.println("=== RIVERS ===");
-                    break;
-            }
-            int winnerIndex = bettingRound(ausgeschieden, sc, preFlop);
-            preFlop = false;
-            if (winnerIndex == -1){
-                while (!checkEveryoneBetSame(ausgeschieden)) {
-                    if (winnerIndex >= 0) {
-                        break;
-                    }
-                    bettingRound(ausgeschieden, sc, false);
-                }
-            }
-            if (winnerIndex > -1){
-                break;
-            }
+        if(players.length> 1){
+            players[1].setBigBlind(1);
         }
 
+        folded = new boolean[players.length];
+        currentPlayerIndex = 0;
+    }
 
-        int winnerIndex = checkWon(ausgeschieden);
 
-
-        int newMoney = players[winnerIndex].getPlayerMoney() + pot;
-        players[winnerIndex].setPlayerMoney(newMoney);
-        System.out.println("Player " + players[winnerIndex].getName() + " wins the pot of " + pot + "chips!");
+    public void startHand(){//ersetzt rounds kümmert sich um spielrunde + input + output
         pot = 0;
+        currentBet = 0;
+        currentPlayerIndex = 0;
+        folded = new boolean[players.length];
 
+        for(PokerChipsPlayer p : players){
+            p.setBet();
+        }
+
+        postBlinds();
+    }
+
+    private void postBlinds(){
+        //Big Blind Spieler 0
+        players[0].setBet(bigBlind);
+        players[0].setPlayerMoney(players[0].getPlayerMoney()-bigBlind);
+        pot += bigBlind;
+
+        //Small Blind Spieler 1
+        if (players.length > 1){
+            players[1].setBet(smallBlind);
+            players[1].setPlayerMoney(players[1].getPlayerMoney()-smallBlind);
+            pot += smallBlind;
+        }
+
+        currentBet = bigBlind;
+    }
+
+    public void callOrCheck(){// check wenn nichts dazuzuzahlen ist call wenn nachgezahlt werden muss dann nächster spieler
+        PokerChipsPlayer p = players[currentPlayerIndex];
+        int toCall = currentBet - p.getBet();//wv muss gezahlt werden um mitzuspielen
+
+        if (toCall > 0){
+            pot += toCall;
+            p.setPlayerMoney(p.getPlayerMoney()-toCall);
+            p.setBet(toCall);
+        }
+        if (isOnlyOnePlayerLeft()){
+            awardPotToLastPlayer();
+            endHandAndPrepareNext();
+            return;
+        }
+        advanceToNextPlayer();
+    }
+
+    public void raise(int raiseAmount){//zahlt akutellen bet auf dann Raise currentBet steigt alle andern müssen callen
+        if(raiseAmount <= 0) return;
+
+        PokerChipsPlayer p = players[currentPlayerIndex];
+        int toCall = currentBet - p.getBet();
+        int total = toCall + raiseAmount;
+
+        pot += total;
+        p.setPlayerMoney(p.getPlayerMoney() - total);
+        p.setBet(total);
+        currentBet += raiseAmount;
+
+        if (isOnlyOnePlayerLeft()){
+            awardPotToLastPlayer();
+            endHandAndPrepareNext();
+            return;
+        }
+        advanceToNextPlayer();
+    }
+
+    public void fold(){// wenn true = spieler ist raus
+        folded[currentPlayerIndex] = true;
+
+        if (isOnlyOnePlayerLeft()){
+            awardPotToLastPlayer();
+            endHandAndPrepareNext();
+            return;
+        }
+        advanceToNextPlayer();
+    }
+
+    private void advanceToNextPlayer(){
+        for (int i = 1; i <= players.length; i++) {
+            int next = (currentPlayerIndex + i) % players.length;// von hinten wieder bei 0
+
+            if (!folded[next]) {
+                currentPlayerIndex = next;
+                return;
+            }
+        }
+    }
+
+    private boolean isOnlyOnePlayerLeft(){// zählt spieler die nicht gefoldet sind vorbei wenn alle bis auf einen gefoldet haben
+        int active = 0;
+        for(boolean f : folded){
+            if (!f)active++;
+        }
+        return active == 1;
+    }
+
+    private int getLastActivePlayerIndex(){// "findet" den letzten aktiven spielerindex
+        for (int i = 0; i < folded.length; i++){
+            if (!folded[i]) return i;
+        }
+        return -1;
+    }
+
+    private void awardPotToLastPlayer(){ // zahlt POt an letzten Spieler
+        int winnerIndex = getLastActivePlayerIndex();
+        if(winnerIndex == -1)return;
+
+        PokerChipsPlayer winner = players[winnerIndex];
+        winner.setPlayerMoney(winner.getPlayerMoney() + pot);
+        pot = 0;
+    }
+
+    public void endHandAndPrepareNext(){// beendet eine Hand bereitet die nächste vor
         swapBlinds();
 
-        //check if a player leaves the game
-        System.out.println("\\n Will a player leave the table? (yes/no)");
-        String leave = sc.nextLine();
-
-        if (leave.equalsIgnoreCase("yes")) {
-            System.out.println(" Which player is leaving the table? (index 0 - " + (players.length - 1) + ")");
-            int leaveIndex = sc.nextInt();
-            sc.nextLine();
-            if (leaveIndex >= 0 && leaveIndex < players.length) {
-                PokerChipsPlayer[] newPlayers = new PokerChipsPlayer[players.length - 1];
-                int idx = 0;
-                for (int i = 0; i < players.length; i++) {
-                    if (i != leaveIndex) {
-                        newPlayers[idx] = players[i];
-                        idx++;
-                    }
-                }
-                players = newPlayers;
-                System.out.println("Player removed.");
-            } else {
-                System.out.println("Invalid. No Player removed.");
-            }
+        for (PokerChipsPlayer p : players) p.setBigBlind(2);
+        players[0].setBigBlind(0);
+        if (players.length > 1){
+            players[1].setBigBlind(1);
         }
-        //check if a player wants to join
-        System.out.println("\\nWill a new player join the table? (yes/no)");
-        String add = sc.nextLine();
-
-        if (add.equalsIgnoreCase("yes")) {
-            if (players.length >= 6) {
-                System.out.println("Table is full! Maximum of 6 players allowed.");
-            } else {
-                System.out.println("Enter new player name: ");
-                String newName = sc.nextLine();
-
-                System.out.println("Enter starting money:");
-                newMoney = sc.nextInt();
-                sc.nextLine();
-
-                PokerChipsPlayer[] newPlayers = new PokerChipsPlayer[players.length + 1];
-
-                for (int i = 0; i < players.length; i++) {
-                    newPlayers[i] = players[i];
-                }
-                newPlayers[players.length] = new PokerChipsPlayer(newName,newMoney);
-                players = newPlayers;
-
-                System.out.println("Player added." + newName);
-            }
-        }
+        startHand();
     }
 
-    private boolean checkEveryoneBetSame(int[] ausgeschieden) {
-
-        for (int i = 0; i < players.length - 1; i++) {
-            if (ausgeschieden[i] == 1) {
-                continue;
-            }
-            if (players[i].getBet() != currentBet) {
-                return false;
-            }
-        }
-        for (PokerChipsPlayer player : players) {
-            player.setBet();
-        }
-        currentBet = 0;
-
-        return true;
-
-    }
 
     private void swapBlinds() {
         PokerChipsPlayer[] temp = new PokerChipsPlayer[players.length];
@@ -158,96 +176,27 @@ public class PokerRules {
             players[i] = temp[i];
         }
     }
-
-    public int checkWon(int[] ausgeschieden) {
-        int counter = 0;
-        for (int j : ausgeschieden) {
-            counter += j;
-        }
-        if (ausgeschieden.length == counter + 1) {
-            for (int i = 0; i < ausgeschieden.length; i++) {
-                if (ausgeschieden[i] == 0) {
-                    return i;
-                }
-            }
-        }
-        return -1;
-
+    public int getPot(){
+        return pot;
     }
 
-    private int bettingRound(int[] ausgeschieden, Scanner sc, boolean preFlop) {
-        while (true) {
-            for (
-                    int i = 0;
-                    i < players.length; i++) {
+    public int getCurrentBet() {
+        return currentBet;
+    }
 
-                if (ausgeschieden[i] == 1) {
-                    continue;
-                }
-                if (preFlop && i == 0) {
-                    players[i].setBet(bigBlind);
-                    currentBet += bigBlind;
-                    players[i].setPlayerMoney(players[i].getPlayerMoney() - bigBlind);
-                    this.pot += bigBlind;
-                }
-                if (preFlop && i == 1) {
-                    players[i].setBet(smallBlind);
-                    players[i].setPlayerMoney(players[i].getPlayerMoney() - smallBlind);
-                    this.pot += smallBlind;
-                }
-                System.out.println("\\nPlayer " + players[i].getName() + ", Money: " + players[i].getPlayerMoney());
+    public int getCurrentPlayerIndex() {
+        return currentPlayerIndex;
+    }
 
-                if (currentBet == players[i].getBet() && players[i].getBet() > currentBet) {
-                    System.out.println("Do you want to Check (C), Raise (R) or Fold(F), current Bet: " + currentBet);
-                } else {
-                    System.out.println("Do you want to Call(C), Raise (R), Fold(F), current Bet: " + currentBet);
-                }
-                String CRF = "";
-                while (!"C".equals(CRF) && !CRF.equals("R") && !CRF.equals("F")) CRF = sc.nextLine();
+    public PokerChipsPlayer getCurrentPlayer(){
+        return players[currentPlayerIndex];
+    }
 
+    public PokerChipsPlayer[] getPlayers(){
+        return players;
+    }
 
-                if (CRF.equals("R")) {
-                    int Bid = sc.nextInt();
-                    players[i].setBet(Bid);
-                    currentBet += Bid;
-                    players[i].setPlayerMoney(players[i].getPlayerMoney() - (Bid));
-                    this.pot += Bid;
-                    System.out.println("Player " + players[i].getName() + "Increased the pot by : " + (Bid));
-                    System.out.println("Pot is now: " + pot);
-                }
-                if (CRF.equals("F")) {
-                    System.out.println("Player " + players[i].getName() + " folded");
-                    ausgeschieden[i] = 1;
-                    int winnerIndex = checkWon(ausgeschieden);
-                    if (winnerIndex != -1) {
-                        return winnerIndex;
-                    }
-                    continue;
-                    //check folds
-
-                }
-
-                if (CRF.equals("C")) {
-                    if (players[i].getBet() == currentBet && players[i].getBet() > currentBet) {
-                        System.out.println("Player " + players[i].getName() + " checked ");
-                    } else {
-                        pot += currentBet - players[i].getBet();
-                        players[i].setPlayerMoney(players[i].getPlayerMoney() - (currentBet - players[i].getBet()));
-                        players[i].setBet(currentBet - players[i].getBet());
-                        System.out.println("Player " + players[i].getName() + " called ");
-
-                    }
-                }
-            }
-            System.out.println("Do you want to continue betting?? (Yes, No)");
-            String CB = "";
-            while (!CB.equals("Yes") && !CB.equals("No")) {
-                CB = sc.nextLine();
-            }
-            if (CB.equals("No")) {
-                break;
-            }
-        }
-        return -1;
+    public boolean isFolded(int i){
+        return folded[i];
     }
 }
