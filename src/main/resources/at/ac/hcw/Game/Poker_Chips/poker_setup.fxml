@@ -4,35 +4,53 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox spacing="15" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="at.ac.hcw.Game.Poker_Chips.PokerSetupController">
-    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+<VBox spacing="15" alignment="TOP_CENTER"
+      xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="at.ac.hcw.Game.Poker_Chips.PokerSetupController"
+      style="-fx-background-color: #f5f0e6; -fx-border-color: black; -fx-border-width: 1;"
+      prefWidth="1000" prefHeight="550">
 
-    <Label text="Poker Game Setup" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
 
-    <HBox spacing="10" alignment="CENTER">
-        <Label text="Start Chips:"/>
-        <TextField fx:id="startingMoneyField" text="1000" prefWidth="80"/>
+    <!-- Title -->
+    <Label text="Wie viele Spieler?"
+           style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+
+    <!-- Blinds Input -->
+    <HBox spacing="20" alignment="CENTER">
+        <VBox>
+            <Label text="Big Blind"/>
+            <TextField fx:id="bigBlindField" promptText="50"/>
+        </VBox>
+        <VBox>
+            <Label text="Small Blind"/>
+            <TextField fx:id="smallBlindField" promptText="25"/>
+        </VBox>
     </HBox>
 
-    <Separator/>
+    <!-- Top buttons: Add/Remove/Start Game -->
+    <HBox spacing="20" alignment="CENTER">
 
-    <Label text="Players (2-6):"/>
-    <VBox fx:id="playerListContainer" spacing="10" alignment="CENTER" />
+        <Button text="Spieler hinzufügen"
+                onAction="#handleAddPlayer"
+                style="-fx-border-color: green; -fx-border-width: 2; -fx-font-weight: bold;"/>
 
-    <HBox spacing="10" alignment="CENTER">
-        <Button text="+ Add Player" onAction="#handleAddPlayer"/>
-        <Button text="- Remove" onAction="#handleRemovePlayer"/>
+        <Button text="Spieler entfernen"
+                onAction="#handleRemovePlayer"
+                style="-fx-border-color: red; -fx-border-width: 2; -fx-font-weight: bold;"/>
+
+        <Button text="Spiel starten"
+                onAction="#handleStartGame"
+                style="-fx-border-color: green; -fx-border-width: 2; -fx-font-weight: bold;"/>
     </HBox>
 
-    <Separator/>
+    <!-- Player cards container: two columns -->
+    <HBox spacing="20" alignment="TOP_CENTER" style="-fx-padding: 20;">
+        <VBox fx:id="leftColumn" spacing="15"/>
+        <VBox fx:id="rightColumn" spacing="15"/>
+    </HBox>
 
-    <GridPane vgap="10" hgap="10" alignment="CENTER">
-        <Label text="Big Blind:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <TextField fx:id="bigBlindField" text="50" prefWidth="60" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-        <Label text="Small Blind:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <TextField fx:id="smallBlindField" text="20" prefWidth="60" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-    </GridPane>
-
-    <Button text="START GAME" onAction="#handleStartGame" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;"/>
 </VBox>

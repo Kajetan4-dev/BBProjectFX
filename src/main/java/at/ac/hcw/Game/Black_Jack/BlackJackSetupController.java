@@ -2,106 +2,135 @@ package at.ac.hcw.Game.Black_Jack;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlackJackSetupController {
 
-    // ===== FXML =====
-    @FXML
-    private TextField startingMoneyField;
+    @FXML private TextField startingMoneyField;
+    @FXML private HBox playerListContainer;
 
-    @FXML
-    private VBox playerListContainer;
+    // Separate lists for names and chips to keep data organized
+    private final List<TextField> nameInputFields = new ArrayList<>();
+    private final List<TextField> chipInputFields = new ArrayList<>();
 
-    // ===== Intern =====
-    private final List<TextField> nameFields = new ArrayList<>();
-
-    // ===== Initialisierung =====
     @FXML
     public void initialize() {
+        // Initialize with 2 players
         handleAddPlayer();
-        handleAddPlayer(); // mind. 2 Spieler
+        handleAddPlayer();
     }
 
-    // ===== Spieler hinzufügen =====
     @FXML
     private void handleAddPlayer() {
-        if (nameFields.size() >= 6) return;
+        if (nameInputFields.size() >= 6) return; // UI Limit
 
-        TextField tf = new TextField();
-        tf.setPromptText("Player " + (nameFields.size() + 1));
-        tf.setMaxWidth(200);
+        int playerNum = nameInputFields.size() + 1;
 
-        nameFields.add(tf);
-        playerListContainer.getChildren().add(tf);
+        // Create UI components
+        StackPane cardIcon = createCardIcon(playerNum);
+        TextField nameField = createStyledTextField("Name P" + playerNum);
+        TextField chipsField = createStyledTextField("Chips");
+
+        // Set default chips from the global setting
+        chipsField.setText(startingMoneyField.getText());
+
+        // Save references for data retrieval
+        nameInputFields.add(nameField);
+        chipInputFields.add(chipsField);
+
+        // Group everything in a centered vertical column
+        VBox playerColumn = new VBox(12, cardIcon, nameField, chipsField);
+        playerColumn.setAlignment(Pos.CENTER);
+
+        playerListContainer.getChildren().add(playerColumn);
     }
 
-    // ===== Spieler entfernen =====
     @FXML
     private void handleRemovePlayer() {
-        if (nameFields.size() <= 2) return;
-
-        TextField tf = nameFields.remove(nameFields.size() - 1);
-        playerListContainer.getChildren().remove(tf);
+        int lastIndex = playerListContainer.getChildren().size() - 1;
+        if (lastIndex >= 1) { // Ensure at least 1 player remains
+            playerListContainer.getChildren().remove(lastIndex);
+            nameInputFields.remove(lastIndex);
+            chipInputFields.remove(lastIndex);
+        }
     }
 
-    // ===== Spiel starten =====
     @FXML
     private void startGame() {
         try {
-            int startChips = Integer.parseInt(startingMoneyField.getText());
-
-            if (startChips <= 0) {
-                System.out.println("Startchips müssen > 0 sein!");
-                return;
-            }
-
-            // ===== Spieler erstellen =====
-            Player[] players = new Player[nameFields.size()];
-
-            for (int i = 0; i < nameFields.size(); i++) {
-                String name = nameFields.get(i).getText().trim();
-                if (name.isEmpty()) {
-                    name = nameFields.get(i).getPromptText();
-                }
-                players[i] = new Player(name, startChips);
-            }
-
-            // ===== Blackjack starten =====
-            BlackjackRules game = new BlackjackRules(players);
-            game.startRound();
-
-            // ===== Table laden =====
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(
-                            "/at/ac/hcw/Game/Black_Jack/blackjack_table.fxml"
-                    )
-            );
-            Parent root = loader.load();
-
-            BlackJackTableController tableController = loader.getController();
-            tableController.setGame(game);
-
-            // ===== Szene wechseln =====
-            Stage stage = (Stage) ((Node) startingMoneyField)
-                    .getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Blackjack Tisch");
-            stage.show();
-
-        } catch (NumberFormatException e) {
-            System.out.println("Bitte gültige Zahl eingeben!");
-        } catch (IOException e) {
-            e.printStackTrace();
+            Player[] players = collectPlayerData();
+            launchTableScene(players);
+        } catch (Exception e) {
+            System.err.println("Launch error: " + e.getMessage());
         }
+    }
+
+    // --- UI Helper Methods (Human Readable Styling) ---
+
+    private StackPane createCardIcon(int number) {
+        Label label = new Label(String.valueOf(number));
+        label.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+
+        StackPane card = new StackPane(label);
+        card.setPrefSize(55, 85);
+        card.setMaxWidth(55);
+        card.setStyle(
+                "-fx-background-color: white; -fx-border-color: #34495e; -fx-border-width: 2; " +
+                        "-fx-border-radius: 8; -fx-background-radius: 8; " +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);"
+        );
+        return card;
+    }
+
+    private TextField createStyledTextField(String prompt) {
+        TextField tf = new TextField();
+        tf.setPromptText(prompt);
+        tf.setPrefWidth(120);
+        tf.setMaxWidth(120);
+        tf.setAlignment(Pos.CENTER);
+        tf.setStyle("-fx-background-radius: 5;");
+        return tf;
+    }
+
+    // --- Logic Helper Methods ---
+
+    private Player[] collectPlayerData() {
+        Player[] players = new Player[nameInputFields.size()];
+        for (int i = 0; i < players.length; i++) {
+            String name = nameInputFields.get(i).getText().trim();
+            if (name.isEmpty()) name = "Player " + (i + 1);
+
+            int chips;
+            try {
+                chips = Integer.parseInt(chipInputFields.get(i).getText());
+            } catch (NumberFormatException e) {
+                chips = Integer.parseInt(startingMoneyField.getText());
+            }
+            players[i] = new Player(name, chips);
+        }
+        return players;
+    }
+
+    private void launchTableScene(Player[] players) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Black_Jack/blackjack_table.fxml"));
+        Parent root = loader.load();
+
+        BlackJackTableController controller = loader.getController();
+        controller.setGame(new BlackjackRules(players));
+
+        Stage stage = (Stage) startingMoneyField.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Blackjack Table");
     }
 }

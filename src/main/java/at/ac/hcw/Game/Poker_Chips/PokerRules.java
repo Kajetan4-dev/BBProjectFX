@@ -23,12 +23,15 @@ public class PokerRules {
     }
 
     // for each player enter every value, name etc. currentblind player wird zu bigblind initialisiere diesen array
-    public void playerSetup(String[] playerName, int startingMoney) {
+// Change your playerSetup to accept the chips array
+    public void playerSetupWithChips(String[] playerName, int[] startingMoney) {
         for (int i = 0; i < players.length; i++) {
-            players[i] = new PokerChipsPlayer(playerName[i], startingMoney);
+            players[i] = new PokerChipsPlayer(playerName[i], startingMoney[i]);
         }
+
+        // Blind roles (0 = Big, 1 = Small)
         players[0].setBigBlind(0);
-        if(players.length> 1){
+        if(players.length > 1){
             players[1].setBigBlind(1);
         }
 
