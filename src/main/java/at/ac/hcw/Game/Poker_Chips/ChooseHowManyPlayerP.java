@@ -1,5 +1,5 @@
 package at.ac.hcw.Game.Poker_Chips;
-
+//für tim
 //this class is useless now I belive after PokerSetupController
 import java.util.Scanner;
 
