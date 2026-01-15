@@ -45,7 +45,7 @@ public class BlackJackSetupController {
         TextField chipsField = createStyledTextField("Chips");
 
         // Set default chips from the global setting
-        chipsField.setText(startingMoneyField.getText());
+        //chipsField.setText(startingMoneyField.getText());
 
         // Save references for data retrieval
         nameInputFields.add(nameField);
