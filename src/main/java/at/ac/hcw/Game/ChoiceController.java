@@ -6,11 +6,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class ChoiceController {
+
+    @FXML
+    public void initialize() {
+        SoundManager.playMusic("/at/ac/hcw/Game/Media/Sounds/Music/jazz-cafe-music-348267.mp3");
+    }
+
+
 
     @FXML
     private void handleBlackjackStart(ActionEvent event) {
