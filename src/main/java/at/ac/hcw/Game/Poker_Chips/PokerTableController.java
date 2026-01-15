@@ -1,6 +1,6 @@
 package at.ac.hcw.Game.Poker_Chips;
 
-import at.ac.hcw.Game.ButtonPressSound;
+import at.ac.hcw.Game.AllSoundEffects;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -22,19 +22,21 @@ public class PokerTableController {
 
     @FXML
     private void handleCall(){
-
+        AllSoundEffects.button();
         game.callOrCheck();
         updateUI();
     }
 
     @FXML
     private void handleFold(){
+        AllSoundEffects.button();
         game.fold();
         updateUI();
     }
 
     @FXML
     private void handleRaise(){
+        AllSoundEffects.button();
         int amount = 0;
         try{
             amount = Integer.parseInt(raiseField.getText());

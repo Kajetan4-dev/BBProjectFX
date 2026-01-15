@@ -1,6 +1,6 @@
 package at.ac.hcw.Game.Poker_Chips;
 
-import at.ac.hcw.Game.ButtonPressSound;
+import at.ac.hcw.Game.AllSoundEffects;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -35,6 +35,7 @@ public class PokerSetupController {
 
     @FXML
     private void handleAddPlayer() {
+        AllSoundEffects.button();
         if (playerCards.size() >= 6) return;
 
         int playerNumber = playerCards.size() + 1;
@@ -53,6 +54,7 @@ public class PokerSetupController {
 
     @FXML
     private void handleRemovePlayer() {
+        AllSoundEffects.button();
         if (playerCards.size() <= 2) return;
 
         PlayerCard lastCard = playerCards.remove(playerCards.size() - 1);
@@ -66,6 +68,7 @@ public class PokerSetupController {
 
     @FXML
     private void handleStartGame() {
+        AllSoundEffects.button();
         try {
             // 1. Collect Data from UI
             int big = Integer.parseInt(bigBlindField.getText());

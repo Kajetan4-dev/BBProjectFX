@@ -1,6 +1,6 @@
 package at.ac.hcw.Game.Black_Jack;
 
-import at.ac.hcw.Game.ButtonPressSound;
+import at.ac.hcw.Game.AllSoundEffects;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -34,6 +34,7 @@ public class BlackJackSetupController {
 
     @FXML
     private void handleAddPlayer() {
+        AllSoundEffects.button();
         if (nameInputFields.size() >= 6) return; // UI Limit
 
         int playerNum = nameInputFields.size() + 1;
@@ -59,6 +60,7 @@ public class BlackJackSetupController {
 
     @FXML
     private void handleRemovePlayer() {
+        AllSoundEffects.button();
         int lastIndex = playerListContainer.getChildren().size() - 1;
         if (lastIndex >= 1) { // Ensure at least 1 player remains
             playerListContainer.getChildren().remove(lastIndex);
@@ -69,6 +71,7 @@ public class BlackJackSetupController {
 
     @FXML
     private void startGame() {
+        AllSoundEffects.button();
         try {
             Player[] players = collectPlayerData();
             launchTableScene(players);

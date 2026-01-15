@@ -21,7 +21,7 @@ public class ChoiceController {
 
     @FXML
     private void handleBlackjackStart(ActionEvent event) {
-        new ButtonPressSound();
+        AllSoundEffects.button();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Black_Jack/blackjack_setup.fxml"));
             Parent root = loader.load();
@@ -41,7 +41,7 @@ public class ChoiceController {
 
     @FXML
     private void handlePokerchipsStart(ActionEvent event) {
-        new ButtonPressSound();
+        AllSoundEffects.button();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Poker_Chips/poker_setup.fxml"));
             Parent root = loader.load();
@@ -58,7 +58,7 @@ public class ChoiceController {
 
     @FXML
     private void handleExit(ActionEvent event) {
-        new ButtonPressSound();
+        AllSoundEffects.button();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
