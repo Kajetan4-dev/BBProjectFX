@@ -25,13 +25,13 @@ public class SettingsController {
 
     @FXML
     private void neuesSpiel() {
-        new ButtonPressSound();
+        new AllSoundEffects();
         // your code
     }
 
     @FXML
     private void zurückZumHauptmenü() {
-        new ButtonPressSound();
+        new AllSoundEffects();
         // your code
     }
 }

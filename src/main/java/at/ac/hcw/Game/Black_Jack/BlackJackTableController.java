@@ -1,5 +1,7 @@
 package at.ac.hcw.Game.Black_Jack;
+//AllSoundEffects.button(); button soud
 
+import at.ac.hcw.Game.AllSoundEffects;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -73,8 +75,8 @@ public class BlackJackTableController {
             Button hitBtn = createBlackButton("Hit");
             Button standBtn = createBlackButton("Stand");
 
-            hitBtn.setOnAction(e -> { game.hit(); updateUI(); checkIfRoundOver(); });
-            standBtn.setOnAction(e -> { game.stand(); updateUI(); checkIfRoundOver(); });
+            hitBtn.setOnAction(e -> { game.hit(); updateUI(); checkIfRoundOver(); AllSoundEffects.button();});
+            standBtn.setOnAction(e -> { game.stand(); updateUI(); checkIfRoundOver(); AllSoundEffects.button();});
 
             chipsLabels.add(chips); bidLabels.add(bid); cardContainers.add(cardsHBox);
             totalLabels.add(total); bidFields.add(bidIn); setBidButtons.add(setBtn);
