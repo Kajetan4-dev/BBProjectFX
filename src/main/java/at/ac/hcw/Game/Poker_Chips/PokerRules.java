@@ -1,5 +1,5 @@
 package at.ac.hcw.Game.Poker_Chips;
-
+//für tim
 
 public class PokerRules {
     PokerChipsPlayer[] players;
