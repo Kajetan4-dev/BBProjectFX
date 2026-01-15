@@ -1,40 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="at.ac.hcw.Game.ChoiceController"
-            style="-fx-background-color: #2ecc71;"> <!-- Grüner Hintergrund -->
+<BorderPane
+        prefHeight="550.0"
+        prefWidth="1000.0"
+        style="-fx-background-color: #1b5e20;"
+        xmlns="http://javafx.com/javafx/25"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="at.ac.hcw.Game.ChoiceController">
 
-    <!-- Oben große Überschrift mit schöner Schrift -->
+    <!-- Top: Large title -->
     <top>
         <HBox alignment="CENTER" style="-fx-padding: 20;">
             <Label text="Spielauswahl"
-                   style="-fx-font-family: 'Segoe Script', cursive; -fx-font-size: 48px; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                   style="-fx-font-family: 'Cinzel', cursive; -fx-font-size: 48px; -fx-text-fill: white; -fx-font-weight: bold;"/>
         </HBox>
     </top>
 
-    <!-- Mitte: Buttons für Blackjack und Pokerchips -->
+    <!-- Center: Buttons -->
     <center>
-        <VBox spacing="30" alignment="CENTER" style="-fx-padding: 30;">
-            <Button text="Blackjack spielen" fx:id="blackjackBtn" onAction="#handleBlackjackStart"
-                    style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 15; -fx-cursor: hand;"/>
-            <Button text="Poker Chips spielen" fx:id="pokerchipsBtn" onAction="#handlePokerchipsStart"
-                    style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 15; -fx-cursor: hand;"/>
-            <Button text="Beenden" onAction="#handleExit"
-                    style="-fx-font-size: 20px; -fx-background-radius: 15; -fx-cursor: hand;"/>
+        <VBox alignment="CENTER" spacing="30" style="-fx-padding: 30;">
+            <!-- Top row: Poker Chips + Blackjack -->
+            <HBox alignment="CENTER" spacing="40">
+                <Button fx:id="pokerchipsBtn" onAction="#handlePokerchipsStart"
+                        text="Poker Chips spielen"
+                        prefWidth="250" prefHeight="80"
+                        style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;"/>
+                <Button fx:id="blackjackBtn" onAction="#handleBlackjackStart"
+                        text="Blackjack spielen"
+                        prefWidth="250" prefHeight="80"
+                        style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;"/>
+            </HBox>
+
+            <!-- Exit button centered below, smaller -->
+            <Button onAction="#handleExit"
+                    text="Beenden"
+                    prefWidth="200" prefHeight="60"
+                    style="-fx-font-size: 20px; -fx-background-radius: 8; -fx-cursor: hand;"/>
         </VBox>
     </center>
 
-    <!-- Unten Mitte: Copyright -->
+    <!-- Bottom: Copyright -->
     <bottom>
         <HBox alignment="CENTER" style="-fx-padding: 10;">
-            <Label text="© 2025 BB Projects" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+            <Label text="© 2025 BB Projects"
+                   style="-fx-text-fill: white; -fx-font-size: 14px;"/>
         </HBox>
     </bottom>
 

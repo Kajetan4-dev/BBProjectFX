@@ -83,8 +83,8 @@ public class ChooseHowManyPlayerP {
         }
 
 
-        pokerGame.playerSetup(names, startingMoney);
-        pokerGame.rounds();
+        //pokerGame.playerSetupWithChips(names, int[] startingMoney);
+        pokerGame.startHand();
     }
 }
 

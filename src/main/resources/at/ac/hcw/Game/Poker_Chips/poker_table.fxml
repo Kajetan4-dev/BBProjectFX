@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing = "12"
+      alignment="TOP_CENTER"
+      xmlns= "http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="at.ac.hcw.Game.Poker_Chips.PokerTableController">
+
+<padding>
+    <Insets top="20" right="20" bottom= "20" left="20"/>
+</padding>
+
+<Label text="Poker Table"
+       style="-fx-font-size: 20px;-fx-font-weight: bold;"/>
+
+
+<Label fx:id = "potLabel" text="Pot : 0"/>
+<Label fx:id = "currentBetLabel" text="Current Bet : 0 "/>
+<Label fx:id = "currentPlayerLabel" text ="Current Player : ?"/>
+
+<Separator/>
+
+<HBox spacing="10" alignment="CENTER">
+    <TextField fx:id="raiseField" promptText="Raise amount" prefWidth="120"/>
+    <Button text=" Raise" onAction="#handleRaise"/>
+</HBox>
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Call / Check" onAction="#handleCall"/>
+        <Button text="Fold" onAction="#handleFold"/>
+    </HBox>
+</VBox>
