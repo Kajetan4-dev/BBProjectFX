@@ -37,7 +37,6 @@
 
     <HBox spacing="10" alignment="CENTER">
         <Button text="Fold" onAction="#handleFold"/>
-        <Button text="Back" onAction="#handleBack"/>
     </HBox>
 
 </VBox>

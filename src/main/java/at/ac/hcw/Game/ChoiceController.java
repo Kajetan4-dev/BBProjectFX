@@ -17,6 +17,25 @@ public class ChoiceController {
         SoundManager.playMusic("/at/ac/hcw/Game/Media/Sounds/Music/jazz-cafe-music-348267.mp3");
     }
 
+    @FXML
+    private void handleOpenSettings(ActionEvent event) {
+        AllSoundEffects.button();
+        try {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // ✅ DAS ist der entscheidende Schritt:
+            SettingsController.setPreviousScene(stage.getScene());
+
+            Parent root = FXMLLoader.load(getClass().getResource("/at/ac/hcw/Game/Settings.fxml"));
+            stage.setScene(new Scene(root));
+            stage.setTitle("Settings");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
     @FXML
