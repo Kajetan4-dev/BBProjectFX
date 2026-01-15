@@ -34,6 +34,21 @@ public class PokerSetupController {
     }
 
     @FXML
+    private void handleGoToSettings() throws IOException {
+        AllSoundEffects.button();
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/at/ac/hcw/Game/Settings.fxml")
+        );
+        Parent root = loader.load();
+
+        Stage stage = (Stage) bigBlindField.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Settings");
+        stage.show();
+    }
+
+
+    @FXML
     private void handleAddPlayer() {
         AllSoundEffects.button();
         if (playerCards.size() >= 6) return;
