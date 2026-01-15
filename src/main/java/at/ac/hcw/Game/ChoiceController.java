@@ -6,7 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,6 +21,7 @@ public class ChoiceController {
 
     @FXML
     private void handleBlackjackStart(ActionEvent event) {
+        new ButtonPressSound();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Black_Jack/blackjack_setup.fxml"));
             Parent root = loader.load();
@@ -41,6 +41,7 @@ public class ChoiceController {
 
     @FXML
     private void handlePokerchipsStart(ActionEvent event) {
+        new ButtonPressSound();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Poker_Chips/poker_setup.fxml"));
             Parent root = loader.load();
@@ -57,6 +58,7 @@ public class ChoiceController {
 
     @FXML
     private void handleExit(ActionEvent event) {
+        new ButtonPressSound();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
