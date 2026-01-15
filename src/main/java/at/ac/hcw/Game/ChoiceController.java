@@ -13,7 +13,15 @@ import java.io.IOException;
 public class ChoiceController {
 
     @FXML
+    public void initialize() {
+        SoundManager.playMusic("/at/ac/hcw/Game/Media/Sounds/Music/jazz-cafe-music-348267.mp3");
+    }
+
+
+
+    @FXML
     private void handleBlackjackStart(ActionEvent event) {
+        new ButtonPressSound();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Black_Jack/blackjack_setup.fxml"));
             Parent root = loader.load();
@@ -33,6 +41,7 @@ public class ChoiceController {
 
     @FXML
     private void handlePokerchipsStart(ActionEvent event) {
+        new ButtonPressSound();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Poker_Chips/poker_setup.fxml"));
             Parent root = loader.load();
@@ -49,6 +58,7 @@ public class ChoiceController {
 
     @FXML
     private void handleExit(ActionEvent event) {
+        new ButtonPressSound();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
