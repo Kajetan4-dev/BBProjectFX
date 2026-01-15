@@ -10,28 +10,24 @@ public class SettingsController {
 
     @FXML
     public void initialize() {
-        // Slider range 0–1 is perfect for MediaPlayer volume
         volumeSld.setMin(0.0);
         volumeSld.setMax(1.0);
 
-        // Set slider to current volume
-        volumeSld.setValue(SoundManager.getVolume());
-
-        // Listen for changes
-        volumeSld.valueProperty().addListener((obs, oldVal, newVal) -> {
-            SoundManager.setVolume(newVal.doubleValue());
-        });
+        // 🔗 TWO-WAY BINDING
+        volumeSld.valueProperty().bindBidirectional(
+                SoundManager.volumeProperty()
+        );
     }
 
     @FXML
     private void neuesSpiel() {
-        new AllSoundEffects();
+        AllSoundEffects.button();
         // your code
     }
 
     @FXML
     private void zurückZumHauptmenü() {
-        new AllSoundEffects();
+        AllSoundEffects.button();
         // your code
     }
 }

@@ -1,5 +1,7 @@
 package at.ac.hcw.Game;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -8,73 +10,63 @@ import java.util.List;
 
 public class SoundManager {
 
-    private static double volume = 0.5; // default 50%
+    // Global volume property (0.0 – 1.0)
+    private static final DoubleProperty volume = new SimpleDoubleProperty(0.5);
+
     private static final List<MediaPlayer> players = new ArrayList<>();
     private static MediaPlayer musicPlayer;
 
-    private SoundManager() {} // prevent instantiation
+    private SoundManager() {}
 
-    /**
-     * Play background music (loops indefinitely).
-     * Calling this again stops previous music and starts new one.
-     */
     public static void playMusic(String path) {
-        stopMusic(); // stop current music if any
+        stopMusic();
 
         Media media = new Media(SoundManager.class.getResource(path).toExternalForm());
         musicPlayer = new MediaPlayer(media);
         musicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        musicPlayer.setVolume(volume);
-        musicPlayer.play();
 
-        register(musicPlayer);
+        // 🔗 bind volume
+        musicPlayer.volumeProperty().bind(volume);
+
+        musicPlayer.play();
+        players.add(musicPlayer);
     }
 
-    /**
-     * Stop background music if playing.
-     */
     public static void stopMusic() {
         if (musicPlayer != null) {
             musicPlayer.stop();
+            musicPlayer.dispose();
             players.remove(musicPlayer);
             musicPlayer = null;
         }
     }
 
-    /**
-     * Play a short sound effect (non-looping).
-     */
     public static void playSound(String path) {
         Media media = new Media(SoundManager.class.getResource(path).toExternalForm());
         MediaPlayer player = new MediaPlayer(media);
-        player.setVolume(volume);
+
+        // 🔗 bind volume
+        player.volumeProperty().bind(volume);
+
         player.setOnEndOfMedia(() -> {
-            player.dispose();       // free resources after playing
-            players.remove(player); // remove from list
+            player.dispose();
+            players.remove(player);
         });
+
         players.add(player);
         player.play();
     }
 
-    /**
-     * Register a MediaPlayer so it reacts to volume changes.
-     */
-    private static void register(MediaPlayer player) {
-        player.setVolume(volume);
-        if (!players.contains(player)) {
-            players.add(player);
-        }
-    }
-
-    /** Adjust the global volume for all sounds/music */
-    public static void setVolume(double newVolume) {
-        volume = Math.max(0, Math.min(1, newVolume)); // clamp between 0 and 1
-        for (MediaPlayer player : players) {
-            player.setVolume(volume);
-        }
+    // Expose volume property
+    public static DoubleProperty volumeProperty() {
+        return volume;
     }
 
     public static double getVolume() {
-        return volume;
+        return volume.get();
+    }
+
+    public static void setVolume(double newVolume) {
+        volume.set(Math.max(0, Math.min(1, newVolume)));
     }
 }
