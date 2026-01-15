@@ -10,7 +10,7 @@ import java.util.List;
 public class BlackJackTableController {
 
     private BlackjackRules game;
-    private int roundCounter = 1; // Zähler für die Runden
+    private int roundCounter = 1;
 
     @FXML private Label roundLabel;
     @FXML private HBox playerContainer;
@@ -40,7 +40,7 @@ public class BlackJackTableController {
 
         for (int i = 0; i < players.length; i++) {
             final int index = i;
-            VBox pBox = new VBox(5); // Sehr kompaktes Spacing (5 statt 12)
+            VBox pBox = new VBox(5);
             pBox.setAlignment(Pos.CENTER);
             pBox.setMinWidth(170);
             pBox.setStyle("-fx-border-color: #dcdcdc; -fx-border-width: 2; -fx-border-radius: 15; -fx-background-color: #fcfcfc; -fx-background-radius: 15; -fx-padding: 10;");
@@ -122,7 +122,6 @@ public class BlackJackTableController {
         Player[] players = game.getPlayers();
 
         for (int i = 0; i < players.length; i++) {
-            // Hit/Stand komplett aus, solange nicht alle geboten haben
             if (!active) {
                 hitButtons.get(i).setDisable(true);
                 standButtons.get(i).setDisable(true);
@@ -130,8 +129,16 @@ public class BlackJackTableController {
                 hitButtons.get(i).setDisable(i != curr);
                 standButtons.get(i).setDisable(i != curr);
             }
-            setBidButtons.get(i).setDisable(players[i].getBid() > 0);
-            bidFields.get(i).setDisable(players[i].getBid() > 0);
+
+            boolean isBroke = players[i].getChips() <= 0;
+            boolean alreadyBid = players[i].getBid() > 0;
+
+            setBidButtons.get(i).setDisable(active || alreadyBid || isBroke);
+            bidFields.get(i).setDisable(active || alreadyBid || isBroke);
+
+            if (isBroke && !alreadyBid) {
+                bidFields.get(i).setPromptText("PLEITE");
+            }
         }
     }
 
@@ -141,10 +148,15 @@ public class BlackJackTableController {
             Player p = game.getPlayers()[index];
             if (val > 0 && val <= p.getChips()) {
                 p.setBid(val);
+
                 boolean allReady = true;
                 for (Player pl : game.getPlayers()) {
-                    if (pl.getBid() <= 0) { allReady = false; break; }
+                    if (pl.getChips() > 0 && pl.getBid() <= 0) {
+                        allReady = false;
+                        break;
+                    }
                 }
+
                 if (allReady && !game.isRoundActive()) game.startRound();
                 updateUI();
             }
@@ -193,7 +205,7 @@ public class BlackJackTableController {
     }
 
     @FXML private void handleNewRound() {
-        roundCounter++; // Nächste Runde
+        roundCounter++;
         game.resetRound();
         createPlayerUI();
         newRoundButton.setVisible(false);
