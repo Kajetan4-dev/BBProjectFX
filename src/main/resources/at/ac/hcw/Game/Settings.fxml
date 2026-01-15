@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane prefHeight="550.0" prefWidth="1000.0" style="-fx-background-color: #f5f0e6;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.Game.SettingsController">
+   <children>
+      <Label alignment="CENTER" layoutX="-2.0" layoutY="-1.0" prefHeight="141.0" prefWidth="1031.0" style="-fx-font-family: 'Cinzel', cursive; -fx-font-size: 48px; -fx-font-weight: bold;" text="Einstellungen" textAlignment="CENTER" />
+      <AnchorPane layoutX="-2.0" layoutY="97.66666412353516" prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Slider fx:id="volumeSld" layoutX="275.0" layoutY="63.0" onDragDetected="#handleVolume" prefHeight="31.0" prefWidth="366.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Slider>
+            <Label layoutX="26.0" layoutY="54.0" prefHeight="49.0" prefWidth="188.0" style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Lautstärke:" />
+         </children>
+      </AnchorPane>
+      <HBox layoutX="-2.0" layoutY="298.0" prefHeight="336.0" prefWidth="1000.0">
+         <children>
+            <VBox alignment="CENTER_LEFT" prefHeight="336.0" prefWidth="557.0" spacing="40.0">
+               <children>
+                  <Button fx:id="neuesSpielBtn" mnemonicParsing="false" onAction="#neuesSpiel" prefHeight="40.0" prefWidth="280.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-font-weight: bold; -fx-font-size: 15px;" text="Neues Spiel">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button fx:id="zurückZumHmnbtn" mnemonicParsing="false" onAction="#zurückZumHauptmenü" prefHeight="40.0" prefWidth="280.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-font-weight: bold; -fx-font-size: 15px;" text="Zurück zum Hauptmenü">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="50.0" left="20.0" />
+               </padding>
+            </VBox>
+            <VBox alignment="BOTTOM_RIGHT" prefHeight="336.0" prefWidth="478.0">
+               <children>
+                  <Button mnemonicParsing="false" prefHeight="56.0" prefWidth="148.0" style="-fx-border-color: red; -fx-border-width: 3; -fx-font-weight: bold; -fx-font-size: 30px;" text="Zurück">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" right="20.0" />
+               </padding>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
