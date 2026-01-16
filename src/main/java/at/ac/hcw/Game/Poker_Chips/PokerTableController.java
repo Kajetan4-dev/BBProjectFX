@@ -1,5 +1,6 @@
 package at.ac.hcw.Game.Poker_Chips;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -68,5 +69,8 @@ public class PokerTableController {
 
             playersBox.getChildren().add(line);
         }
+    }
+
+    public void handleBack(ActionEvent actionEvent) {
     }
 }

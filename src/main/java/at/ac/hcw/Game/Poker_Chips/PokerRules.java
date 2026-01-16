@@ -154,6 +154,7 @@ public class PokerRules {
             nextRound();
         } else {
             // River fertig -> Hand zu Ende (für euer Projekt reicht das)
+            awardPotToShowdownWinner();
             endHandAndPrepareNext();
         }
     }
@@ -218,6 +219,43 @@ public class PokerRules {
         PokerChipsPlayer winner = players[winnerIndex];
         winner.setPlayerMoney(winner.getPlayerMoney() + pot);
         pot = 0;
+    }
+
+    private void awardPotToShowdownWinner(){
+        int winnerIndex = getRandomActivePlayer();
+        if (winnerIndex == -1) return;
+
+        PokerChipsPlayer winner = players[winnerIndex];
+        winner.setPlayerMoney(winner.getPlayerMoney() + pot);
+        pot = 0;
+    }
+
+    private int getRandomActivePlayer() {
+        int active = 0;
+
+        // 1️⃣ Anzahl aktiver Spieler zählen
+        for (int i = 0; i < players.length; i++) {
+            if (!folded[i]) {
+                active++;
+            }
+        }
+
+        // 2️⃣ Falls keiner aktiv ist
+        if (active == 0) return -1;
+
+        // 3️⃣ Zufälligen aktiven Spieler auswählen
+        int r = (int) (Math.random() * active);
+
+        for (int i = 0; i < players.length; i++) {
+            if (!folded[i]) {
+                if (r == 0) {
+                    return i;
+                }
+                r--;
+            }
+        }
+
+        return -1; // Sicherheitsfallback
     }
 
     public void endHandAndPrepareNext() {

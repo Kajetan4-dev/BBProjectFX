@@ -1,0 +1,88 @@
+/* ===== Base ===== */
+.root {
+    -fx-font-family: "Segoe UI", "Inter", "System";
+    -fx-text-fill: rgba(255,255,255,0.92);
+}
+
+.bg-dark {
+    -fx-background-color: linear-gradient(to bottom, #0b1a2a, #06101c);
+}
+
+.bg-table {
+    -fx-background-color: radial-gradient(center 50% 35%, radius 70%, #0f6b3a, #083622, #06101c);
+}
+
+/* ===== Typography ===== */
+.h1 {
+    -fx-font-size: 26px;
+    -fx-font-weight: 800;
+    -fx-text-fill: rgba(255,255,255,0.95);
+}
+
+.subtle {
+    -fx-text-fill: rgba(255,255,255,0.70);
+}
+
+/* ===== Cards ===== */
+.card {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-padding: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 18, 0.18, 0, 8);
+}
+
+.card-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: 800;
+    -fx-text-fill: rgba(255,255,255,0.92);
+}
+
+/* ===== Inputs ===== */
+.text-field {
+    -fx-background-color: rgba(255,255,255,0.10);
+    -fx-background-radius: 10;
+    -fx-text-fill: rgba(255,255,255,0.92);
+    -fx-prompt-text-fill: rgba(255,255,255,0.55);
+    -fx-highlight-fill: rgba(255,255,255,0.18);
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 10;
+    -fx-padding: 9 10;
+}
+
+/* ===== Buttons ===== */
+.btn {
+    -fx-background-radius: 12;
+    -fx-padding: 10 16;
+    -fx-font-weight: 800;
+    -fx-cursor: hand;
+    -fx-text-fill: white;
+}
+
+.btn-green { -fx-background-color: linear-gradient(#2fb36b, #1e8b52); }
+.btn-red   { -fx-background-color: linear-gradient(#d25656, #a93b3b); }
+.btn-blue  { -fx-background-color: linear-gradient(#3b79d6, #2d5fb0); }
+
+.btn:pressed {
+    -fx-translate-y: 1;
+    -fx-opacity: 0.95;
+}
+
+/* ===== Pills / HUD ===== */
+.pill {
+    -fx-background-color: rgba(0,0,0,0.35);
+    -fx-background-radius: 999;
+    -fx-padding: 8 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 16, 0.18, 0, 6);
+}
+
+.pill .label {
+    -fx-text-fill: rgba(255,255,255,0.88);
+    -fx-font-weight: 800;
+}
+
+/* ===== Separator ===== */
+.separator *.line {
+    -fx-border-color: rgba(255,255,255,0.10);
+}

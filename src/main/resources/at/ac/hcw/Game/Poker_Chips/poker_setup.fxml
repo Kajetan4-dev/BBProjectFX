@@ -1,38 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 
-<VBox spacing="15" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+<VBox spacing="14"
+      alignment="TOP_CENTER"
+      styleClass="bg-dark"
+      stylesheets="@/ui/poker-ui.css"
+      xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="at.ac.hcw.Game.Poker_Chips.PokerSetupController">
-    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
 
-    <Label text="Poker Game Setup" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    <padding><Insets top="22" right="22" bottom="22" left="22"/></padding>
 
-    <HBox spacing="10" alignment="CENTER">
-        <Label text="Start Chips:"/>
-        <TextField fx:id="startingMoneyField" text="1000" prefWidth="80"/>
+    <!-- Header -->
+    <VBox spacing="6" alignment="CENTER_LEFT" maxWidth="620">
+        <Label text="Poker Setup" styleClass="h1"/>
+        <Label text="Spieler hinzufügen, Start-Chips setzen und Blinds konfigurieren."
+               styleClass="subtle"/>
+    </VBox>
+
+    <!-- Start chips -->
+    <HBox maxWidth="620" spacing="12" alignment="CENTER_LEFT" styleClass="card">
+        <VBox spacing="4">
+            <Label text="Start Chips" styleClass="card-title"/>
+            <Label text="Wert gilt für neue Spieler." styleClass="subtle"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="startingMoneyField" text="1000" prefWidth="120"/>
     </HBox>
 
-    <Separator/>
+    <!-- Players -->
+    <VBox maxWidth="620" spacing="10" styleClass="card">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Players (2–6)" styleClass="card-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="+ Add Player" styleClass="btn,btn-green" onAction="#handleAddPlayer"/>
+            <Button text="- Remove" styleClass="btn,btn-red" onAction="#handleRemovePlayer"/>
+        </HBox>
 
-    <Label text="Players (2-6):"/>
-    <VBox fx:id="playerListContainer" spacing="10" alignment="CENTER" />
+        <Separator/>
 
-    <HBox spacing="10" alignment="CENTER">
-        <Button text="+ Add Player" onAction="#handleAddPlayer"/>
-        <Button text="- Remove" onAction="#handleRemovePlayer"/>
+        <!-- Hier füllst du dynamisch die Spieler rein -->
+        <VBox fx:id="playerListContainer" spacing="10" />
+    </VBox>
+
+    <!-- Blinds -->
+    <HBox maxWidth="620" spacing="14" styleClass="card" alignment="CENTER_LEFT">
+        <VBox spacing="4">
+            <Label text="Blinds" styleClass="card-title"/>
+            <Label text="Big Blind und Small Blind." styleClass="subtle"/>
+        </VBox>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <VBox spacing="8">
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Label text="Big Blind:" styleClass="subtle"/>
+                <TextField fx:id="bigBlindField" text="50" prefWidth="90"/>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Label text="Small Blind:" styleClass="subtle"/>
+                <TextField fx:id="smallBlindField" text="20" prefWidth="90"/>
+            </HBox>
+        </VBox>
     </HBox>
 
-    <Separator/>
+    <!-- Start button -->
+    <HBox maxWidth="620" alignment="CENTER_RIGHT">
+        <Button text="START GAME" styleClass="btn,btn-green" onAction="#handleStartGame"/>
+    </HBox>
 
-    <GridPane vgap="10" hgap="10" alignment="CENTER">
-        <Label text="Big Blind:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <TextField fx:id="bigBlindField" text="50" prefWidth="60" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-        <Label text="Small Blind:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <TextField fx:id="smallBlindField" text="20" prefWidth="60" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-    </GridPane>
-
-    <Button text="START GAME" onAction="#handleStartGame" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;"/>
 </VBox>
