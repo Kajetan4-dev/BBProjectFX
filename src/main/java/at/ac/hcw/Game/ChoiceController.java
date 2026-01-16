@@ -23,8 +23,7 @@ public class ChoiceController {
         try {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            // ✅ DAS ist der entscheidende Schritt:
-            SettingsController.setPreviousScene(stage.getScene());
+            //SettingsController.setPreviousScene(stage.getScene());
 
             Parent root = FXMLLoader.load(getClass().getResource("/at/ac/hcw/Game/Settings.fxml"));
             stage.setScene(new Scene(root));

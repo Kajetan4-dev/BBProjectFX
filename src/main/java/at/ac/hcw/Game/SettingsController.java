@@ -1,16 +1,29 @@
 package at.ac.hcw.Game;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class SettingsController {
+
     @FXML
     private Button neuesSpielBtn;
     private int PBN;
     @FXML
     private Slider volumeSld;
+
+    private static boolean fromBlackjack = false;
+
+    public  static  void setFromBlackjack(boolean value){
+        fromBlackjack = value;
+    }
 
     @FXML
     public void initialize() {
@@ -40,11 +53,35 @@ public class SettingsController {
     @FXML
     private void zurückZumHauptmenü() {
         AllSoundEffects.button();
-        // your code
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("/at/ac/hcw/Game/Choice.fxml"));
+            Stage stage = (Stage) volumeSld.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Casino Game Selection");
+            stage.show();
+
+            fromBlackjack = false;
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void zurückLast(){
         AllSoundEffects.button();
+        String fxml = fromBlackjack ? "/at/ac/hcw/Game/Black_Jack/blackjack_setup.fxml" : "/at/ac/hcw/Game/Poker_Chips/poker_setup.fxml";
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource(fxml));
+            Stage stage = (Stage) volumeSld.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle(fromBlackjack ?"Blackjack Setup" : "Poker Chips Setup");
+            stage.show();
+
+            fromBlackjack = false;
+        }catch (IOException e){
+            e.printStackTrace();
+        }finally{
+            fromBlackjack = false;
+        }
     }
 }

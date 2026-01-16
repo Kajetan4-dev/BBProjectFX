@@ -20,7 +20,6 @@ import java.util.List;
 
 public class BlackJackSetupController {
 
-    @FXML private TextField startingMoneyField;
     @FXML private HBox playerListContainer;
 
     // Separate lists for names and chips to keep data organized
@@ -38,15 +37,15 @@ public class BlackJackSetupController {
     private void handleGoToSettings() throws IOException {
         AllSoundEffects.button();
 
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/at/ac/hcw/Game/Settings.fxml")
-        );
+        SettingsController.setFromBlackjack(true);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Settings.fxml"));
         Parent root = loader.load();
 
         SettingsController controller = loader.getController();
         controller.setPBN(0);
 
-        Stage stage = (Stage) startingMoneyField.getScene().getWindow();
+        Stage stage = (Stage) playerListContainer.getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.setTitle("Settings");
         stage.show();
@@ -66,7 +65,7 @@ public class BlackJackSetupController {
         TextField chipsField = createStyledTextField("Chips");
 
         // Set default chips from the global setting
-        //chipsField.setText(startingMoneyField.getText());
+        chipsField.setText("500");
 
         // Save references for data retrieval
         nameInputFields.add(nameField);
@@ -140,7 +139,7 @@ public class BlackJackSetupController {
             try {
                 chips = Integer.parseInt(chipInputFields.get(i).getText());
             } catch (NumberFormatException e) {
-                chips = Integer.parseInt(startingMoneyField.getText());
+                chips = 500;
             }
             players[i] = new Player(name, chips);
         }
@@ -154,7 +153,7 @@ public class BlackJackSetupController {
         BlackJackTableController controller = loader.getController();
         controller.setGame(new BlackjackRules(players));
 
-        Stage stage = (Stage) startingMoneyField.getScene().getWindow();
+        Stage stage = (Stage) playerListContainer.getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.setTitle("Blackjack Table");
     }
