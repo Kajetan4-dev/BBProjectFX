@@ -11,7 +11,7 @@
         prefHeight="550.0"
         prefWidth="1000.0"
         style="-fx-background-color: #1b5e20;"
-        xmlns="http://javafx.com/javafx/25"
+        xmlns="http://javafx.com/javafx/23"
         xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="at.ac.hcw.Game.ChoiceController">
 
