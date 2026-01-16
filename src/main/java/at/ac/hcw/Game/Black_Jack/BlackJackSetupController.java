@@ -13,6 +13,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -103,7 +106,14 @@ public class BlackJackSetupController {
     // --- UI Helper Methods (Human Readable Styling) ---
 
     private StackPane createCardIcon(int number) {
-        Label label = new Label(String.valueOf(number));
+        int col =(number - 1) % 13;
+        int row = 0;
+
+        var cardImage = CardSpriteSheet.createCardView(col,row,55,85);
+
+        StackPane card = new StackPane(cardImage);
+
+       /* Label label = new Label(String.valueOf(number));
         label.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
 
         StackPane card = new StackPane(label);
@@ -113,7 +123,7 @@ public class BlackJackSetupController {
                 "-fx-background-color: white; -fx-border-color: #34495e; -fx-border-width: 2; " +
                         "-fx-border-radius: 8; -fx-background-radius: 8; " +
                         "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);"
-        );
+        );*/
         return card;
     }
 
