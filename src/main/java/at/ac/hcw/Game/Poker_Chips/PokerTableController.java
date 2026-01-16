@@ -1,10 +1,18 @@
 package at.ac.hcw.Game.Poker_Chips;
 
 import at.ac.hcw.Game.AllSoundEffects;
+import at.ac.hcw.Game.GameStatePoker;
+import at.ac.hcw.Game.SettingsController;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,6 +124,27 @@ public class PokerTableController {
                 leftColumn.getChildren().add(pBox);
             }
         }
+    }
+
+    @FXML
+    private void handleGoToSettings() throws IOException {
+        AllSoundEffects.button();
+        //Saves Game State
+        GameStatePoker.setPokerGame(game);
+
+        SettingsController.setFromBlackjack(false);
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/at/ac/hcw/Game/Settings.fxml")
+        );
+        Parent root = loader.load();
+
+        SettingsController controller = loader.getController();
+        controller.setPBN(1); // or 1, 2, etc.
+
+        Stage stage = (Stage) currentBetLabel.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Settings");
+        stage.show();
     }
 
     private Button createStyledButton(String text) {

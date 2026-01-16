@@ -43,7 +43,7 @@ public class BlackJackSetupController {
         Parent root = loader.load();
 
         SettingsController controller = loader.getController();
-        controller.setPBN(0);
+        controller.setPBN(2);
 
         Stage stage = (Stage) playerListContainer.getScene().getWindow();
         stage.setScene(new Scene(root));
