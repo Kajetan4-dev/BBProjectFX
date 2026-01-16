@@ -2,160 +2,116 @@ package at.ac.hcw.Game.Poker_Chips;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
-import javafx.geometry.Pos;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PokerSetupController {
 
-    @FXML private VBox leftColumn;
-    @FXML private VBox rightColumn;
-
     @FXML private TextField bigBlindField;
     @FXML private TextField smallBlindField;
+    @FXML private HBox playerListContainer;
 
-    private final List<PlayerCard> playerCards = new ArrayList<>();
+    // Listen für den Zugriff auf Namen und Chips bei Spielstart
+    private final List<TextField> nameInputFields = new ArrayList<>();
+    private final List<TextField> chipInputFields = new ArrayList<>();
 
     @FXML
     public void initialize() {
-        // Start with 2 players by default
-        handleAddPlayer();
-        handleAddPlayer();
+        handleAddPlayer(); // Spieler 1 erstellen
+        handleAddPlayer(); // Spieler 2 erstellen
     }
 
     @FXML
     private void handleAddPlayer() {
-        if (playerCards.size() >= 6) return;
+        if (nameInputFields.size() >= 6) return; // Limit: max 6 Spieler
+        int playerNum = nameInputFields.size() + 1;
 
-        int playerNumber = playerCards.size() + 1;
-        int startMoney = 500; // Fixed default starting money
+        // UI-Elemente erzeugen (Icon, Name, Chips)
+        StackPane cardIcon = createCardIcon(playerNum);
+        TextField nameField = createStyledTextField("Name P" + playerNum);
+        TextField chipsField = createStyledTextField("Chips");
+        chipsField.setText("500");
 
-        PlayerCard card = new PlayerCard(playerNumber, startMoney);
-        playerCards.add(card);
+        // Felder für späteren Datenzugriff speichern
+        nameInputFields.add(nameField);
+        chipInputFields.add(chipsField);
 
-        // Add to left or right column
-        if (playerNumber <= 3) {
-            leftColumn.getChildren().add(card.getCard());
-        } else {
-            rightColumn.getChildren().add(card.getCard());
-        }
+        // Elemente untereinander in einer Spalte anordnen
+        VBox playerColumn = new VBox(12, cardIcon, nameField, chipsField);
+        playerColumn.setAlignment(Pos.CENTER);
+        playerListContainer.getChildren().add(playerColumn);
     }
 
     @FXML
     private void handleRemovePlayer() {
-        if (playerCards.size() <= 2) return;
-
-        PlayerCard lastCard = playerCards.remove(playerCards.size() - 1);
-
-        if (lastCard.getPlayerNumber() <= 3) {
-            leftColumn.getChildren().remove(lastCard.getCard());
-        } else {
-            rightColumn.getChildren().remove(lastCard.getCard());
+        int lastIndex = playerListContainer.getChildren().size() - 1;
+        if (lastIndex >= 1) { // Mindestens 2 Spieler behalten
+            playerListContainer.getChildren().remove(lastIndex);
+            nameInputFields.remove(lastIndex);
+            chipInputFields.remove(lastIndex);
         }
+    }
+
+    // Erstellt das weiße Karten-Icon mit der Spielernummer
+    private StackPane createCardIcon(int number) {
+        Label label = new Label(String.valueOf(number));
+        label.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        StackPane card = new StackPane(label);
+        card.setPrefSize(55, 85);
+        card.setMaxWidth(55);
+        card.setStyle("-fx-background-color: white; -fx-border-color: #34495e; -fx-border-width: 2; -fx-border-radius: 8; -fx-background-radius: 8;");
+        return card;
+    }
+
+    // Erstellt ein einheitliches Textfeld
+    private TextField createStyledTextField(String prompt) {
+        TextField tf = new TextField();
+        tf.setPromptText(prompt);
+        tf.setPrefWidth(120);
+        tf.setAlignment(Pos.CENTER);
+        return tf;
     }
 
     @FXML
     private void handleStartGame() {
         try {
-            // 1. Collect Data from UI
+            // Blinds und Spielerdaten einsammeln
             int big = Integer.parseInt(bigBlindField.getText());
             int small = Integer.parseInt(smallBlindField.getText());
+            int playerCount = nameInputFields.size();
 
-            int playerCount = playerCards.size();
             String[] names = new String[playerCount];
             int[] startingChips = new int[playerCount];
 
             for (int i = 0; i < playerCount; i++) {
-                names[i] = playerCards.get(i).getName();
-                startingChips[i] = playerCards.get(i).getChips(); // Get individual chips
+                names[i] = nameInputFields.get(i).getText().isEmpty() ? "Player " + (i+1) : nameInputFields.get(i).getText();
+                startingChips[i] = Integer.parseInt(chipInputFields.get(i).getText());
             }
 
-            // 2. Initialize Game Logic
+            // Spiellogik initialisieren
             PokerRules pokerGame = new PokerRules(playerCount, big, small);
-            // Note: I modified this to accept the chips array
             pokerGame.playerSetupWithChips(names, startingChips);
             pokerGame.startHand();
 
-            // 3. SWITCH THE SCENE (This was missing!)
+            // Wechsel zum Spieltisch (poker_table.fxml)
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Poker_Chips/poker_table.fxml"));
             Parent root = loader.load();
-
-            // Pass the game instance to the Table Controller
             PokerTableController tableController = loader.getController();
             tableController.setGame(pokerGame);
 
-            // Get the current window (Stage) and set the new Scene
-            Stage stage = (Stage) bigBlindField.getScene().getWindow();
+            Stage stage = (Stage) playerListContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Poker Table");
-            stage.show();
-
-        } catch (NumberFormatException e) {
-            System.out.println("Error: Please enter valid numbers for blinds and chips!");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error: Could not find poker_table.fxml");
-        }
-    }
-
-    /** Inner class for a Player Card UI component */
-    private static class PlayerCard {
-        private final VBox card;
-        private final TextField nameField;
-        private final TextField chipsField;
-        private final int playerNumber;
-
-        public PlayerCard(int playerNumber, int startMoney) {
-            this.playerNumber = playerNumber;
-
-            card = new VBox(5);
-            card.setAlignment(Pos.CENTER_LEFT);
-            card.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-padding: 10; -fx-background-color: #f5f0e6;");
-
-            Label playerLabel = new Label("Player " + playerNumber);
-            playerLabel.setStyle("-fx-font-weight: bold;");
-
-            nameField = new TextField();
-            nameField.setPromptText("Name");
-            nameField.setMaxWidth(150);
-
-            HBox chipsBox = new HBox(5);
-            chipsBox.setAlignment(Pos.CENTER_LEFT);
-            Label chipsLabel = new Label("Chips:");
-            chipsField = new TextField(String.valueOf(startMoney));
-            chipsField.setMaxWidth(80);
-            chipsBox.getChildren().addAll(chipsLabel, chipsField);
-
-            card.getChildren().addAll(playerLabel, nameField, chipsBox);
-        }
-
-        public VBox getCard() {
-            return card;
-        }
-
-        public int getPlayerNumber() {
-            return playerNumber;
-        }
-
-        public String getName() {
-            return nameField.getText().isEmpty() ? "Player " + playerNumber : nameField.getText();
-        }
-
-        public int getChips() {
-            try {
-                return Integer.parseInt(chipsField.getText());
-            } catch (NumberFormatException e) {
-                return 500;
-            }
-        }
+        } catch (Exception e) { e.printStackTrace(); }
     }
 }

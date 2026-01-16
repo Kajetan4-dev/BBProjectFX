@@ -12,12 +12,14 @@ public class BlackJackTableController {
     private BlackjackRules game;
     private int roundCounter = 1;
 
+    // FXML Referenzen für die Anzeige
     @FXML private Label roundLabel;
     @FXML private HBox playerContainer;
     @FXML private Label dealerTotalLabel;
     @FXML private HBox dealerCardContainer;
     @FXML private Button newRoundButton;
 
+    // Listen zur Verwaltung der dynamischen UI-Elemente pro Spieler
     private List<Label> chipsLabels = new ArrayList<>();
     private List<Label> bidLabels = new ArrayList<>();
     private List<HBox> cardContainers = new ArrayList<>();
@@ -27,12 +29,14 @@ public class BlackJackTableController {
     private List<Button> hitButtons = new ArrayList<>();
     private List<Button> standButtons = new ArrayList<>();
 
+    // Initialisiert das Spiel und die Benutzeroberfläche
     public void setGame(BlackjackRules game) {
         this.game = game;
         createPlayerUI();
         updateUI();
     }
 
+    // Erstellt für jeden Spieler eine eigene Anzeige-Box (Karte)
     private void createPlayerUI() {
         playerContainer.getChildren().clear();
         clearLists();
@@ -66,6 +70,7 @@ public class BlackJackTableController {
             bidIn.setMaxWidth(85);
             bidIn.setStyle("-fx-alignment: center; -fx-text-fill: black;");
 
+            // Buttons erstellen und Aktionen zuweisen
             Button setBtn = createBlackButton("Set Bid");
             setBtn.setDisable(false);
             setBtn.setOnAction(e -> setBidForPlayer(index, bidIn));
@@ -76,6 +81,7 @@ public class BlackJackTableController {
             hitBtn.setOnAction(e -> { game.hit(); updateUI(); checkIfRoundOver(); });
             standBtn.setOnAction(e -> { game.stand(); updateUI(); checkIfRoundOver(); });
 
+            // Elemente in Listen speichern
             chipsLabels.add(chips); bidLabels.add(bid); cardContainers.add(cardsHBox);
             totalLabels.add(total); bidFields.add(bidIn); setBidButtons.add(setBtn);
             hitButtons.add(hitBtn); standButtons.add(standBtn);
@@ -85,6 +91,7 @@ public class BlackJackTableController {
         }
     }
 
+    // Aktualisiert Texte und Karten auf dem Tisch
     private void updateUI() {
         roundLabel.setText("Round: " + roundCounter);
         Player[] players = game.getPlayers();
@@ -107,6 +114,7 @@ public class BlackJackTableController {
         int[] dCards = dealer.getCards();
         for (int j = 0; j < dCards.length; j++) {
             if (dCards[j] != 0) {
+                // Versteckt die zweite Dealer-Karte solange die Runde aktiv ist
                 boolean hidden = (game.isRoundActive() && j == 1 && dealer.isCardHidden());
                 dealerCardContainer.getChildren().add(createCardUI(dCards[j], hidden));
             }
@@ -116,6 +124,7 @@ public class BlackJackTableController {
         updateButtons();
     }
 
+    // Deaktiviert/Aktiviert Buttons je nachdem wer dran ist
     private void updateButtons() {
         int curr = game.getCurrentPlayerIndex();
         boolean active = game.isRoundActive();
@@ -142,6 +151,7 @@ public class BlackJackTableController {
         }
     }
 
+    // Setzt den Einsatz für einen Spieler
     private void setBidForPlayer(int index, TextField field) {
         try {
             int val = Integer.parseInt(field.getText());
@@ -163,6 +173,7 @@ public class BlackJackTableController {
         } catch (Exception e) {}
     }
 
+    // Erzeugt ein Karten-Label (weiß mit schwarzer Schrift)
     private Label createCardUI(int value, boolean hidden) {
         Label card = new Label(hidden ? "?" : String.valueOf(value));
         card.setPrefSize(35, 50);
@@ -173,6 +184,7 @@ public class BlackJackTableController {
         return card;
     }
 
+    // Standard-Design für die Buttons
     private Button createBlackButton(String text) {
         Button btn = new Button(text);
         btn.setMinWidth(100);
@@ -181,6 +193,7 @@ public class BlackJackTableController {
         return btn;
     }
 
+    // Prüft das Rundenende und zeigt den Gewinner-Alert
     private void checkIfRoundOver() {
         if (!game.isRoundActive()) {
             newRoundButton.setVisible(true);
@@ -188,6 +201,7 @@ public class BlackJackTableController {
         }
     }
 
+    // Erzeugt die Textzusammenfassung für das Ende der Runde
     private void showWinnerAlert() {
         StringBuilder msg = new StringBuilder("Round " + roundCounter + " Results:\n\n");
         int dTotal = BlackjackRules.calculatehand(game.getDealer().getCards());
@@ -204,6 +218,7 @@ public class BlackJackTableController {
         showAlert("Round Over", msg.toString());
     }
 
+    // Bereitet eine komplett neue Runde vor
     @FXML private void handleNewRound() {
         roundCounter++;
         game.resetRound();
@@ -212,12 +227,14 @@ public class BlackJackTableController {
         updateUI();
     }
 
+    // Leert alle Referenz-Listen
     private void clearLists() {
         chipsLabels.clear(); bidLabels.clear(); cardContainers.clear();
         totalLabels.clear(); bidFields.clear(); setBidButtons.clear();
         hitButtons.clear(); standButtons.clear();
     }
 
+    // Zeigt ein JavaFX Alert Fenster an
     private void showAlert(String title, String content) {
         Alert a = new Alert(Alert.AlertType.INFORMATION);
         a.setTitle(title); a.setHeaderText(null); a.setContentText(content);
