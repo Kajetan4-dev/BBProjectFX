@@ -290,6 +290,7 @@ public class BlackJackTableController {
     private void checkIfRoundOver() {
         if (!game.isRoundActive()) {
             newRoundButton.setVisible(true);
+            showWinnerAlert();
         }
     }
 
@@ -324,4 +325,7 @@ public class BlackJackTableController {
         a.showAndWait();
     }
 
+    private void showWinnerAlert() {
+        // TODO: implement winner summary
+    }
 }
