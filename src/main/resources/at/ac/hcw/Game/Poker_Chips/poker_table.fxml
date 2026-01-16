@@ -6,7 +6,7 @@
 
 <VBox spacing = "12"
       alignment="TOP_CENTER"
-      xmlns= "http://javafx.com/javafx/22"
+      xmlns= "http://javafx.com/javafx/23"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="at.ac.hcw.Game.Poker_Chips.PokerTableController">
 

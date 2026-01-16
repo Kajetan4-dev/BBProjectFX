@@ -5,7 +5,7 @@
 <?import javafx.geometry.Insets?>
 
 <VBox spacing="15" alignment="TOP_CENTER"
-      xmlns="http://javafx.com/javafx/22"
+      xmlns="http://javafx.com/javafx/23"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="at.ac.hcw.Game.Poker_Chips.PokerSetupController"
       style="-fx-background-color: #f5f0e6; -fx-border-color: black; -fx-border-width: 1;"
