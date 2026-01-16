@@ -2,14 +2,21 @@ package at.ac.hcw.Game.Black_Jack;
 //AllSoundEffects.button(); button soud
 
 import at.ac.hcw.Game.AllSoundEffects;
+import at.ac.hcw.Game.SettingsController;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.layout.Pane;
 import javafx.application.Platform;
+import javafx.stage.Stage;
 
 public class BlackJackTableController {
 
@@ -46,6 +53,24 @@ public class BlackJackTableController {
         Platform.runLater(this::layoutPlayers);
     }
 
+    @FXML
+    private void handleGoToSettings() throws IOException {
+        AllSoundEffects.button();
+
+        SettingsController.setFromBlackjack(true);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Settings.fxml"));
+        Parent root = loader.load();
+
+        SettingsController controller = loader.getController();
+        controller.setPBN(2);
+
+        Stage stage = (Stage) container.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Settings");
+        stage.show();
+    }
+
     private void createBackgroud() {
         try {
             container.setStyle(
@@ -72,28 +97,43 @@ public class BlackJackTableController {
         double h = playerContainer.getHeight();
         if (w <= 0 || h <= 0) return;
 
-        // Kreis allignment für die spieler
+        // Ellipse radii
+        double radiusX = w * 0.4; // horizontal stretch
+        double radiusY = h * -0.35; // vertical stretch
 
         double centerX = w / 2;
-        double centerY = h * -1.25;
-        double radius = Math.min(w, h) * 1.75;
+        double centerY = h / 10; // dealer is at center
 
-        double startAngle = 50;
-        double endAngle = 130;
+        // Spread players evenly around the ellipse (semi-circle or full circle)
+        double endAngle = 180 + 45; // left
+        double startAngle = 360 - 45;   // right
         double step = n == 1 ? 0 : (endAngle - startAngle) / (n - 1);
 
         for (int i = 0; i < n; i++) {
             VBox box = (VBox) playerContainer.getChildren().get(i);
             double angle = Math.toRadians(startAngle + i * step);
 
-            box.setLayoutX(centerX + radius * Math.cos(angle) - box.getPrefWidth() / 2);
-            box.setLayoutY(centerY + radius * Math.sin(angle) - box.getPrefHeight() / 2);
+            // Ellipse position around dealer
+            double x = centerX + radiusX * Math.cos(angle) - box.getPrefWidth() / 2;
+            double y = centerY + radiusY * Math.sin(angle) - box.getPrefHeight() / 2;
 
-            double visualAngle = (startAngle + i * step) - 90;
-            box.setRotate(visualAngle * 0.6);
+            box.setLayoutX(x);
+            box.setLayoutY(y);
 
+            // Optional rotation for a fan effect around dealer
+            double rotation = -30 + 60.0 * i / (n - 1);
+            box.setRotate(rotation);
         }
     }
+
+
+
+
+
+
+
+
+
 
     private void createPlayerUI() {
         playerContainer.getChildren().clear();
@@ -112,7 +152,7 @@ public class BlackJackTableController {
             // Karten oben anzeigen
             HBox cardsHBox = new HBox(3);
             cardsHBox.setAlignment(Pos.CENTER);
-            cardsHBox.setMinHeight(60);
+            cardsHBox.setMinHeight(10);
 
             // Name und Infos in Weiß (damit man es auf dunkler Matte sieht)
             Label name = new Label(players[i].getName());

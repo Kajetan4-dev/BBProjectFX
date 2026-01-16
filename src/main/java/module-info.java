@@ -4,6 +4,7 @@ module org.example {
     requires javafx.media;
     //requires org.example;
     requires javafx.graphics;
+
     //requires org.example;
 
 
