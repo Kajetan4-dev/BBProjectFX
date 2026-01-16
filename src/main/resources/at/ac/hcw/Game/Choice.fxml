@@ -33,7 +33,7 @@
     </center>
 
     <bottom>
-        <HBox alignment="CENTER" padding="10">
+        <HBox alignment="CENTER" style="-fx-padding: 10;">
             <Label text="© 2025 BB Projects" styleClass="subtle"/>
         </HBox>
     </bottom>

@@ -69,6 +69,19 @@ public class PokerTableController {
                             + foldedText + turnMarker
             );
 
+// 🔴 NEU: Grundstil (hell)
+            line.getStyleClass().add("players-label");
+
+// 🔴 NEU: Folded-Stil
+            if (game.isFolded(i)) {
+                line.getStyleClass().add("players-label-folded");
+            }
+
+// 🔴 NEU: Aktueller Spieler
+            if (i == game.getCurrentPlayerIndex()) {
+                line.getStyleClass().add("players-label-current");
+            }
+
             playersBox.getChildren().add(line);
         }
 

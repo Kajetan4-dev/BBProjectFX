@@ -19,7 +19,7 @@
 
         <!-- Top HUD -->
         <top>
-            <HBox spacing="12" alignment="CENTER" padding="8">
+            <HBox spacing="12" alignment="CENTER" style="-fx-padding: 8;">
                 <Label text="Poker Table" styleClass="h1"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <HBox styleClass="pill" spacing="12" alignment="CENTER">

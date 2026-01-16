@@ -86,3 +86,42 @@
 .separator *.line {
     -fx-border-color: rgba(255,255,255,0.10);
 }
+/* =========================
+   Winning Popup
+   ========================= */
+
+.popup-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+.popup-winner {
+    -fx-text-fill: #eafff3;   /* sehr helles Grün/Weiß */
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.popup-chips {
+    -fx-text-fill: #a8ffcf;   /* helles Grün */
+    -fx-font-size: 18px;
+}
+
+/* =========================
+   Players List
+   ========================= */
+
+.players-label {
+    -fx-text-fill: #f2fff8;   /* sehr hell, fast weiß */
+    -fx-font-size: 14px;
+}
+
+.players-label-current {
+    -fx-text-fill: #7dffb3;   /* hellgrün für aktuellen Spieler */
+    -fx-font-weight: bold;
+}
+
+.players-label-folded {
+    -fx-text-fill: rgba(255, 255, 255, 0.45); /* heller, aber „ausgegraut“ */
+    -fx-font-style: italic;
+}

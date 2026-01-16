@@ -16,15 +16,15 @@
           styleClass="card">
 
         <Label text="🎉 RUNDENSIEGER 🎉"
-               styleClass="h1"/>
+               styleClass="popup-title"/>
 
         <Label fx:id="winnerLabel"
                text="Player X"
-               style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+               styleClass="popup-winner"/>
 
         <Label fx:id="chipsLabel"
                text="+0 Chips"
-               style="-fx-font-size: 18px;"/>
+               styleClass="popup-chips"/>
 
         <Button text="Weiter"
                 styleClass="btn,btn-green"
