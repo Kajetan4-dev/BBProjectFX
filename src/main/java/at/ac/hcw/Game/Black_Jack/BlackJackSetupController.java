@@ -112,18 +112,6 @@ public class BlackJackSetupController {
         var cardImage = CardSpriteSheet.createCardView(col,row,55,85);
 
         StackPane card = new StackPane(cardImage);
-
-       /* Label label = new Label(String.valueOf(number));
-        label.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
-
-        StackPane card = new StackPane(label);
-        card.setPrefSize(55, 85);
-        card.setMaxWidth(55);
-        card.setStyle(
-                "-fx-background-color: white; -fx-border-color: #34495e; -fx-border-width: 2; " +
-                        "-fx-border-radius: 8; -fx-background-radius: 8; " +
-                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);"
-        );*/
         return card;
     }
 

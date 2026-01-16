@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.layout.Pane;
 import javafx.application.Platform;
+import javafx.scene.Node;
+import javafx.scene.layout.StackPane;
 
 public class BlackJackTableController {
 
@@ -178,6 +180,12 @@ public class BlackJackTableController {
         dealerTotalLabel.setText(game.isRoundActive() ? "Dealer Total: ?" : "Dealer Total: " + BlackjackRules.calculatehand(dCards));
         updateButtons();
     }
+    private int valueToCol(int value) {
+        if (value == 1) return 0;                 // Ass -> col 0
+        if (value >= 2 && value <= 9) return value - 1;  // 2->1 ... 9->8
+        return 9;                                  // 10 bleibt "10" (col 9)
+    }
+
 
     private void updateButtons() {
         int curr = game.getCurrentPlayerIndex();
@@ -204,14 +212,27 @@ public class BlackJackTableController {
         } catch (Exception e) {}
     }
 
-    private Label createCardUI(int value, boolean hidden) {
-        Label card = new Label(hidden ? "?" : String.valueOf(value));
-        card.setPrefSize(35, 50);
-        card.setAlignment(Pos.CENTER);
-        // Karten bleiben weiß, damit sie sich vom grünen Hintergrund abheben
-        card.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-border-color: #333; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-weight: bold;");
-        return card;
+    private Node createCardUI(int value, boolean hidden) {
+
+        double w = 35;   // gleiche Größe wie vorher (deine Labels waren 35x50)
+        double h = 50;
+
+        if (hidden) {
+            // erstmal simpel: verdeckte Karte als "?"
+            Label back = new Label("?");
+            back.setPrefSize(w, h);
+            back.setAlignment(Pos.CENTER);
+            back.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-border-color: #333; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-weight: bold;");
+            return back;
+        }
+
+        int col = valueToCol(value);
+        int row = 0; // erstmal immer Pik (Suit später)
+
+        // echtes Kartenbild aus SpriteSheet
+        return CardSpriteSheet.createCardView(col, row, w, h);
     }
+
 
     private Button createTransparentButton(String text) {
         Button btn = new Button(text);
