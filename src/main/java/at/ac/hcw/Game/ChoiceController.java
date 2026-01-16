@@ -17,6 +17,24 @@ public class ChoiceController {
         SoundManager.playMusic("/at/ac/hcw/Game/Media/Sounds/Music/the-free-jazz-music-459752.mp3");
     }
 
+    @FXML
+    private void handleOpenSettings(ActionEvent event) {
+        AllSoundEffects.button();
+        try {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            //SettingsController.setPreviousScene(stage.getScene());
+
+            Parent root = FXMLLoader.load(getClass().getResource("/at/ac/hcw/Game/Settings.fxml"));
+            stage.setScene(new Scene(root));
+            stage.setTitle("Settings");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
     @FXML

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<AnchorPane prefHeight="550.0" prefWidth="1000.0" style="-fx-background-color: #f5f0e6;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.Game.SettingsController">
+<AnchorPane prefHeight="550.0" prefWidth="1000.0" style="-fx-background-color: #f5f0e6;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.Game.SettingsController">
    <children>
       <Label alignment="CENTER" layoutX="-2.0" layoutY="-1.0" prefHeight="141.0" prefWidth="1031.0" style="-fx-font-family: 'Cinzel', cursive; -fx-font-size: 48px; -fx-font-weight: bold;" text="Einstellungen" textAlignment="CENTER" />
       <AnchorPane layoutX="-2.0" layoutY="97.66666412353516" prefHeight="200.0" prefWidth="200.0">
@@ -44,7 +44,7 @@
             </VBox>
             <VBox alignment="BOTTOM_RIGHT" prefHeight="336.0" prefWidth="478.0">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="56.0" prefWidth="148.0" onAction="#zurückLast"  style="-fx-border-color: red; -fx-border-width: 3; -fx-font-weight: bold; -fx-font-size: 30px;" text="Zurück">
+                  <Button fx:id="backBtn" mnemonicParsing="false" onAction="#zurückLast" prefHeight="56.0" prefWidth="148.0" style="-fx-border-color: red; -fx-border-width: 3; -fx-font-weight: bold; -fx-font-size: 30px;" text="Zurück">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
