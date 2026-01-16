@@ -68,7 +68,8 @@ public class BlackJackTableController {
         );
 
     }
-
+// das aussehen von den speilern am tisch sollte vl nicht durchsichtig sein und wieder eine karten sein,
+// wie in dieser implementation.
     private void createPlayerUI() {
         playerContainer.getChildren().clear();
         clearLists();
@@ -127,7 +128,7 @@ public class BlackJackTableController {
             playerContainer.getChildren().add(pBox);
         }
     }
-
+// das ganze layout wo die creatPlayerui() eingefügt werden
     private void layoutPlayers() {
         int n = playerContainer.getChildren().size();
         if (n == 0) return;
@@ -135,6 +136,8 @@ public class BlackJackTableController {
         double w = playerContainer.getWidth();
         double h = playerContainer.getHeight();
         if (w <= 0 || h <= 0) return;
+
+        // Kreis allignment für die spieler
 
         double centerX = w / 2;
         double centerY = h * -0.3;
