@@ -74,7 +74,7 @@ public class BlackJackTableController {
 
         double centerX = w / 2;
         double centerY = h * 1.05; // Mittelpunkt knapp unter dem Fenster
-        double radius = Math.min(w, h) * 0.75;
+        double radius = Math.min(w, h) * 1;
 
         double startAngle = 220;
         double endAngle = 320;
