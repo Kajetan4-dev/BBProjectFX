@@ -4,32 +4,32 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox spacing = "12"
-      alignment="TOP_CENTER"
-      xmlns= "http://javafx.com/javafx/22"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="at.ac.hcw.Game.Poker_Chips.PokerTableController">
+<VBox spacing="10" alignment="TOP_CENTER" prefWidth="1200" prefHeight="800"
+      xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="at.ac.hcw.Game.Poker_Chips.PokerTableController"
+      style="-fx-background-color: #f4f4f4;">
 
-<padding>
-    <Insets top="20" right="20" bottom= "20" left="20"/>
-</padding>
+    <Label text="Poker Table" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-padding: 15 0 0 0;"/>
+    <Label fx:id="roundLabel" text="Round: 1" style="-fx-font-size: 18px; -fx-text-fill: #555; -fx-font-weight: bold;"/>
 
-<Label text="Poker Table"
-       style="-fx-font-size: 20px;-fx-font-weight: bold;"/>
-
-
-<Label fx:id = "potLabel" text="Pot : 0"/>
-<Label fx:id = "currentBetLabel" text="Current Bet : 0 "/>
-<Label fx:id = "currentPlayerLabel" text ="Current Player : ?"/>
-
-<Separator/>
-
-<HBox spacing="10" alignment="CENTER">
-    <TextField fx:id="raiseField" promptText="Raise amount" prefWidth="120"/>
-    <Button text=" Raise" onAction="#handleRaise"/>
-</HBox>
-    <HBox spacing="10" alignment="CENTER">
-        <Button text="Call / Check" onAction="#handleCall"/>
-        <Button text="Fold" onAction="#handleFold"/>
+    <HBox spacing="40" alignment="CENTER">
+        <HBox spacing="8" alignment="CENTER">
+            <Label text="Pot:" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: black;"/>
+            <Label fx:id="potLabel" text="0" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+        </HBox>
+        <HBox spacing="8" alignment="CENTER">
+            <Label text="Current Bet:" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: black;"/>
+            <Label fx:id="currentBetLabel" text="0" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #c0392b;"/>
+        </HBox>
     </HBox>
+
+    <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS"
+                style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+        <content>
+            <HBox fx:id="playerContainer" spacing="15" alignment="CENTER" style="-fx-padding: 20;" />
+        </content>
+    </ScrollPane>
+
+    <Separator/>
+    <Label text="Game Controls" style="-fx-text-fill: #999; -fx-padding: 0 0 10 0;"/>
 </VBox>
