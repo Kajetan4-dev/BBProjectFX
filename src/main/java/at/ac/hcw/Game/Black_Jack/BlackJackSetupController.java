@@ -1,6 +1,7 @@
 package at.ac.hcw.Game.Black_Jack;
 
 import at.ac.hcw.Game.AllSoundEffects;
+import at.ac.hcw.Game.SettingsController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -13,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,25 @@ public class BlackJackSetupController {
         handleAddPlayer();
         handleAddPlayer();
     }
+
+    @FXML
+    private void handleGoToSettings() throws IOException {
+        AllSoundEffects.button();
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/at/ac/hcw/Game/Settings.fxml")
+        );
+        Parent root = loader.load();
+
+        SettingsController controller = loader.getController();
+        controller.setPBN(0);
+
+        Stage stage = (Stage) startingMoneyField.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Settings");
+        stage.show();
+    }
+
 
     @FXML
     private void handleAddPlayer() {

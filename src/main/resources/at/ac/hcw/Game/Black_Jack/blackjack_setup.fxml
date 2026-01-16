@@ -16,7 +16,12 @@
     </padding>
 
     <VBox alignment="CENTER" spacing="10">
-        <Label style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="BLACKJACK SETUP" />
+      <HBox alignment="CENTER_RIGHT">
+         <children>
+              <Label prefHeight="47.0" prefWidth="558.0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="BLACKJACK SETUP" />
+            <Button mnemonicParsing="false" onAction="#handleGoToSettings" prefHeight="45.0" prefWidth="67.0" text="Settings" />
+         </children>
+      </HBox>
         <HBox alignment="CENTER" spacing="10">
             <Label style="-fx-font-size: 14px;" text="Standard Startkapital:" />
             <TextField fx:id="startingMoneyField" alignment="CENTER" prefWidth="80" text="500" />

@@ -1,6 +1,7 @@
 package at.ac.hcw.Game.Poker_Chips;
 //für tim
 import at.ac.hcw.Game.AllSoundEffects;
+import at.ac.hcw.Game.SettingsController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -40,6 +41,9 @@ public class PokerSetupController {
                 getClass().getResource("/at/ac/hcw/Game/Settings.fxml")
         );
         Parent root = loader.load();
+
+        SettingsController controller = loader.getController();
+        controller.setPBN(0); // or 1, 2, etc.
 
         Stage stage = (Stage) bigBlindField.getScene().getWindow();
         stage.setScene(new Scene(root));
