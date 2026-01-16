@@ -17,16 +17,17 @@ import java.util.List;
 
 public class BlackJackSetupController {
 
-    @FXML private TextField startingMoneyField;
+    // Standardwert für das Startkapital, da das UI-Feld entfernt wurde
+    private static final String DEFAULT_CHIPS = "500";
+
     @FXML private HBox playerListContainer;
 
-    // Separate lists for names and chips to keep data organized
     private final List<TextField> nameInputFields = new ArrayList<>();
     private final List<TextField> chipInputFields = new ArrayList<>();
 
     @FXML
     public void initialize() {
-        // Initialize with 2 players
+        // Initialisierung mit 2 Spielern
         handleAddPlayer();
         handleAddPlayer();
     }
@@ -37,19 +38,19 @@ public class BlackJackSetupController {
 
         int playerNum = nameInputFields.size() + 1;
 
-        // Create UI components
+        // UI Komponenten erstellen
         StackPane cardIcon = createCardIcon(playerNum);
         TextField nameField = createStyledTextField("Name P" + playerNum);
         TextField chipsField = createStyledTextField("Chips");
 
-        // Set default chips from the global setting
-        chipsField.setText(startingMoneyField.getText());
+        // Standard-Chips setzen
+        chipsField.setText(DEFAULT_CHIPS);
 
-        // Save references for data retrieval
+        // Referenzen speichern
         nameInputFields.add(nameField);
         chipInputFields.add(chipsField);
 
-        // Group everything in a centered vertical column
+        // In einer vertikalen Spalte gruppieren
         VBox playerColumn = new VBox(12, cardIcon, nameField, chipsField);
         playerColumn.setAlignment(Pos.CENTER);
 
@@ -59,7 +60,7 @@ public class BlackJackSetupController {
     @FXML
     private void handleRemovePlayer() {
         int lastIndex = playerListContainer.getChildren().size() - 1;
-        if (lastIndex >= 1) { // Ensure at least 1 player remains
+        if (lastIndex >= 1) { // Mindestens 1 Spieler muss bleiben
             playerListContainer.getChildren().remove(lastIndex);
             nameInputFields.remove(lastIndex);
             chipInputFields.remove(lastIndex);
@@ -73,10 +74,9 @@ public class BlackJackSetupController {
             launchTableScene(players);
         } catch (Exception e) {
             System.err.println("Launch error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
-
-    // --- UI Helper Methods (Human Readable Styling) ---
 
     private StackPane createCardIcon(int number) {
         Label label = new Label(String.valueOf(number));
@@ -103,8 +103,6 @@ public class BlackJackSetupController {
         return tf;
     }
 
-    // --- Logic Helper Methods ---
-
     private Player[] collectPlayerData() {
         Player[] players = new Player[nameInputFields.size()];
         for (int i = 0; i < players.length; i++) {
@@ -115,7 +113,7 @@ public class BlackJackSetupController {
             try {
                 chips = Integer.parseInt(chipInputFields.get(i).getText());
             } catch (NumberFormatException e) {
-                chips = Integer.parseInt(startingMoneyField.getText());
+                chips = Integer.parseInt(DEFAULT_CHIPS);
             }
             players[i] = new Player(name, chips);
         }
@@ -129,7 +127,8 @@ public class BlackJackSetupController {
         BlackJackTableController controller = loader.getController();
         controller.setGame(new BlackjackRules(players));
 
-        Stage stage = (Stage) startingMoneyField.getScene().getWindow();
+        // Zugriff auf die Stage über den playerListContainer, da startingMoneyField gelöscht wurde
+        Stage stage = (Stage) playerListContainer.getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.setTitle("Blackjack Table");
     }

@@ -19,10 +19,6 @@
 
     <VBox alignment="CENTER" spacing="10">
         <Label text="BLACKJACK SETUP" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
-        <HBox alignment="CENTER" spacing="10">
-            <Label text="Standard Startkapital:" style="-fx-font-size: 14px;" />
-            <TextField fx:id="startingMoneyField" prefWidth="80" text="500" alignment="CENTER" />
-        </HBox>
     </VBox>
 
     <Separator maxWidth="800" />
