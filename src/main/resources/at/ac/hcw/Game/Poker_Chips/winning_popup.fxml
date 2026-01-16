@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx/22"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="at.ac.hcw.Game.Poker_Chips.WinningPopupController"
+           stylesheets="@/ui/poker-ui.css"
+           style="-fx-background-color: rgba(0,0,0,0.55);">
+
+    <VBox spacing="14"
+          alignment="CENTER"
+          maxWidth="360"
+          styleClass="card">
+
+        <Label text="🎉 RUNDENSIEGER 🎉"
+               styleClass="h1"/>
+
+        <Label fx:id="winnerLabel"
+               text="Player X"
+               style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+
+        <Label fx:id="chipsLabel"
+               text="+0 Chips"
+               style="-fx-font-size: 18px;"/>
+
+        <Button text="Weiter"
+                styleClass="btn,btn-green"
+                onAction="#handleClose"/>
+    </VBox>
+
+</StackPane>

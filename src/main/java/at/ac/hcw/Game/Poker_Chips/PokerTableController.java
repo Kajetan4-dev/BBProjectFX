@@ -2,8 +2,10 @@ package at.ac.hcw.Game.Poker_Chips;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class PokerTableController {
@@ -68,6 +70,31 @@ public class PokerTableController {
             );
 
             playersBox.getChildren().add(line);
+        }
+
+        if (game.hasRoundEnded()) {
+            showWinningPopup();
+        }
+    }
+
+    private void showWinningPopup() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("winning_popup.fxml"));
+
+            StackPane popup = loader.load();
+            WinningPopupController controller = loader.getController();
+            controller.setRoot(popup);
+
+            int winnerIndex = game.getLastWinnerIndex();
+            int chipsWon = game.getLastPotWon();
+
+            controller.setData(game.getPlayers()[winnerIndex].getName(), chipsWon);
+
+            StackPane root = (StackPane) playersBox.getScene().getRoot();
+            root.getChildren().add(popup);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

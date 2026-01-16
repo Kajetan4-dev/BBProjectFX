@@ -4,65 +4,84 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane styleClass="bg-table"
-            stylesheets="@/ui/poker-ui.css"
-            xmlns="http://javafx.com/javafx/22"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="at.ac.hcw.Game.Poker_Chips.PokerTableController">
+<!-- 🔴 NEU: StackPane als Root für Popup-Overlay -->
+<StackPane xmlns="http://javafx.com/javafx/22"
+           xmlns:fx="http://javafx.com/fxml/1"
+           stylesheets="@/ui/poker-ui.css"
+           fx:controller="at.ac.hcw.Game.Poker_Chips.PokerTableController">
 
-    <padding><Insets top="18" right="18" bottom="18" left="18"/></padding>
+    <!-- Dein bisheriges Layout bleibt 1:1 -->
+    <BorderPane styleClass="bg-table">
 
-    <!-- Top HUD -->
-    <top>
-        <HBox spacing="12" alignment="CENTER" padding="8">
-            <Label text="Poker Table" styleClass="h1"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <HBox styleClass="pill" spacing="12" alignment="CENTER">
-                <Label fx:id="roundLabel" text="Round: PREFLOP"/>
-                <Label fx:id="potLabel" text="Pot: 0"/>
+        <padding>
+            <Insets top="18" right="18" bottom="18" left="18"/>
+        </padding>
+
+        <!-- Top HUD -->
+        <top>
+            <HBox spacing="12" alignment="CENTER" padding="8">
+                <Label text="Poker Table" styleClass="h1"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <HBox styleClass="pill" spacing="12" alignment="CENTER">
+                    <Label fx:id="roundLabel" text="Round: PREFLOP"/>
+                    <Label fx:id="potLabel" text="Pot: 0"/>
+                </HBox>
             </HBox>
-        </HBox>
-    </top>
+        </top>
 
-    <!-- Center: Info + players list -->
-    <center>
-        <VBox spacing="12" alignment="TOP_CENTER">
-            <HBox spacing="12" maxWidth="720">
-                <VBox styleClass="card" spacing="6" VBox.vgrow="NEVER" HBox.hgrow="ALWAYS">
-                    <Label text="Status" styleClass="card-title"/>
-                    <Label fx:id="currentBetLabel" text="Current Bet: 0" styleClass="subtle"/>
-                    <Label fx:id="currentPlayerLabel" text="Current Player: ?" styleClass="subtle"/>
+        <!-- Center -->
+        <center>
+            <VBox spacing="12" alignment="TOP_CENTER">
+                <HBox spacing="12" maxWidth="720">
+                    <VBox styleClass="card" spacing="6"
+                          VBox.vgrow="NEVER" HBox.hgrow="ALWAYS">
+                        <Label text="Status" styleClass="card-title"/>
+                        <Label fx:id="currentBetLabel"
+                               text="Current Bet: 0"
+                               styleClass="subtle"/>
+                        <Label fx:id="currentPlayerLabel"
+                               text="Current Player: ?"
+                               styleClass="subtle"/>
+                    </VBox>
+
+                    <VBox styleClass="card" spacing="6" prefWidth="260">
+                        <Label text="Raise" styleClass="card-title"/>
+                        <HBox spacing="10">
+                            <TextField fx:id="raiseField"
+                                       promptText="Raise amount"
+                                       prefWidth="140"/>
+                            <Button text="Raise"
+                                    styleClass="btn,btn-blue"
+                                    onAction="#handleRaise"/>
+                        </HBox>
+                    </VBox>
+                </HBox>
+
+                <VBox maxWidth="720" spacing="10" styleClass="card">
+                    <Label text="Players" styleClass="card-title"/>
+                    <Separator/>
+                    <VBox fx:id="playersBox" spacing="8"/>
                 </VBox>
-
-                <VBox styleClass="card" spacing="6" prefWidth="260">
-                    <Label text="Raise" styleClass="card-title"/>
-                    <HBox spacing="10">
-                        <TextField fx:id="raiseField" promptText="Raise amount" prefWidth="140"/>
-                        <Button text="Raise" styleClass="btn,btn-blue" onAction="#handleRaise"/>
-                    </HBox>
-                </VBox>
-            </HBox>
-
-            <VBox maxWidth="720" spacing="10" styleClass="card">
-                <Label text="Players" styleClass="card-title"/>
-                <Separator/>
-                <!-- Hier renderst du alle Spieler (wie bisher) -->
-                <VBox fx:id="playersBox" spacing="8"/>
             </VBox>
-        </VBox>
-    </center>
+        </center>
 
-    <!-- Bottom actions -->
-    <bottom>
-        <VBox spacing="12" alignment="CENTER">
-            <HBox spacing="14" alignment="CENTER">
-                <!-- Optional: nur wenn du handleCall() hast -->
-                <Button text="Call / Check" styleClass="btn,btn-blue" onAction="#handleCall"/>
-                <Button text="— Fold" styleClass="btn,btn-red" onAction="#handleFold"/>
-            </HBox>
+        <!-- Bottom actions -->
+        <bottom>
+            <VBox spacing="12" alignment="CENTER">
+                <HBox spacing="14" alignment="CENTER">
+                    <Button text="Call / Check"
+                            styleClass="btn,btn-blue"
+                            onAction="#handleCall"/>
+                    <Button text="— Fold"
+                            styleClass="btn,btn-red"
+                            onAction="#handleFold"/>
+                </HBox>
 
-            <Button text="Spiel beenden" styleClass="btn,btn-red" onAction="#handleBack"/>
-        </VBox>
-    </bottom>
+                <Button text="Spiel beenden"
+                        styleClass="btn,btn-red"
+                        onAction="#handleBack"/>
+            </VBox>
+        </bottom>
 
-</BorderPane>
+    </BorderPane>
+</StackPane>

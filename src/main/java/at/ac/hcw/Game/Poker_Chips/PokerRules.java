@@ -13,6 +13,9 @@ public class PokerRules {
 
     private boolean[] folded;
 
+    private int lastWinnerIndex = -1;
+    private int lastPotWon = 0;
+
     // Runde-Logik
     private boolean[] needsAction; // wer muss in dieser Runde noch handeln?
     private int round;             // 0=Preflop,1=Flop,2=Turn,3=River
@@ -217,6 +220,9 @@ public class PokerRules {
         if (winnerIndex == -1) return;
 
         PokerChipsPlayer winner = players[winnerIndex];
+        lastWinnerIndex = winnerIndex;
+        lastPotWon = pot;
+
         winner.setPlayerMoney(winner.getPlayerMoney() + pot);
         pot = 0;
     }
@@ -306,4 +312,18 @@ public class PokerRules {
             default -> "ROUND";
         };
     }
+
+    public int getLastWinnerIndex() {
+        return lastWinnerIndex;
+    }
+
+    public int getLastPotWon() {
+        return lastPotWon;
+    }
+
+    public boolean hasRoundEnded() {
+        return lastWinnerIndex != -1;
+    }
+
+
 }
