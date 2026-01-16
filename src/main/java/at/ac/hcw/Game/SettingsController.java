@@ -1,27 +1,16 @@
 package at.ac.hcw.Game;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Slider;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
-
-import java.io.IOException;
+import javafx.scene.control.Slider;
+import javafx.scene.layout.Pane;
 
 public class SettingsController {
-
-    private static Scene previousScene;
-
-    public static void setPreviousScene(Scene scene){
-        previousScene = scene;
-    }
+    @FXML
+    private Button neuesSpielBtn;
+    private int PBN;
     @FXML
     private Slider volumeSld;
-
-    @FXML
-    private Button backBtn;
 
     @FXML
     public void initialize() {
@@ -33,39 +22,29 @@ public class SettingsController {
                 SoundManager.volumeProperty()
         );
     }
+    public void setPBN(int PBN) {
+        this.PBN = PBN;
+
+        // You can react immediately if needed
+        if (neuesSpielBtn != null && PBN == 0) {
+            ((Pane) neuesSpielBtn.getParent()).getChildren().remove(neuesSpielBtn);
+        }
+    }
 
     @FXML
     private void neuesSpiel() {
         AllSoundEffects.button();
-
+        // your code
     }
 
     @FXML
     private void zurückZumHauptmenü() {
         AllSoundEffects.button();
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/at/ac/hcw/Game/Choice.fxml"));
-            Stage stage = (Stage) backBtn.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Casino Game Selection");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // your code
     }
 
-
     @FXML
-    private void handleBack() {
+    private void zurückLast(){
         AllSoundEffects.button();
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/at/ac/hcw/Game/Poker_Chips/poker_setup.fxml"));
-            Stage stage = (Stage) backBtn.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Poker Chips Setup");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

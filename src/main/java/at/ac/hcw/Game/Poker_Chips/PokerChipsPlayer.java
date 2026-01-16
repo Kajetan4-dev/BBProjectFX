@@ -1,5 +1,4 @@
 package at.ac.hcw.Game.Poker_Chips;
-//für tim
 public class PokerChipsPlayer {
     private String name;
     private int playerMoney;

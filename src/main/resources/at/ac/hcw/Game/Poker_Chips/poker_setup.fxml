@@ -17,7 +17,7 @@
       
           <!-- Title -->
           <Label prefHeight="40.0" prefWidth="551.0" style="-fx-font-size: 28px; -fx-font-weight: bold;" text="Wie viele Spieler?" />
-         <Button mnemonicParsing="false" onAction="#handleGoToSettings" prefHeight="45.0" prefWidth="67.0" text="Settings" />
+         <Button mnemonicParsing="false" onAction="#handleGoToSettings" prefHeight="55.0" prefWidth="60.0" style="-fx-font-size: 25px; -fx-border-color: Black; -fx-border-width: 2;" text="⚙" />
       </children>
    </HBox>
 

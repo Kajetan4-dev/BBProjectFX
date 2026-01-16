@@ -14,7 +14,7 @@ public class ChoiceController {
 
     @FXML
     public void initialize() {
-        SoundManager.playMusic("/at/ac/hcw/Game/Media/Sounds/Music/jazz-cafe-music-348267.mp3");
+        SoundManager.playMusic("/at/ac/hcw/Game/Media/Sounds/Music/the-free-jazz-music-459752.mp3");
     }
 
     @FXML
