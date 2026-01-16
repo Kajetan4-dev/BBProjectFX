@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+
+    <Label fx:id="playerNameLabel" text="Player Name" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+    <Label fx:id="playerChipsLabel" text="Chips: 0"/>
+    <Label fx:id="playerBidLabel" text="Bid: 0"/>
+    <Label fx:id="playerTotalLabel" text="Total: 0"/>
+
+    <HBox fx:id="cardsContainer" spacing="5" alignment="CENTER_LEFT" style="-fx-padding: 5px;">
+        <!-- Karten werden hier dynamisch als Label hinzugefügt -->
+    </HBox>
+
+    <TextField fx:id="playerBidField" promptText="Bid setzen" maxWidth="80"/>
+    <Button fx:id="setBidButton" text="Set Bid"/>
+    <Button fx:id="hitButton" text="Hit" disable="true"/>
+    <Button fx:id="standButton" text="Stand" disable="true"/>
+
+</VBox>
