@@ -72,24 +72,26 @@ public class BlackJackTableController {
         double h = playerContainer.getHeight();
         if (w <= 0 || h <= 0) return;
 
-        double centerX = w / 2;
-        double centerY = h * 1.05; // Mittelpunkt knapp unter dem Fenster
-        double radius = Math.min(w, h) * 1;
+        // Kreis allignment für die spieler
 
-        double startAngle = 220;
-        double endAngle = 320;
-        double step = (n == 1) ? 0 : (endAngle - startAngle) / (n - 1);
+        double centerX = w / 2;
+        double centerY = h * -1.25;
+        double radius = Math.min(w, h) * 1.75;
+
+        double startAngle = 50;
+        double endAngle = 130;
+        double step = n == 1 ? 0 : (endAngle - startAngle) / (n - 1);
 
         for (int i = 0; i < n; i++) {
             VBox box = (VBox) playerContainer.getChildren().get(i);
-            double currentAngle = (n == 1) ? 270 : startAngle + (i * step);
-            double angleRad = Math.toRadians(currentAngle);
+            double angle = Math.toRadians(startAngle + i * step);
 
-            box.setLayoutX(centerX + radius * Math.cos(angleRad) - (box.getPrefWidth() / 2));
-            box.setLayoutY(centerY + radius * Math.sin(angleRad) - (box.getPrefHeight() / 2));
+            box.setLayoutX(centerX + radius * Math.cos(angle) - box.getPrefWidth() / 2);
+            box.setLayoutY(centerY + radius * Math.sin(angle) - box.getPrefHeight() / 2);
 
-            // Rotation zum Dealer hin
-            box.setRotate(currentAngle - 270);
+            double visualAngle = (startAngle + i * step) - 90;
+            box.setRotate(visualAngle * 0.6);
+
         }
     }
 
