@@ -1,5 +1,7 @@
 package at.ac.hcw.Game.Poker_Chips;
-
+//für tim
+import at.ac.hcw.Game.AllSoundEffects;
+import at.ac.hcw.Game.SettingsController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -33,7 +35,27 @@ public class PokerSetupController {
     }
 
     @FXML
+    private void handleGoToSettings() throws IOException {
+        AllSoundEffects.button();
+        SettingsController.setFromBlackjack(false);
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/at/ac/hcw/Game/Settings.fxml")
+        );
+        Parent root = loader.load();
+
+        SettingsController controller = loader.getController();
+        controller.setPBN(0); // or 1, 2, etc.
+
+        Stage stage = (Stage) bigBlindField.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Settings");
+        stage.show();
+    }
+
+
+    @FXML
     private void handleAddPlayer() {
+        AllSoundEffects.button();
         if (playerCards.size() >= 6) return;
 
         int playerNumber = playerCards.size() + 1;
@@ -52,6 +74,7 @@ public class PokerSetupController {
 
     @FXML
     private void handleRemovePlayer() {
+        AllSoundEffects.button();
         if (playerCards.size() <= 2) return;
 
         PlayerCard lastCard = playerCards.remove(playerCards.size() - 1);
@@ -65,6 +88,7 @@ public class PokerSetupController {
 
     @FXML
     private void handleStartGame() {
+        AllSoundEffects.button();
         try {
             // 1. Collect Data from UI
             int big = Integer.parseInt(bigBlindField.getText());

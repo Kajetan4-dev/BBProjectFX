@@ -1,5 +1,7 @@
 package at.ac.hcw.Game.Black_Jack;
 
+import at.ac.hcw.Game.AllSoundEffects;
+import at.ac.hcw.Game.SettingsController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -12,12 +14,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlackJackSetupController {
 
-    @FXML private TextField startingMoneyField;
     @FXML private HBox playerListContainer;
 
     // Separate lists for names and chips to keep data organized
@@ -32,7 +34,27 @@ public class BlackJackSetupController {
     }
 
     @FXML
+    private void handleGoToSettings() throws IOException {
+        AllSoundEffects.button();
+
+        SettingsController.setFromBlackjack(true);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Settings.fxml"));
+        Parent root = loader.load();
+
+        SettingsController controller = loader.getController();
+        controller.setPBN(2);
+
+        Stage stage = (Stage) playerListContainer.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Settings");
+        stage.show();
+    }
+
+
+    @FXML
     private void handleAddPlayer() {
+        AllSoundEffects.button();
         if (nameInputFields.size() >= 6) return; // UI Limit
 
         int playerNum = nameInputFields.size() + 1;
@@ -43,7 +65,7 @@ public class BlackJackSetupController {
         TextField chipsField = createStyledTextField("Chips");
 
         // Set default chips from the global setting
-        chipsField.setText(startingMoneyField.getText());
+        chipsField.setText("500");
 
         // Save references for data retrieval
         nameInputFields.add(nameField);
@@ -58,6 +80,7 @@ public class BlackJackSetupController {
 
     @FXML
     private void handleRemovePlayer() {
+        AllSoundEffects.button();
         int lastIndex = playerListContainer.getChildren().size() - 1;
         if (lastIndex >= 1) { // Ensure at least 1 player remains
             playerListContainer.getChildren().remove(lastIndex);
@@ -68,6 +91,7 @@ public class BlackJackSetupController {
 
     @FXML
     private void startGame() {
+        AllSoundEffects.button();
         try {
             Player[] players = collectPlayerData();
             launchTableScene(players);
@@ -115,7 +139,7 @@ public class BlackJackSetupController {
             try {
                 chips = Integer.parseInt(chipInputFields.get(i).getText());
             } catch (NumberFormatException e) {
-                chips = Integer.parseInt(startingMoneyField.getText());
+                chips = 500;
             }
             players[i] = new Player(name, chips);
         }
@@ -129,7 +153,7 @@ public class BlackJackSetupController {
         BlackJackTableController controller = loader.getController();
         controller.setGame(new BlackjackRules(players));
 
-        Stage stage = (Stage) startingMoneyField.getScene().getWindow();
+        Stage stage = (Stage) playerListContainer.getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.setTitle("Blackjack Table");
     }

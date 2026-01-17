@@ -15,7 +15,7 @@
       <Label alignment="CENTER" layoutX="-2.0" layoutY="-1.0" prefHeight="141.0" prefWidth="1031.0" style="-fx-font-family: 'Cinzel', cursive; -fx-font-size: 48px; -fx-font-weight: bold;" text="Einstellungen" textAlignment="CENTER" />
       <AnchorPane layoutX="-2.0" layoutY="97.66666412353516" prefHeight="200.0" prefWidth="200.0">
          <children>
-            <Slider fx:id="volumeSld" layoutX="275.0" layoutY="63.0" onDragDetected="#handleVolume" prefHeight="31.0" prefWidth="366.0">
+            <Slider fx:id="volumeSld" layoutX="275.0" layoutY="63.0" prefHeight="31.0" prefWidth="366.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -44,7 +44,7 @@
             </VBox>
             <VBox alignment="BOTTOM_RIGHT" prefHeight="336.0" prefWidth="478.0">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="56.0" prefWidth="148.0" style="-fx-border-color: red; -fx-border-width: 3; -fx-font-weight: bold; -fx-font-size: 30px;" text="Zurück">
+                  <Button fx:id="backBtn" mnemonicParsing="false" onAction="#zurückLast" prefHeight="56.0" prefWidth="148.0" style="-fx-border-color: red; -fx-border-width: 3; -fx-font-weight: bold; -fx-font-size: 30px;" text="Zurück">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
