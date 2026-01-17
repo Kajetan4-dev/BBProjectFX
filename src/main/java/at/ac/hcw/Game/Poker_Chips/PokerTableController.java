@@ -1,23 +1,33 @@
 package at.ac.hcw.Game.Poker_Chips;
 
+import at.ac.hcw.Game.AllSoundEffects;
+import at.ac.hcw.Game.GameStatePoker;
+import at.ac.hcw.Game.SettingsController;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PokerTableController {
 
-    // UI-Elemente aus der FXML-Datei
     @FXML private Label potLabel;
     @FXML private Label currentBetLabel;
     @FXML private Label roundLabel;
     @FXML private HBox playerContainer;
+    @FXML private VBox leftColumn;
+    @FXML private VBox rightColumn;
 
     private PokerRules game;
 
-    // Listen zur Verwaltung der dynamisch erstellten UI-Elemente pro Spieler
+    private List<Label> nameLabels = new ArrayList<>();
     private List<Label> moneyLabels = new ArrayList<>();
     private List<Label> betLabels = new ArrayList<>();
     private List<Label> roleLabels = new ArrayList<>();
@@ -27,102 +37,145 @@ public class PokerTableController {
     private List<Button> foldButtons = new ArrayList<>();
     private List<VBox> playerBoxes = new ArrayList<>();
 
-    // Initialisiert das Spiel und baut die Benutzeroberfläche auf
     public void setGame(PokerRules game) {
         this.game = game;
-        createPlayerUI(); // Erstellt die grafischen Karten für alle Spieler
-        updateUI();       // Füllt die Karten mit den aktuellen Werten
+        createPlayerUI();
+        updateUI();
     }
 
-    // Erstellt dynamisch für jeden Spieler eine Anzeige-Box (Karte)
     private void createPlayerUI() {
-        playerContainer.getChildren().clear(); // Container leeren
-        clearLists();                          // Listen für neue Runde zurücksetzen
+        leftColumn.getChildren().clear();
+        rightColumn.getChildren().clear();
+        clearLists();
+
         PokerChipsPlayer[] players = game.getPlayers();
 
         for (int i = 0; i < players.length; i++) {
-            // Haupt-Container der Spielerkarte
-            VBox pBox = new VBox(8);
-            pBox.setAlignment(Pos.CENTER);
-            pBox.setMinWidth(160);
-            pBox.setStyle("-fx-border-color: #dcdcdc; -fx-border-width: 2; -fx-border-radius: 15; -fx-background-color: white; -fx-background-radius: 15; -fx-padding: 10;");
 
-            // Label für Rollen-Anzeige (D, SB, BB)
+            VBox pBox = new VBox(10);
+            pBox.setAlignment(Pos.CENTER_LEFT);
+            pBox.setMinWidth(260);
+            pBox.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-padding: 10; -fx-background-color: #f5f0e6;");
+
             Label roleLabel = new Label("");
-            roleLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #7f8c8d; -fx-background-radius: 10; -fx-padding: 2 10;");
+            roleLabel.setStyle(
+                    "-fx-font-weight: bold;" +
+                            "-fx-text-fill: white;" +
+                            "-fx-background-color: #7f8c8d;" +
+                            "-fx-background-radius: 10;" +
+                            "-fx-padding: 2 8;"
+            );
             roleLabel.setVisible(false);
 
-            // Spielerinformationen
             Label name = new Label(players[i].getName());
-            name.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: black;");
+            name.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: black;");
+
 
             Label chips = new Label("Chips: " + players[i].getPlayerMoney());
-            chips.setStyle("-fx-text-fill: black;");
+            chips.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: black;");
 
-            Label bid = new Label("Bid: 0");
-            bid.setStyle("-fx-text-fill: black;");
+            Label bet = new Label("Bet: 0");
 
-            // Eingabefeld für Raise-Beträge
-            TextField rField = new TextField();
-            rField.setPromptText("Raise...");
-            rField.setMaxWidth(90);
-            rField.setAlignment(Pos.CENTER);
+            HBox headerRow = new HBox(8, roleLabel, name);
+            headerRow.setAlignment(Pos.CENTER_LEFT);
 
-            // Buttons erstellen und mit Spiellogik verknüpfen
+            VBox moneyAndBet = new VBox(4, chips, bet);
+            moneyAndBet.setAlignment(Pos.CENTER_LEFT);
+
+            TextField betField = new TextField();
+            betField.setPromptText("Amount...");
+            betField.setMaxWidth(80);
+            betField.setAlignment(Pos.CENTER);
+
             Button raiseBtn = createStyledButton("Raise");
+            Button callBtn  = createStyledButton("Call");
+            Button foldBtn  = createStyledButton("Fold");
+
             raiseBtn.setOnAction(e -> {
                 try {
-                    game.raise(Integer.parseInt(rField.getText()));
-                    rField.clear();
+                    AllSoundEffects.button();
+                    game.raise(Integer.parseInt(betField.getText()));
+                    betField.clear();
                     updateUI();
-                } catch(Exception ex){} // Ignoriert ungültige Eingaben
+                } catch (Exception ex) {}
             });
 
-            Button callBtn = createStyledButton("Call/Check");
-            callBtn.setOnAction(e -> { game.callOrCheck(); updateUI(); });
+            callBtn.setOnAction(e -> {AllSoundEffects.button(); game.callOrCheck(); updateUI(); });
+            foldBtn.setOnAction(e -> {AllSoundEffects.button(); game.fold(); updateUI(); });
 
-            Button foldBtn = createStyledButton("Fold");
-            foldBtn.setOnAction(e -> { game.fold(); updateUI(); });
+            HBox buttonsRow = new HBox(6, betField, raiseBtn, callBtn, foldBtn);
+            buttonsRow.setAlignment(Pos.CENTER_LEFT);
 
-            // Referenzen in Listen speichern für späteren Zugriff in updateUI()
+            nameLabels.add(name);
             roleLabels.add(roleLabel);
-            moneyLabels.add(chips); betLabels.add(bid); raiseFields.add(rField);
-            callButtons.add(callBtn); raiseButtons.add(raiseBtn); foldButtons.add(foldBtn);
+            moneyLabels.add(chips);
+            betLabels.add(bet);
+            raiseFields.add(betField);
+            callButtons.add(callBtn);
+            raiseButtons.add(raiseBtn);
+            foldButtons.add(foldBtn);
             playerBoxes.add(pBox);
 
-            // Alle Elemente der Spielerbox hinzufügen
-            pBox.getChildren().addAll(roleLabel, name, chips, bid, rField, raiseBtn, callBtn, foldBtn);
-            playerContainer.getChildren().add(pBox);
+            pBox.getChildren().addAll(headerRow, moneyAndBet, buttonsRow);
+
+            if (i >= 3) {
+                rightColumn.getChildren().add(pBox);
+            } else {
+                leftColumn.getChildren().add(pBox);
+            }
         }
     }
 
-    // Hilfsmethode für einheitliches Button-Design
+    @FXML
+    private void handleGoToSettings() throws IOException {
+        AllSoundEffects.button();
+        //Saves Game State
+        GameStatePoker.setPokerGame(game);
+
+        SettingsController.setFromBlackjack(false);
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/at/ac/hcw/Game/Settings.fxml")
+        );
+        Parent root = loader.load();
+
+        SettingsController controller = loader.getController();
+        controller.setPBN(1); // or 1, 2, etc.
+
+        Stage stage = (Stage) currentBetLabel.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Settings");
+        stage.show();
+    }
+
     private Button createStyledButton(String text) {
         Button b = new Button(text);
         b.setMinWidth(110);
-        b.setStyle("-fx-background-color: white; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-text-fill: black; -fx-cursor: hand; -fx-font-weight: bold;");
+        b.setStyle("-fx-border-color: black;" +
+                        "-fx-border-radius: 5;" +
+                        "-fx-text-fill: black;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-font-weight: bold;"
+        );
         return b;
     }
 
-    // Aktualisiert alle Anzeigen basierend auf dem aktuellen Spielzustand
     private void updateUI() {
-        // Allgemeine Spielinfos setzen
         potLabel.setText(String.valueOf(game.getPot()));
         currentBetLabel.setText(String.valueOf(game.getCurrentBet()));
-        if(roundLabel != null) roundLabel.setText("Round: " + game.getHandCount());
+        if (roundLabel != null) roundLabel.setText("Round: " + game.getHandCount());
 
         PokerChipsPlayer[] players = game.getPlayers();
-        int curr = game.getCurrentPlayerIndex(); // Wer ist gerade dran?
-        int dIdx = game.getDIndex();             // Dealer-Index
-        int bbIdx = game.getBBIndex();           // Big Blind Index
-        int sbIdx = game.getSBIndex();           // Small Blind Index
+        int curr = game.getCurrentPlayerIndex();
+        int dIdx = game.getDIndex();
+        int bbIdx = game.getBBIndex();
+        int sbIdx = game.getSBIndex();
 
         for (int i = 0; i < players.length; i++) {
-            // Texte aktualisieren
-            moneyLabels.get(i).setText("Chips: " + players[i].getPlayerMoney());
-            betLabels.get(i).setText("Bid: " + players[i].getBet());
 
-            // Rollen-Schilder (D, BB, SB) zuweisen
+            nameLabels.get(i).setText(players[i].getName());
+            moneyLabels.get(i).setText("Chips: " + players[i].getPlayerMoney());
+            betLabels.get(i).setText("Bet: " + players[i].getBet());
+
             if (i == dIdx) {
                 roleLabels.get(i).setText("D");
                 roleLabels.get(i).setVisible(true);
@@ -139,30 +192,33 @@ public class PokerTableController {
             boolean isCurrent = (i == curr);
             boolean folded = game.isFolded(i);
 
-            // Buttons sperren, wenn der Spieler nicht dran ist oder gefoldet hat
             callButtons.get(i).setDisable(!isCurrent || folded);
             raiseButtons.get(i).setDisable(!isCurrent || folded);
             foldButtons.get(i).setDisable(!isCurrent || folded);
             raiseFields.get(i).setDisable(!isCurrent || folded);
 
-            // Visuelles Feedback
             if (folded) {
-                playerBoxes.get(i).setOpacity(0.4); // Gefaltete Spieler ausgrauen
+                playerBoxes.get(i).setOpacity(0.4);
             } else if (isCurrent) {
-                // Aktiver Spieler erhält einen blauen Rahmen
-                playerBoxes.get(i).setStyle("-fx-border-color: #3498db; -fx-border-width: 3; -fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-padding: 10;");
+                playerBoxes.get(i).setStyle("-fx-border-color: blue; -fx-border-width: 2; -fx-padding: 10; -fx-background-color: #f5f0e6;"
+                );
                 playerBoxes.get(i).setOpacity(1.0);
             } else {
-                // Inaktive Spieler haben einen normalen grauen Rahmen
-                playerBoxes.get(i).setStyle("-fx-border-color: #dcdcdc; -fx-border-width: 2; -fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-padding: 10;");
+                playerBoxes.get(i).setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-padding: 10; -fx-background-color: #f5f0e6;");
                 playerBoxes.get(i).setOpacity(1.0);
             }
         }
     }
 
-    // Leert alle Listen für einen sauberen Neuaufbau
     private void clearLists() {
-        moneyLabels.clear(); betLabels.clear(); roleLabels.clear(); raiseFields.clear();
-        callButtons.clear(); raiseButtons.clear(); foldButtons.clear(); playerBoxes.clear();
+        nameLabels.clear();
+        moneyLabels.clear();
+        betLabels.clear();
+        roleLabels.clear();
+        raiseFields.clear();
+        callButtons.clear();
+        raiseButtons.clear();
+        foldButtons.clear();
+        playerBoxes.clear();
     }
 }
