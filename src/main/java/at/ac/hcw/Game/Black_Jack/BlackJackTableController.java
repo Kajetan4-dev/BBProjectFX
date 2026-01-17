@@ -154,8 +154,6 @@ public class BlackJackTableController {
                             "-fx-background-color: #fcfcfc; -fx-background-radius: 15; -fx-padding: 10;"
             );
 
-            Label name = new Label(players[i].getName());
-            name.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
             // Karten oben anzeigen
             HBox cardsHBox = new HBox(3);
@@ -180,7 +178,7 @@ public class BlackJackTableController {
             bidIn.setPromptText("Einsatz...");
             bidIn.setStyle("-fx-background-radius: 5;");
 
-            Button setBtn = createTransparentButton("Set Bid");
+            Button setBtn = createBlackButton("Set Bid");
             setBtn.setDisable(false);
             setBtn.setOnAction(e -> setBidForPlayer(index, bidIn));
 
@@ -317,14 +315,6 @@ public class BlackJackTableController {
         showAlert("Round Over", msg.toString());
     }
 
-    @FXML private void handleNewRound() {
-        roundCounter++;
-        game.resetRound();
-        createPlayerUI();
-        layoutPlayers();
-        newRoundButton.setVisible(false);
-        updateUI();
-    }
 
     private void clearLists() {
         chipsLabels.clear(); bidLabels.clear(); cardContainers.clear();
