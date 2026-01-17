@@ -8,6 +8,8 @@ public class Deck {
 
     private List<Integer> cards;
 
+
+
     public Deck() {
         cards = new ArrayList<>();
         initDeck();
@@ -49,4 +51,12 @@ public class Deck {
     public int remainingCards() {
         return cards.size();
     }
+
+    public void setCards(int[] cardsArray) {
+        cards.clear();
+        for (int c : cardsArray) {
+            cards.add(c);
+        }
+    }
+
 }

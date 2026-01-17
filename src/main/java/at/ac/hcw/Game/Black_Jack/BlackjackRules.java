@@ -162,4 +162,14 @@ public class BlackjackRules {
         while (total > 21 && aces > 0) { total -= 10; aces--; }
         return total;
     }
+
+    public void setCurrentPlayerIndex(int index) {
+        this.currentPlayerIndex = index;
+    }
+
+    public void setRoundActive(boolean active) {
+        this.roundActive = active;
+    }
+
+
 }
