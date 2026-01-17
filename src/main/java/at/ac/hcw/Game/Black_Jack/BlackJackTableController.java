@@ -219,19 +219,19 @@ public class BlackJackTableController {
 
             // Name und Infos in Weiß (damit man es auf dunkler Matte sieht)
             Label name = new Label(players[i].getName());
-            name.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;");
+            name.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: black;");
 
             // Container für Chips-Stapel
             HBox chipsHBox = new HBox(5);
             chipsHBox.setAlignment(Pos.CENTER);
             Label chipsLabel = new Label();
-            chipsLabel.setStyle("-fx-text-fill: white;");
+            chipsLabel.setStyle("-fx-text-fill: black;");
 
             // Container für Bid-Stapel
             HBox bidHBox = new HBox(5);
             bidHBox.setAlignment(Pos.CENTER);
             Label bidLabel = new Label();
-            bidLabel.setStyle("-fx-text-fill: white;");
+            bidLabel.setStyle("-fx-text-fill: black;");
 
             Label total = new Label("Total: 0");
             total.setStyle("-fx-text-fill: black;");
@@ -251,12 +251,12 @@ public class BlackJackTableController {
             hitBtn.setOnAction(e -> { game.hit(); updateUI(); checkIfRoundOver(); AllSoundEffects.button();});
             standBtn.setOnAction(e -> { game.stand(); updateUI(); checkIfRoundOver(); AllSoundEffects.button();});
 
-            chipsLabels.add(chips); bidLabels.add(bid); cardContainers.add(cardsHBox);
+            chipsLabels.add(chipsLabel); bidLabels.add(bidLabel); cardContainers.add(cardsHBox);
             totalLabels.add(total); bidFields.add(bidIn); setBidButtons.add(setBtn);
             hitButtons.add(hitBtn); standButtons.add(standBtn);
 
             // Reihenfolge: Erst Karten, dann Name/Chips, dann Buttons
-            pBox.getChildren().addAll(cardsHBox, total, name, chips, bid, bidIn, setBtn, hitBtn, standBtn);
+            pBox.getChildren().addAll(cardsHBox, total, name, chipsHBox, bidHBox, bidIn, setBtn, hitBtn, standBtn);
             playerContainer.getChildren().add(pBox);
         }
     }
