@@ -56,12 +56,6 @@ public class BlackJackTableController {
     private List<Button> hitButtons = new ArrayList<>();
     private List<Button> standButtons = new ArrayList<>();
 
-    @FXML
-    public void initialize() {
-        playerContainer.widthProperty().addListener((obs, oldVal, newVal) -> layoutPlayers());
-        playerContainer.heightProperty().addListener((obs, oldVal, newVal) -> layoutPlayers());
-    }
-
     public void setGame(BlackjackRules game) {
         if (GameStateBlackjack.hasSavedGame()) {
             this.game = GameStateBlackjack.getSavedGame();
