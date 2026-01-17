@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="550.0" prefWidth="1000.0" spacing="25" style="-fx-background-color: #f5f0e6;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.Game.Black_Jack.BlackJackSetupController">
+<VBox alignment="TOP_CENTER" prefHeight="550.0" prefWidth="1000.0" spacing="25" style="-fx-background-color: #f5f0e6;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.Game.Black_Jack.BlackJackSetupController">
 
     <padding>
         <Insets bottom="40" left="20" right="20" top="40" />
