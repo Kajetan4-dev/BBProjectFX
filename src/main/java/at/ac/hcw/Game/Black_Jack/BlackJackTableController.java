@@ -2,16 +2,23 @@ package at.ac.hcw.Game.Black_Jack;
 //AllSoundEffects.button(); button soud
 
 import at.ac.hcw.Game.AllSoundEffects;
+import at.ac.hcw.Game.SettingsController;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.Node;
+import javafx.scene.layout.StackPane;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.layout.Pane;
 import javafx.application.Platform;
-import javafx.scene.Node;
-import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 public class BlackJackTableController {
 
@@ -48,6 +55,24 @@ public class BlackJackTableController {
         Platform.runLater(this::layoutPlayers);
     }
 
+    @FXML
+    private void handleGoToSettings() throws IOException {
+        AllSoundEffects.button();
+
+        SettingsController.setFromBlackjack(true);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Settings.fxml"));
+        Parent root = loader.load();
+
+        SettingsController controller = loader.getController();
+        controller.setPBN(2);
+
+        Stage stage = (Stage) container.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Settings");
+        stage.show();
+    }
+
     private void createBackgroud() {
         try {
             container.setStyle(
@@ -74,26 +99,43 @@ public class BlackJackTableController {
         double h = playerContainer.getHeight();
         if (w <= 0 || h <= 0) return;
 
-        double centerX = w / 2;
-        double centerY = h * 1.05; // Mittelpunkt knapp unter dem Fenster
-        double radius = Math.min(w, h) * 0.75;
+        // Ellipse radii
+        double radiusX = w * 0.4; // horizontal stretch
+        double radiusY = h * -0.35; // vertical stretch
 
-        double startAngle = 220;
-        double endAngle = 320;
-        double step = (n == 1) ? 0 : (endAngle - startAngle) / (n - 1);
+        double centerX = w / 2;
+        double centerY = h / 10; // dealer is at center
+
+        // Spread players evenly around the ellipse (semi-circle or full circle)
+        double endAngle = 180 + 45; // left
+        double startAngle = 360 - 45;   // right
+        double step = n == 1 ? 0 : (endAngle - startAngle) / (n - 1);
 
         for (int i = 0; i < n; i++) {
             VBox box = (VBox) playerContainer.getChildren().get(i);
-            double currentAngle = (n == 1) ? 270 : startAngle + (i * step);
-            double angleRad = Math.toRadians(currentAngle);
+            double angle = Math.toRadians(startAngle + i * step);
 
-            box.setLayoutX(centerX + radius * Math.cos(angleRad) - (box.getPrefWidth() / 2));
-            box.setLayoutY(centerY + radius * Math.sin(angleRad) - (box.getPrefHeight() / 2));
+            // Ellipse position around dealer
+            double x = centerX + radiusX * Math.cos(angle) - box.getPrefWidth() / 2;
+            double y = centerY + radiusY * Math.sin(angle) - box.getPrefHeight() / 2;
 
-            // Rotation zum Dealer hin
-            box.setRotate(currentAngle - 270);
+            box.setLayoutX(x);
+            box.setLayoutY(y);
+
+            // Optional rotation for a fan effect around dealer
+            double rotation = -30 + 60.0 * i / (n - 1);
+            box.setRotate(rotation);
         }
     }
+
+
+
+
+
+
+
+
+
 
     private void createPlayerUI() {
         playerContainer.getChildren().clear();
@@ -112,7 +154,7 @@ public class BlackJackTableController {
             // Karten oben anzeigen
             HBox cardsHBox = new HBox(3);
             cardsHBox.setAlignment(Pos.CENTER);
-            cardsHBox.setMinHeight(60);
+            cardsHBox.setMinHeight(10);
 
             // Name und Infos in Weiß (damit man es auf dunkler Matte sieht)
             Label name = new Label(players[i].getName());
@@ -180,12 +222,6 @@ public class BlackJackTableController {
         dealerTotalLabel.setText(game.isRoundActive() ? "Dealer Total: ?" : "Dealer Total: " + BlackjackRules.calculatehand(dCards));
         updateButtons();
     }
-    private int valueToCol(int value) {
-        if (value == 1) return 0;                 // Ass -> col 0
-        if (value >= 2 && value <= 9) return value - 1;  // 2->1 ... 9->8
-        return 9;                                  // 10 bleibt "10" (col 9)
-    }
-
 
     private void updateButtons() {
         int curr = game.getCurrentPlayerIndex();
@@ -212,27 +248,29 @@ public class BlackJackTableController {
         } catch (Exception e) {}
     }
 
-    private Node createCardUI(int value, boolean hidden) {
+    private int valueToCol(int value){
+        if (value == 1) return 0;
+        if (value >= 2 && value <= 9) return value -1;
+        return -9;
+    }
 
-        double w = 35;   // gleiche Größe wie vorher (deine Labels waren 35x50)
+    private Node createCardUI(int value, boolean hidden) {
+        double w = 35;
         double h = 50;
 
-        if (hidden) {
-            // erstmal simpel: verdeckte Karte als "?"
-            Label back = new Label("?");
-            back.setPrefSize(w, h);
-            back.setAlignment(Pos.CENTER);
-            back.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-border-color: #333; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-weight: bold;");
-            return back;
+        if (hidden){
+            Label card = new Label("?");
+            card.setPrefSize(w,h);
+            card.setAlignment(Pos.CENTER);
+            card.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-border-color: #333; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-weight: bold;");
+            return card;
         }
 
         int col = valueToCol(value);
-        int row = 0; // erstmal immer Pik (Suit später)
+        int row = 0;
 
-        // echtes Kartenbild aus SpriteSheet
-        return CardSpriteSheet.createCardView(col, row, w, h);
+        return CardSpriteSheet.createCardView(col,row,w,h);
     }
-
 
     private Button createTransparentButton(String text) {
         Button btn = new Button(text);
