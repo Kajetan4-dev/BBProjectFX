@@ -250,8 +250,10 @@ public class BlackJackTableController {
 
     private int valueToCol(int value){
         if (value == 1) return 0;
-        if (value >= 2 && value <= 9) return value -1;
-        return -9;
+        if (value >= 2 && value <= 10) return value -1;
+        if (value == 11) return 10;
+        if (value == 12) return 11;
+        return 12;
     }
 
     private Node createCardUI(int value, boolean hidden) {

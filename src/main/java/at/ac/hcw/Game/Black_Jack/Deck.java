@@ -23,9 +23,10 @@ public class Deck {
                 for (int v = 2; v <= 9; v++) {
                     cards.add(v);               // 2–9
                 }
-                for (int j = 0; j < 4; j++) {
-                    cards.add(10);              // 10, Bube, Dame, König
-                }
+                cards.add(10);         // 10, Bube, Dame, König
+                cards.add(11);
+                cards.add(12);
+                cards.add(13);
             }
         }
     }
