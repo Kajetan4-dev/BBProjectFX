@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class CardSpriteSheet {
-    private static final String sheetPath = "/at/ac/hcw/Game/Media/images/cards/poker-v1.png";
+    private static final String sheetPath = "/at/ac/hcw/Game/Media/images/cards/cardsheet.png";
 
     private static final int COLS = 13;
     private static final int ROWS = 4;

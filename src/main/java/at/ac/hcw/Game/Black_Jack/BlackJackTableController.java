@@ -250,14 +250,6 @@ public class BlackJackTableController {
         } catch (Exception e) {}
     }
 
-    private int valueToCol(int value){
-        if (value == 1) return 0;
-        if (value >= 2 && value <= 10) return value -1;
-        if (value == 11) return 10;
-        if (value == 12) return 11;
-        return 12;
-    }
-
     private Node createCardUI(int value, boolean hidden) {
         double w = 35;
         double h = 50;
@@ -270,8 +262,8 @@ public class BlackJackTableController {
             return card;
         }
 
-        int col = valueToCol(value);
-        int row = 0;
+        int col = value % 13;
+        int row = value / 13;
 
         return CardSpriteSheet.createCardView(col,row,w,h);
     }

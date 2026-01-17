@@ -153,10 +153,16 @@ public class BlackjackRules {
     public static int calculatehand(int[] cards) {
         int total = 0;
         int aces = 0;
-        for (int v : cards) {
-            if (v == 1) { aces++; total += 11; } // Ass vorerst als 11
-            else if (v >= 10) { total += 10; } // Bildkarten zählen 10
-            else if (v >= 2) { total += v; }
+        for (int id : cards) {
+            if (id == -1) continue;
+
+            int col = id % 13;
+            int rank = col + 1;
+
+            if (rank == 1) { aces++; total += 11; } // Ass vorerst als 11
+            else if (rank >= 10) { total += 10; } // Bildkarten zählen 10
+            else { total += rank; }
+
         }
         // Falls über 21 Punkte, werden Asse von 11 auf 1 abgewertet
         while (total > 21 && aces > 0) { total -= 10; aces--; }
