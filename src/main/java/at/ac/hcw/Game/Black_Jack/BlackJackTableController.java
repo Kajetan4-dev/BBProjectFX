@@ -66,6 +66,7 @@ public class BlackJackTableController {
         createPlayerUI();
         createBackground();
         updateUI();
+        layoutPlayers();
         Platform.runLater(this::layoutPlayers);
     }
 
