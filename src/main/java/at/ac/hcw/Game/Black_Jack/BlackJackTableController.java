@@ -233,7 +233,7 @@ public class BlackJackTableController {
             HBox bidHBox = new HBox(5);
             bidHBox.setAlignment(Pos.CENTER);
             Label bidLabel = new Label();
-            bidLabel.setStyle("-fx-text-fill: black;");
+            bidLabel.setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
 
             Label total = new Label("Total: 0");
             total.setStyle("-fx-text-fill: black;");
@@ -254,7 +254,8 @@ public class BlackJackTableController {
             standBtn.setOnAction(e -> { game.stand(); updateUI(); checkIfRoundOver(); AllSoundEffects.button();});
 
             chipsLabels.add(chipsLabel); bidLabels.add(bidLabel); cardContainers.add(cardsHBox);
-            totalLabels.add(total); bidFields.add(bidIn); setBidButtons.add(setBtn);
+            totalLabels.add(total);
+            bidFields.add(bidIn); setBidButtons.add(setBtn);
             hitButtons.add(hitBtn); standButtons.add(standBtn);
 
             // Reihenfolge: Erst Karten, dann Name/Chips, dann Buttons
