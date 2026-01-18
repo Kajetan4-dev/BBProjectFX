@@ -47,10 +47,9 @@ public class BlackJackTableController {
 
     public void setGame(BlackjackRules game) {
         // Restore saved game if exists
-        if (GameStateBlackjack.hasSavedGame()) {
+        if(game != null){this.game = game;}
+        else if (GameStateBlackjack.hasSavedGame()) {
             this.game = GameStateBlackjack.getSavedGame();
-        } else {
-            this.game = game;
         }
 
         createPlayerUI();
