@@ -12,23 +12,6 @@
 <VBox fx:id="container" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" prefWidth="1273.0" spacing="10" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.Game.Black_Jack.BlackJackTableController">
    <HBox alignment="TOP_RIGHT">
       <children>
-      
-          <!-- 🔥 Hintergrundbild -->
-          <!--
-          <background>
-          <Background>
-              <images>
-                  <BackgroundImage
-                      image="@../Media/images/Pokertable.jpg"
-                      repeatX="NO_REPEAT"
-                      repeatY="NO_REPEAT"
-                      position="CENTER"/>
-              </images>
-          </Background>
-      </background>-->
-      
-      
-      
           <Label prefHeight="63.0" prefWidth="698.0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-padding: 15 0 0 0; -fx-text-fill: white;" text="Blackjack Table" />
          <Button mnemonicParsing="false" onAction="#handleGoToSettings" prefHeight="55.0" prefWidth="60.0" style="-fx-font-size: 25px; -fx-border-color: Black; -fx-border-width: 2;" text="⚙">
             <cursor>
