@@ -17,6 +17,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Controller für den Setup-Screen:
+ * - Spieler anlegen (2 bis 6)
+ * - Startgeld setzen
+ * - Blinds setzen
+ * - Spiel starten und zur Table-Scene wechseln
+ *
+ * Diese Datei ist die "einfache Setup-Version" (nur Namenfelder).
+ */
 public class PokerSetupController {
 
     @FXML private VBox leftColumn;

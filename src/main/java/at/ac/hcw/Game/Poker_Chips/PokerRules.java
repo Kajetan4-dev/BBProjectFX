@@ -1,19 +1,40 @@
 package at.ac.hcw.Game.Poker_Chips;
 
+/*
+ * Enthält die Spiellogik für "Poker Chips" (vereinfachte Hand-Logik).
+ * Fokus: Blinds posten, Call/Raise/Fold, Pot verwalten, Winner bestimmen wenn alle bis auf einen gefoldet haben.
+ *
+ * Diese Version entscheidet den Gewinner NUR über "alle bis auf einen folden".
+ * (Keine Karten, kein Showdown.)
+ */
+
 public class PokerRules {
-    // Variablen für Spieler, Pot-Größe und Blind-Einstellungen
-    private PokerChipsPlayer[] players;
-    private int pot;
+
+    // Variablen für Spieler, Pot-Größe
+    private PokerChipsPlayer[] players; //Array aller Spieler
+    private int pot; //aktueller Pot (Summe aller Einsätze)
+
+    //Blind-Einstellungen
     private final int bigBlind;
     private final int smallBlind;
-    private int currentBet; // Der aktuell höchste Einsatz auf dem Tisch
-    private int currentPlayerIndex; // Wer ist gerade am Zug
-    private boolean[] folded; // Speichert, welcher Spieler ausgestiegen ist
-    private int handCount = 1; // Rundenzähler
-    private int dealerIndex = 0; // Position des Dealer-Buttons
-    private int lastWinnerIndex = -1;
-    private int lastPotWon = 0;
 
+    //Betting-Status
+    private int currentBet;  // aktuell höchster Einsatz, den alle "matchen" müssen
+    private int currentPlayerIndex; // Wer ist gerade am Zug
+    private boolean[] folded; // folded[i] == true -> Spieler i ist gefoldet
+
+    //Rundenzähler / Dealerbutton
+    private int handCount = 1; // zählt die Hände/Runden
+    private int dealerIndex = 0; // Position des Dealer-Buttons
+
+    // Infos für Winner-Popup (damit UI weiß: wer hat gewonnen + wieviel)
+    private int lastWinnerIndex = -1; // -1 bedeutet: keine Runde beendet
+    private int lastPotWon = 0; // wie viele Chips wurden gewonnen
+
+    /*
+     * Konstruktor: erstellt das Spiel mit Anzahl Spieler und Blind-Werten.
+     * Spieler-Objekte werden später in playerSetupWithChips() erstellt.
+     */
     public PokerRules(int noPlayer, int bigBlind, int smallBlind) {
         this.players = new PokerChipsPlayer[noPlayer];
         this.pot = 0;
@@ -23,7 +44,10 @@ public class PokerRules {
         this.folded = new boolean[noPlayer];
     }
 
-    // Initialisiert die Spieler mit Namen und Chips
+    /*
+     * Initialisiert die Spieler mit Namen + Startgeld (Chips).
+     * Danach startet sofort die erste Hand.
+     */
     public void playerSetupWithChips(String[] playerName, int[] startingMoney) {
         for (int i = 0; i < players.length; i++) {
             players[i] = new PokerChipsPlayer(playerName[i], startingMoney[i]);
@@ -31,19 +55,31 @@ public class PokerRules {
         startHand();
     }
 
-    // Bereitet eine neue Hand vor (Reset der Einsätze)
+    /*
+     * Startet eine neue Hand:
+     * - Pot und CurrentBet resetten
+     * - Fold-Status resetten
+     * - Spielerbets resetten
+     * - Blinds posten
+     */
     public void startHand() {
         pot = 0;
         currentBet = 0;
-        folded = new boolean[players.length];
-        for (PokerChipsPlayer p : players) p.setBet();
+
+        folded = new boolean[players.length]; // alles false
+        for (PokerChipsPlayer p : players) p.setBet(); // Einsatz pro Spieler auf 0
 
         // Der Dealer beginnt die Setzrunde
         currentPlayerIndex = dealerIndex;
+
+        // Blinds werden automatisch abgezogen
         postBlinds();
     }
 
-    // Zieht die Pflichteinsätze (Blinds) automatisch ab
+    /* Zieht die Pflichteinsätze (Blinds) automatisch ab
+     * bbIdx = dealer+1
+     * sbIdx = dealer+2
+     */
     private void postBlinds() {
         // BB ist direkt neben dem Dealer (+1), SB daneben (+2)
         int bbIdx = (dealerIndex + 1) % players.length;
@@ -61,13 +97,19 @@ public class PokerRules {
         currentBet = bigBlind;
     }
 
-    // Gleicht den Einsatz an (Mitgehen)
+    /*
+     * Call oder Check:
+     * - Wenn Spieler weniger gesetzt hat als currentBet -> Differenz nachzahlen
+     * - Danach prüfen: Hand vorbei? sonst nächster Spieler
+     */
     public void callOrCheck() {
         PokerChipsPlayer p = players[currentPlayerIndex];
         int toCall = currentBet - p.getBet(); // Differenz berechnen
         if (toCall > 0) {
             pot += toCall;
             p.setPlayerMoney(p.getPlayerMoney() - toCall);
+
+            // WICHTIG: setBet(int) addiert, deshalb genau die Differenz addieren
             p.setBet(toCall);
         }
         checkEndOrAdvance();
@@ -114,13 +156,21 @@ public class PokerRules {
         currentPlayerIndex = next;
     }
 
+    /*
+     * Prüft, ob nur noch ein Spieler nicht gefoldet ist.
+     */
     private boolean isOnlyOnePlayerLeft() {
         int active = 0;
         for (boolean f : folded) if (!f) active++;
         return active == 1;
     }
 
-    // Überweist den Pot an den Gewinner
+
+    /*
+     * Gewinner bekommt den Pot:
+     * - lastWinnerIndex und lastPotWon werden gesetzt (für UI Popup)
+     * - Chips werden dem Gewinner gutgeschrieben
+     */
     private void awardPotToLastPlayer() {
         for (int i = 0; i < players.length; i++) {
             if (!folded[i]) {
@@ -134,20 +184,32 @@ public class PokerRules {
         }
     }
 
+    /*
+     * Gibt den Gewinner der letzten beendeten Hand zurück (oder null, wenn keiner vorhanden).
+     * (Wird z.B. für Alerts genutzt.)
+     */
     public PokerChipsPlayer getRoundWinner() {
         if (lastWinnerIndex < 0) return null;
         return players[lastWinnerIndex];
     }
 
+    /* True, wenn eine Hand beendet wurde und Gewinnerdaten bereitstehen. */
     public boolean hasRoundEnded() {
         return lastWinnerIndex != -1;
     }
+    /* Gewinnerindex der letzten beendeten Hand. */
     public int getLastWinnerIndex() {
         return lastWinnerIndex;
     }
+    /* Potbetrag, den der Gewinner gewonnen hat. */
     public  int getLastPotWon() {
         return lastPotWon;
     }
+
+    /*
+     * Muss nach dem Anzeigen des Popups aufgerufen werden,
+     * damit nicht jedes updateUI() das Popup erneut zeigt.
+     */
     public void clearRoundEndFlag() {
         lastWinnerIndex = -1; lastPotWon = 0;
     }
