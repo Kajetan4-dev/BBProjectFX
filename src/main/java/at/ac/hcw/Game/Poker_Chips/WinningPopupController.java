@@ -1,5 +1,6 @@
 package at.ac.hcw.Game.Poker_Chips;
 
+import at.ac.hcw.Game.AllSoundEffects;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -18,6 +19,7 @@ public class WinningPopupController {
     // Referenz auf das geladene Popup-Root-Node, damit wir es entfernen können
     private StackPane popupRoot;
 
+
     /*
      * Übergibt dem Controller eine Referenz auf das Popup-Root,
      * damit handleClose() es später entfernen kann.
@@ -28,6 +30,7 @@ public class WinningPopupController {
 
     //Setzt die Daten (Gewinnername, Chips) in die Labels.
     public void setData(String winnerName, int chipsWon) {
+        AllSoundEffects.winning();
         winnerLabel.setText(winnerName);
         chipsLabel.setText("+" + chipsWon + " Chips");
     }

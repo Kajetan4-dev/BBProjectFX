@@ -18,31 +18,30 @@ public class SettingsController {
 
     @FXML
     private Button neuesSpielBtn;
+    //Variable PBN is the parameter that shows the Settings in which Screen whe are on,
+    //0 = Poker choose players
+    //1 = Poker Game
+    //2 = Black Jack choose players
+    //3 = Black Jack Game
     private int PBN;
     @FXML
     private Slider volumeSld;
 
-    private static boolean fromBlackjack = false;
 
-    public static void setFromBlackjack(boolean value) {
-        fromBlackjack = value;
-    }
-
+    //Initializes the sound
     @FXML
     public void initialize() {
         volumeSld.setMin(0.0);
         volumeSld.setMax(1.0);
 
-        // 🔗 TWO-WAY BINDING
-        volumeSld.valueProperty().bindBidirectional(
-                SoundManager.volumeProperty()
-        );
+        volumeSld.valueProperty().bindBidirectional(SoundManager.volumeProperty());
     }
 
+    //Allows the PBN to be set
     public void setPBN(int PBN) {
         this.PBN = PBN;
 
-        // You can react immediately if needed
+        //This removes new game when not in a game
         if (neuesSpielBtn != null && PBN == 0 || neuesSpielBtn != null && PBN == 2) {
             ((Pane) neuesSpielBtn.getParent()).getChildren().remove(neuesSpielBtn);
         }
@@ -51,6 +50,8 @@ public class SettingsController {
     @FXML
     private void neuesSpiel() {
         AllSoundEffects.button();
+
+        //Logic for starting a new game for Poker Chips
         if (PBN == 1) {
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/at/ac/hcw/Game/Poker_Chips/poker_setup.fxml"));
@@ -59,39 +60,25 @@ public class SettingsController {
                 stage.setTitle("Casino Game Selection");
                 stage.show();
 
-                fromBlackjack = false;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        if (PBN == 2) {
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/at/ac/hcw/Game/Black_Jack/blackjack_setup.fxml"));
-                Stage stage = (Stage) volumeSld.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.setTitle("Casino Game Selection");
-                stage.show();
 
-                fromBlackjack = false;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        //Logik for starting a new game in Black Jack
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/at/ac/hcw/Game/Black_Jack/blackjack_setup.fxml"));
-            Stage stage = (Stage) volumeSld.getScene().getWindow();
+            Stage stage = (Stage) neuesSpielBtn.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Casino Game Selection");
             stage.show();
 
-            fromBlackjack = false;
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        // your code
     }
 
+    //Logic for going back to the selection of Poker and Black Jack
     @FXML
     private void zurückZumHauptmenü() {
         AllSoundEffects.button();
@@ -102,15 +89,17 @@ public class SettingsController {
             stage.setTitle("Casino Game Selection");
             stage.show();
 
-            fromBlackjack = false;
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    //Logic for the "normal" Zurück btn
     @FXML
     private void zurückLast() {
         AllSoundEffects.button();
+
+        //for the player selection in Poker
         if (PBN == 0) {
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/at/ac/hcw/Game/Poker_Chips/poker_setup.fxml"));
@@ -119,11 +108,12 @@ public class SettingsController {
                 stage.setTitle("Casino Game Selection");
                 stage.show();
 
-                fromBlackjack = false;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        //for going back to the game Poker Chips
         if (PBN == 1) {
             try {
 
@@ -131,21 +121,22 @@ public class SettingsController {
                 Parent root = loader.load();
 
                 PokerTableController tableController = loader.getController();
+                //Very impoetant Grabs the last saved state in the game and then
+                //reuses it
                 tableController.setGame(GameStatePoker.getPokerGame());
 
-                // Get the current window (Stage) and set the new Scene
+
                 Stage stage = (Stage) neuesSpielBtn.getScene().getWindow();
                 stage.setScene(new Scene(root));
                 stage.setTitle("Poker Table");
                 stage.show();
 
-            } catch (NumberFormatException e) {
-                System.out.println("Error: Please enter valid numbers for blinds and chips!");
-            } catch (IOException e) {
+            }catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Error: Could not find poker_table.fxml");
             }
         }
+        //Goes back to the Black Jack player selection Screen
         if (PBN == 2) {
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/at/ac/hcw/Game/Black_Jack/blackjack_setup.fxml"));
@@ -154,13 +145,13 @@ public class SettingsController {
                 stage.setTitle("Casino Game Selection");
                 stage.show();
 
-                fromBlackjack = false;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        //Goes Back to Black Jack
         if (PBN == 3) {
-            // 🔁 Load last saved Blackjack state
             if (GameStateBlackjack.hasSavedGame()) {
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Black_Jack/blackjack_table.fxml"));
@@ -175,28 +166,10 @@ public class SettingsController {
                     stage.setTitle("Blackjack Table");
                     stage.show();
 
-                    fromBlackjack = false;
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    System.err.println("Could not load Blackjack Table from saved state.");
-                }
-            } else {
-                // If no saved game exists, fallback to setup screen
-                try {
-                    Parent root = FXMLLoader.load(getClass().getResource("/at/ac/hcw/Game/Black_Jack/blackjack_setup.fxml"));
-                    Stage stage = (Stage) neuesSpielBtn.getScene().getWindow();
-                    stage.setScene(new Scene(root));
-                    stage.setTitle("Blackjack Setup");
-                    stage.show();
-
-                    fromBlackjack = false;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-
         }
-
     }
 }

@@ -13,39 +13,35 @@ public class SoundManager {
     // Global volume property (0.0 – 1.0)
     private static final DoubleProperty volume = new SimpleDoubleProperty(0.5);
 
+    //private Variables that store the different sounds
     private static final List<MediaPlayer> players = new ArrayList<>();
+    //holds background music
     private static MediaPlayer musicPlayer;
 
+    //Constructor that prevents from creating instances of sound manager
     private SoundManager() {}
 
+    //plays music in a loop
     public static void playMusic(String path) {
-        stopMusic();
-
+        //Creates a media player to play the music in
         Media media = new Media(SoundManager.class.getResource(path).toExternalForm());
         musicPlayer = new MediaPlayer(media);
+        //Loops music forever
         musicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
 
-        // 🔗 bind volume
+        //Any change to the volume updates the music instantly
         musicPlayer.volumeProperty().bind(volume);
 
+        //plays music
         musicPlayer.play();
         players.add(musicPlayer);
     }
 
-    public static void stopMusic() {
-        if (musicPlayer != null) {
-            musicPlayer.stop();
-            musicPlayer.dispose();
-            players.remove(musicPlayer);
-            musicPlayer = null;
-        }
-    }
-
+    //plays a single sound effect
     public static void playSound(String path) {
         Media media = new Media(SoundManager.class.getResource(path).toExternalForm());
         MediaPlayer player = new MediaPlayer(media);
 
-        // 🔗 bind volume
         player.volumeProperty().bind(volume);
 
         player.setOnEndOfMedia(() -> {
