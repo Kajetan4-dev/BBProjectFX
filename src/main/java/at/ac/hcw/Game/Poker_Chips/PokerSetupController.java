@@ -17,6 +17,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Controller für den Setup-Screen:
+ * - Spieler anlegen (2 bis 6)
+ * - Startgeld setzen
+ * - Blinds setzen
+ * - Spiel starten und zur Table-Scene wechseln
+ *
+ * Diese Datei ist die "einfache Setup-Version" (nur Namenfelder).
+ */
 public class PokerSetupController {
 
     @FXML private VBox leftColumn;
@@ -107,7 +116,6 @@ public class PokerSetupController {
             PokerRules pokerGame = new PokerRules(playerCount, big, small);
             // Note: I modified this to accept the chips array
             pokerGame.playerSetupWithChips(names, startingChips);
-            pokerGame.startHand();
 
             // 3. SWITCH THE SCENE (This was missing!)
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Poker_Chips/poker_table.fxml"));

@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 
 <StackPane xmlns="http://javafx.com/javafx/22"
            xmlns:fx="http://javafx.com/fxml/1"
@@ -12,7 +11,7 @@
 
     <VBox spacing="14"
           alignment="CENTER"
-          maxWidth="360"
+          maxWidth="420"
           styleClass="card">
 
         <Label text="🎉 RUNDENSIEGER 🎉"
@@ -26,9 +25,12 @@
                text="+0 Chips"
                styleClass="popup-chips"/>
 
-        <Button text="Weiter"
-                styleClass="btn,btn-green"
-                onAction="#handleClose"/>
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Weiter"
+                    styleClass="btn,btn-green"
+                    onAction="#handleClose"/>
+        </HBox>
+
     </VBox>
 
 </StackPane>
