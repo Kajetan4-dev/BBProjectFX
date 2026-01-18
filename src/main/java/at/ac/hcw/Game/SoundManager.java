@@ -62,11 +62,4 @@ public class SoundManager {
         return volume;
     }
 
-    public static double getVolume() {
-        return volume.get();
-    }
-
-    public static void setVolume(double newVolume) {
-        volume.set(Math.max(0, Math.min(1, newVolume)));
-    }
 }

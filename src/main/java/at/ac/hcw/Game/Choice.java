@@ -20,8 +20,4 @@ public class Choice extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) {
-        // This launches the JavaFX lifecycle
-        launch();
-    }
 }

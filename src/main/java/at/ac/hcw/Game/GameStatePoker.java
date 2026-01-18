@@ -14,7 +14,4 @@ public class GameStatePoker {
         pokerGame = game;
     }
 
-    public static boolean hasPokerGame() {
-        return pokerGame != null;
-    }
 }

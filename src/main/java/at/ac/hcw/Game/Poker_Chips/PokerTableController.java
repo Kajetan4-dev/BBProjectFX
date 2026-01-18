@@ -21,7 +21,7 @@ public class PokerTableController {
     @FXML private Label potLabel;
     @FXML private Label currentBetLabel;
     @FXML private Label roundLabel;
-    @FXML private HBox playerContainer;
+//    @FXML private HBox playerContainer;
     @FXML private VBox leftColumn;
     @FXML private VBox rightColumn;
 
