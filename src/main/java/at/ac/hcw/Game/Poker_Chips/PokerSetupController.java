@@ -107,7 +107,6 @@ public class PokerSetupController {
             PokerRules pokerGame = new PokerRules(playerCount, big, small);
             // Note: I modified this to accept the chips array
             pokerGame.playerSetupWithChips(names, startingChips);
-            pokerGame.startHand();
 
             // 3. SWITCH THE SCENE (This was missing!)
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Poker_Chips/poker_table.fxml"));

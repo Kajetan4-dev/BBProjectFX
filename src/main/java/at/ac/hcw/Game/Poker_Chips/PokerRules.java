@@ -11,6 +11,8 @@ public class PokerRules {
     private boolean[] folded; // Speichert, welcher Spieler ausgestiegen ist
     private int handCount = 1; // Rundenzähler
     private int dealerIndex = 0; // Position des Dealer-Buttons
+    private int lastWinnerIndex = -1;
+    private int lastPotWon = 0;
 
     public PokerRules(int noPlayer, int bigBlind, int smallBlind) {
         this.players = new PokerChipsPlayer[noPlayer];
@@ -66,7 +68,7 @@ public class PokerRules {
         if (toCall > 0) {
             pot += toCall;
             p.setPlayerMoney(p.getPlayerMoney() - toCall);
-            p.setBet(p.getBet() + toCall);
+            p.setBet(toCall);
         }
         checkEndOrAdvance();
     }
@@ -80,7 +82,7 @@ public class PokerRules {
 
         pot += total;
         p.setPlayerMoney(p.getPlayerMoney() - total);
-        p.setBet(p.getBet() + total);
+        p.setBet(total);
         currentBet += raiseAmount; // Neuen Standard setzen
         checkEndOrAdvance();
     }
@@ -122,10 +124,32 @@ public class PokerRules {
     private void awardPotToLastPlayer() {
         for (int i = 0; i < players.length; i++) {
             if (!folded[i]) {
+
+                lastWinnerIndex = i;
+                lastPotWon = pot;
+
                 players[i].setPlayerMoney(players[i].getPlayerMoney() + pot);
                 break;
             }
         }
+    }
+
+    public PokerChipsPlayer getRoundWinner() {
+        if (lastWinnerIndex < 0) return null;
+        return players[lastWinnerIndex];
+    }
+
+    public boolean hasRoundEnded() {
+        return lastWinnerIndex != -1;
+    }
+    public int getLastWinnerIndex() {
+        return lastWinnerIndex;
+    }
+    public  int getLastPotWon() {
+        return lastPotWon;
+    }
+    public void clearRoundEndFlag() {
+        lastWinnerIndex = -1; lastPotWon = 0;
     }
 
     // Getter für das UI

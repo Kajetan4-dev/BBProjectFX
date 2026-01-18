@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.layout.StackPane;
 
 public class PokerTableController {
 
@@ -208,6 +209,10 @@ public class PokerTableController {
                 playerBoxes.get(i).setOpacity(1.0);
             }
         }
+        if (game.hasRoundEnded()){
+            showWinningPopupOverlay();
+            game.clearRoundEndFlag();
+        }
     }
 
     private void clearLists() {
@@ -241,7 +246,7 @@ public class PokerTableController {
             );
             Parent root = loader.load();
 
-            at.ac.hcw.Game.Poker.PokerWinningPopupController controller = loader.getController();
+            at.ac.hcw.Game.Poker_Chips.WinningPopupController controller = loader.getController();
             controller.setResult(winnerName, chipsWon);
 
             Stage stage = new Stage();
@@ -251,6 +256,29 @@ public class PokerTableController {
             stage.show();
 
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void  showWinningPopupOverlay() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/at/ac/hcw/Game/Poker_Chips/winning_popup.fxml")
+            );
+
+            StackPane popup = loader.load();
+            WinningPopupController controller = loader.getController();
+
+            int winnerIndex = game.getLastWinnerIndex();
+            int chipsWon = game.getLastPotWon();
+            String winnerName = game.getPlayers()[winnerIndex].getName();
+
+            controller.setRoot(popup);
+            controller.setData(winnerName, chipsWon);
+
+            StackPane root = (StackPane) potLabel.getScene().getRoot();
+            root.getChildren().add(popup);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
