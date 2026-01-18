@@ -1,5 +1,7 @@
 package at.ac.hcw.Game.Black_Jack;
 
+import java.util.Arrays;
+
 public class BlackjackRules {
 
     // Spielobjekte: Kartendeck, Dealer und die Liste der Spieler
@@ -137,12 +139,16 @@ public class BlackjackRules {
     // Setzt alle Werte für eine neue Runde zurück
     public void resetRound() {
         for (Player p : players) {
-            p.setCards(new int[9]);
+            int[] empty = new int[9];
+            Arrays.fill(empty,-1);
+            p.setCards(empty);
             p.setStand(false);
             p.setBid(0);
             p.setTotal(0);
         }
-        dealer.setCards(new int[9]);
+        int [] dEmpty = new int[9];
+        Arrays.fill(dEmpty,-1);
+        dealer.setCards(dEmpty);
         dealer.setTotal(0);
         dealer.resetHideCard();
         roundActive = false;

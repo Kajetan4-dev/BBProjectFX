@@ -302,7 +302,7 @@ public class BlackJackTableController {
             cardContainers.get(i).getChildren().clear();
             if (players[i].getBid() > 0) {
                 for (int val : players[i].getCards()) {
-                    if (val != 0) cardContainers.get(i).getChildren().add(createCardUI(val, false));
+                    if (val != -1) cardContainers.get(i).getChildren().add(createCardUI(val, false));
                 }
                 totalLabels.get(i).setText("Total: " + BlackjackRules.calculatehand(players[i].getCards()));
             }
@@ -311,7 +311,7 @@ public class BlackJackTableController {
         dealerCardContainer.getChildren().clear();
         int[] dCards = dealer.getCards();
         for (int j = 0; j < dCards.length; j++) {
-            if (dCards[j] != 0) {
+            if (dCards[j] != -1) {
                 boolean hidden = (game.isRoundActive() && j == 1 && dealer.isCardHidden());
                 dealerCardContainer.getChildren().add(createCardUI(dCards[j], hidden));
             }
@@ -352,8 +352,8 @@ public class BlackJackTableController {
     }
 
     private Node createCardUI(int value, boolean hidden) {
-        double w = 70;
-        double h = 100;
+        double w = 50;
+        double h = 80;
 
         if (hidden){
             Label card = new Label("?");
