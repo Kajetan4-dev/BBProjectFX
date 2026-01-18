@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20"
+      alignment="CENTER"
+      prefWidth="400"
+      prefHeight="250"
+      style="-fx-background-color: #0b2c3d;"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.BlackjackWinningPopupController">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label fx:id="titleLabel"
+           text="BLACKJACK!"
+           style="-fx-font-size: 28px; -fx-text-fill: lightgreen;"/>
+
+    <Label fx:id="infoLabel"
+           text="Player gewinnt 300 Chips"
+           style="-fx-font-size: 16px; -fx-text-fill: white;"/>
+
+    <Button text="Continue"
+            onAction="#onContinue"
+            prefWidth="120"/>
+
+</VBox>
