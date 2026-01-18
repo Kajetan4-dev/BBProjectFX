@@ -1,4 +1,5 @@
 package at.ac.hcw.Game.Black_Jack;
+//AllSoundEffects.button(); button soud
 
 import at.ac.hcw.Game.AllSoundEffects;
 import at.ac.hcw.Game.SettingsController;
@@ -6,18 +7,23 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
+import javafx.scene.Node;
+import javafx.scene.layout.StackPane;
+
+import java.io.IOException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public class BlackJackTableController {
 
@@ -263,7 +269,14 @@ public class BlackJackTableController {
         }
     }
 
-    // ------------------------- UPDATE UI -------------------------
+    private Button createBlackButton(String text) {
+        Button btn = new Button(text);
+        btn.setMinWidth(100);
+        btn.setStyle("-fx-text-fill: black; -fx-font-weight: bold; -fx-cursor: hand;");
+        btn.setDisable(true);
+        return btn;
+    }
+
     private void updateUI() {
         roundLabel.setText("Round: " + roundCounter);
         Player[] players = game.getPlayers();
@@ -338,17 +351,25 @@ public class BlackJackTableController {
         } catch (Exception e) {}
     }
 
-    private Label createCardUI(int value, boolean hidden) {
-        Label card = new Label(hidden ? "?" : String.valueOf(value));
-        card.setPrefSize(35, 50);
-        card.setAlignment(Pos.CENTER);
-        card.setStyle(hidden ?
-                "-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-weight: bold;" :
-                "-fx-background-color: white; -fx-text-fill: black; -fx-border-color: #888; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-weight: bold;");
-        return card;
+    private Node createCardUI(int value, boolean hidden) {
+        double w = 70;
+        double h = 100;
+
+        if (hidden){
+            Label card = new Label("?");
+            card.setPrefSize(w,h);
+            card.setAlignment(Pos.CENTER);
+            card.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-border-color: #333; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-weight: bold;");
+            return card;
+        }
+
+        int col = value % 13;
+        int row = value / 13;
+
+        return CardSpriteSheet.createCardView(col,row,w,h);
     }
 
-    private Button createBlackButton(String text) {
+    private Button createTransparentButton(String text) {
         Button btn = new Button(text);
         btn.setMinWidth(100);
         btn.setStyle("-fx-text-fill: black; -fx-font-weight: bold; -fx-cursor: hand;");
