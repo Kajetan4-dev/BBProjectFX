@@ -57,10 +57,11 @@ public class BlackJackTableController {
     private List<Button> standButtons = new ArrayList<>();
 
     public void setGame(BlackjackRules game) {
-        if (GameStateBlackjack.hasSavedGame()) {
-            this.game = GameStateBlackjack.getSavedGame();
-        } else {
+        if(game != null) {
             this.game = game;
+        }
+        else if (GameStateBlackjack.hasSavedGame()) {
+            this.game = GameStateBlackjack.getSavedGame();
         }
 
         createPlayerUI();
