@@ -31,13 +31,14 @@ public class WinningPopupController {
         winnerLabel.setText(winnerName);
         chipsLabel.setText("+" + chipsWon + " Chips");
     }
-
+    /*
+     * Wird durch den Button "Weiter" ausgelöst.
+     * Entfernt das Popup aus dem Parent (Overlay wird ausgeblendet).
+     */
     @FXML
     private void handleClose() {
-        // Popup vom Parent entfernen (Overlay ausblenden)
+        // // PopupRoot hängt in einem Parent-StackPane (Scene-Root oder Overlay-Container)
         ((StackPane) popupRoot.getParent()).getChildren().remove(popupRoot);
     }
 
-    public void setResult(String winnerName, int chipsWon) {
-    }
 }

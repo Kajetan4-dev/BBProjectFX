@@ -22,7 +22,7 @@ public class PokerTableController {
     @FXML private Label potLabel;
     @FXML private Label currentBetLabel;
     @FXML private Label roundLabel;
-//    @FXML private HBox playerContainer;
+    @FXML private HBox playerContainer;
     @FXML private VBox leftColumn;
     @FXML private VBox rightColumn;
 
@@ -77,7 +77,6 @@ public class PokerTableController {
 
             Label bet = new Label("Bet: 0");
             bet.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: black;");
-
 
             HBox headerRow = new HBox(8, roleLabel, name);
             headerRow.setAlignment(Pos.CENTER_LEFT);
@@ -134,6 +133,7 @@ public class PokerTableController {
         AllSoundEffects.button();
         //Saves Game State
         GameStatePoker.setPokerGame(game);
+
         SettingsController.setFromBlackjack(false);
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/at/ac/hcw/Game/Settings.fxml")
@@ -248,7 +248,6 @@ public class PokerTableController {
             Parent root = loader.load();
 
             at.ac.hcw.Game.Poker_Chips.WinningPopupController controller = loader.getController();
-            controller.setResult(winnerName, chipsWon);
 
             Stage stage = new Stage();
             stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);

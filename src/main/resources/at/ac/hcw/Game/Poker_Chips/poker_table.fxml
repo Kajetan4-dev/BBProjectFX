@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane xmlns="http://javafx.com/javafx/25"
+<StackPane xmlns="http://javafx.com/javafx/23"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="at.ac.hcw.Game.Poker_Chips.PokerTableController">
 
