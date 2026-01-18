@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.layout.StackPane;
 
 /*
  * Controller für den Poker-Tisch:
@@ -31,8 +30,6 @@ public class PokerTableController {
     @FXML private Label currentBetLabel;
     @FXML private Label roundLabel;
     // Container aus FXML (Spieler werden links/rechts eingefügt)
-
-    @FXML private HBox playerContainer;
     @FXML private VBox leftColumn;
     @FXML private VBox rightColumn;
 
@@ -288,51 +285,6 @@ public class PokerTableController {
         playerBoxes.clear();
     }
 
-    /*
-     * Legacy-Methode:
-     * Zeigt ein Popup-Fenster (Stage) an.
-     *
-     * In deinem Projekt wird aber aktuell das OVERLAY verwendet (showWinningPopupOverlay()).
-     * Du könntest diese Methode später löschen, wenn du sicher bist, dass du sie nicht mehr brauchst.
-     */
-    private void showWinnerAlert() {
-
-        PokerChipsPlayer winner = game.getRoundWinner();
-        int pot = game.getPot();
-
-        if (winner == null) return;
-
-        showPokerWinningPopup(winner.getName(), pot);
-    }
-
-    /*
-     * Legacy-Popup via Stage:
-     * Achtung: Der Pfad "/poker_winning_popup.fxml" existiert in deinem Upload nicht,
-     * du verwendest mittlerweile "winning_popup.fxml".
-     *
-     * Außerdem: In WinningPopupController ist setResult(...) leer => hätte keine Wirkung.
-     */
-    private void showPokerWinningPopup(String winnerName, int chipsWon) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(
-                            "/at/ac/hcw/Game/Poker_Chips/poker_winning_popup.fxml"
-                    )
-            );
-            Parent root = loader.load();
-
-            at.ac.hcw.Game.Poker_Chips.WinningPopupController controller = loader.getController();
-
-            Stage stage = new Stage();
-            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-            stage.setTitle("Poker Result");
-            stage.setScene(new Scene(root));
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     /*
      * Overlay-Popup:
