@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.layout.StackPane;
-
+//öz
 public class PokerTableController {
 
     @FXML private Label potLabel;
@@ -133,7 +133,7 @@ public class PokerTableController {
     private void handleGoToSettings() throws IOException {
         AllSoundEffects.button();
         //Saves Game State
-        GameStatePoker.setPokerGame(game);
+
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/at/ac/hcw/Game/Settings.fxml")
         );
