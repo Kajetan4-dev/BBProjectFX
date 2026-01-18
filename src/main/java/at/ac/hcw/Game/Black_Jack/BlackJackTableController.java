@@ -352,8 +352,8 @@ public class BlackJackTableController {
     }
 
     private Node createCardUI(int value, boolean hidden) {
-        double w = 35;
-        double h = 50;
+        double w = 70;
+        double h = 100;
 
         if (hidden){
             Label card = new Label("?");
