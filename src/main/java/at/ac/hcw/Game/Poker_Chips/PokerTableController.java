@@ -227,38 +227,6 @@ public class PokerTableController {
         playerBoxes.clear();
     }
 
-    private void showWinnerAlert() {
-
-        PokerChipsPlayer winner = game.getRoundWinner();
-        int pot = game.getPot();
-
-        if (winner == null) return;
-
-        showPokerWinningPopup(winner.getName(), pot);
-    }
-
-    private void showPokerWinningPopup(String winnerName, int chipsWon) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(
-                            "/at/ac/hcw/Game/Poker_Chips/poker_winning_popup.fxml"
-                    )
-            );
-            Parent root = loader.load();
-
-            at.ac.hcw.Game.Poker_Chips.WinningPopupController controller = loader.getController();
-            controller.setResult(winnerName, chipsWon);
-
-            Stage stage = new Stage();
-            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-            stage.setTitle("Poker Result");
-            stage.setScene(new Scene(root));
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     private void  showWinningPopupOverlay() {
         try {
             FXMLLoader loader = new FXMLLoader(
