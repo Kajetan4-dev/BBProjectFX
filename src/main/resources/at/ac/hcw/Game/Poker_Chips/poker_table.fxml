@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- Imports für verwendete JavaFX-Klassen -->
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -9,16 +10,24 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
 
+<!--
+    Poker Table Screen
+    - StackPane als Root (für Overlay-Popups!)
+    - Spieler links / rechts
+    - Pot & Current Bet
+-->
 <StackPane xmlns="http://javafx.com/javafx/23"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="at.ac.hcw.Game.Poker_Chips.PokerTableController">
 
+    <!-- Hauptlayout -->
     <VBox alignment="TOP_CENTER"
           prefHeight="800"
           prefWidth="1200"
           spacing="10"
           style="-fx-background-color: #f5f0e6;">
 
+        <!-- Kopfzeile -->
         <HBox alignment="TOP_RIGHT" prefHeight="63.0" prefWidth="1155.0">
             <children>
 
@@ -43,10 +52,12 @@
             </VBox.margin>
         </HBox>
 
+        <!-- Rundenanzeige -->
         <Label fx:id="roundLabel"
                style="-fx-font-size: 18px; -fx-text-fill: #555; -fx-font-weight: bold;"
                text="Round: 1" />
 
+        <!-- Pot & Bet -->
         <HBox alignment="CENTER" spacing="40">
             <HBox alignment="CENTER" spacing="8">
                 <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: black;" text="Pot:" />
@@ -62,6 +73,7 @@
             </HBox>
         </HBox>
 
+        <!-- Spielerbereich -->
         <ScrollPane fitToHeight="true"
                     fitToWidth="true"
                     style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;"
