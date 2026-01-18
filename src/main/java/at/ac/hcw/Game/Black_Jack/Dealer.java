@@ -18,6 +18,15 @@ public class Dealer extends Player {
     }
 
     public void resetHideCard() {
-        this.hideCard = true;
+        hideCard = true;
+    }
+
+    public void setCardHidden(boolean hidden) {
+        this.hideCard = hidden;
+    }
+
+    @Override
+    public void setCards(int[] cards) {
+        super.setCards(cards);
     }
 }

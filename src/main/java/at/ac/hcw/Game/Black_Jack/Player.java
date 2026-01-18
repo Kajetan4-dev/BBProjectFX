@@ -91,6 +91,7 @@ public class Player {
         this.stand = stand;
     }
 
+
     public String toString(){
         return "Name: " + this.getName() + " | Chips: " + this.getChips();
     }
