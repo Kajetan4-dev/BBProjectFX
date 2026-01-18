@@ -1,5 +1,5 @@
 package at.ac.hcw.Game.Black_Jack;
-//AllSoundEffects.button(); button soud
+
 
 import at.ac.hcw.Game.AllSoundEffects;
 import at.ac.hcw.Game.SettingsController;
@@ -14,11 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
-
-import java.io.IOException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -175,8 +171,8 @@ public class BlackJackTableController {
         if (w <= 0 || h <= 0) return;
 
         // Ellipse radii
-        double radiusX = w * 0.4; // horizontal stretch
-        double radiusY = h * -0.35; // vertical stretch
+        double radiusX = w * 0.5; // horizontal stretch
+        double radiusY = h * -0.30; // vertical stretch
 
         double centerX = w / 2;
         double centerY = h / 10; // dealer is at center
@@ -197,8 +193,6 @@ public class BlackJackTableController {
             box.setLayoutY(y);
 
             // Optional rotation for a fan effect around dealer
-            double rotation = -30 + 60.0 * i / (n - 1);
-            box.setRotate(rotation);
         }
     }
 
@@ -215,8 +209,8 @@ public class BlackJackTableController {
             pBox.setAlignment(Pos.CENTER);
             pBox.setPrefSize(170, 260);
             pBox.setStyle(
-                    "-fx-border-color: #dcdcdc; -fx-border-width: 2; -fx-border-radius: 15;" +
-                            "-fx-background-color: #fcfcfc; -fx-background-radius: 15; -fx-padding: 10;"
+                    "-fx-border-color: transparent; -fx-border-width: 2; -fx-border-radius: 15;" +
+                            "-fx-background-color: transparent; -fx-background-radius: 15; -fx-padding: 10;"
             );
 
 
@@ -352,8 +346,8 @@ public class BlackJackTableController {
     }
 
     private Node createCardUI(int value, boolean hidden) {
-        double w = 70;
-        double h = 100;
+        double w = 50;
+        double h = 80;
 
         if (hidden){
             Label card = new Label("?");
