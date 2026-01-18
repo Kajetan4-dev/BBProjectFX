@@ -75,6 +75,8 @@ public class PokerTableController {
             chips.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: black;");
 
             Label bet = new Label("Bet: 0");
+            bet.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: black;");
+
 
             HBox headerRow = new HBox(8, roleLabel, name);
             headerRow.setAlignment(Pos.CENTER_LEFT);
@@ -131,7 +133,6 @@ public class PokerTableController {
         AllSoundEffects.button();
         //Saves Game State
         GameStatePoker.setPokerGame(game);
-
         SettingsController.setFromBlackjack(false);
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/at/ac/hcw/Game/Settings.fxml")
