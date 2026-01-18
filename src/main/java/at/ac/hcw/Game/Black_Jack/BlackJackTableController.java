@@ -14,24 +14,30 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.layout.StackPane;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.layout.Pane;
+
 import javafx.stage.Stage;
 
 public class BlackJackTableController {
 
-    @FXML private VBox container;
+    @FXML
+    private VBox container;
     private BlackjackRules game;
     private int roundCounter = 1;
 
-    @FXML private Pane playerContainer;
-    @FXML private Label roundLabel;
-    @FXML private Label dealerTotalLabel;
-    @FXML private HBox dealerCardContainer;
-    @FXML private Button newRoundButton;
+    @FXML
+    private Pane playerContainer;
+    @FXML
+    private Label roundLabel;
+    @FXML
+    private Label dealerTotalLabel;
+    @FXML
+    private HBox dealerCardContainer;
+    @FXML
+    private Button newRoundButton;
 
     @FXML
     public void initialize() {
@@ -44,7 +50,7 @@ public class BlackJackTableController {
         roundCounter++;
         game.resetRound();
         createPlayerUI();
-        layoutPlayers(); // 👈 neu
+        layoutPlayers();
         newRoundButton.setVisible(false);
         updateUI();
     }
@@ -59,10 +65,9 @@ public class BlackJackTableController {
     private List<Button> standButtons = new ArrayList<>();
 
     public void setGame(BlackjackRules game) {
-        if(game != null) {
+        if (game != null) {
             this.game = game;
-        }
-        else if (GameStateBlackjack.hasSavedGame()) {
+        } else if (GameStateBlackjack.hasSavedGame()) {
             this.game = GameStateBlackjack.getSavedGame();
         }
 
@@ -75,15 +80,6 @@ public class BlackJackTableController {
 
     // ------------------------- CHIP STACKING LOGIC -------------------------
 
-    /**
-     * Wählt das Chip-Bild basierend auf dem Wert aus.
-     */
-    private String getChipColorByAmount(int amount) {
-        if (amount >= 500) return "/at/ac/hcw/Game/Media/images/BlackChipsTransparent.png";
-        if (amount >= 100) return "/at/ac/hcw/Game/Media/images/BlueChipsTransparent.png";
-        if (amount >= 50) return "/at/ac/hcw/Game/Media/images/RedChipsTransparent.png";
-        return "/at/ac/hcw/Game/Media/images/GreenChipsTransparent.png";
-    }
 
     /**
      * Erstellt einen visuellen Stapel aus Chips.
@@ -217,23 +213,23 @@ public class BlackJackTableController {
             // Karten oben anzeigen
             HBox cardsHBox = new HBox(3);
             cardsHBox.setAlignment(Pos.CENTER);
-            cardsHBox.setMinHeight(10);
+            cardsHBox.setMinHeight(20);
 
             // Name und Infos in Weiß (damit man es auf dunkler Matte sieht)
             Label name = new Label(players[i].getName());
-            name.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: black;");
+            name.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;");
 
             // Container für Chips-Stapel
             HBox chipsHBox = new HBox(5);
             chipsHBox.setAlignment(Pos.CENTER);
             Label chipsLabel = new Label();
-            chipsLabel.setStyle("-fx-text-fill: black;");
+            chipsLabel.setStyle("-fx-text-fill: white;");
 
             // Container für Bid-Stapel
             HBox bidHBox = new HBox(5);
             bidHBox.setAlignment(Pos.CENTER);
             Label bidLabel = new Label();
-            bidLabel.setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
+            bidLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
 
             Label total = new Label("Total: 0");
             total.setStyle("-fx-text-fill: black;");
@@ -250,13 +246,27 @@ public class BlackJackTableController {
             Button hitBtn = createBlackButton("Hit");
             Button standBtn = createBlackButton("Stand");
 
-            hitBtn.setOnAction(e -> { game.hit(); updateUI(); checkIfRoundOver(); AllSoundEffects.button();});
-            standBtn.setOnAction(e -> { game.stand(); updateUI(); checkIfRoundOver(); AllSoundEffects.button();});
+            hitBtn.setOnAction(e -> {
+                game.hit();
+                updateUI();
+                checkIfRoundOver();
+                AllSoundEffects.button();
+            });
+            standBtn.setOnAction(e -> {
+                game.stand();
+                updateUI();
+                checkIfRoundOver();
+                AllSoundEffects.button();
+            });
 
-            chipsLabels.add(chipsLabel); bidLabels.add(bidLabel); cardContainers.add(cardsHBox);
+            chipsLabels.add(chipsLabel);
+            bidLabels.add(bidLabel);
+            cardContainers.add(cardsHBox);
             totalLabels.add(total);
-            bidFields.add(bidIn); setBidButtons.add(setBtn);
-            hitButtons.add(hitBtn); standButtons.add(standBtn);
+            bidFields.add(bidIn);
+            setBidButtons.add(setBtn);
+            hitButtons.add(hitBtn);
+            standButtons.add(standBtn);
 
             // Reihenfolge: Erst Karten, dann Name/Chips, dann Buttons
             pBox.getChildren().addAll(cardsHBox, total, name, chipsHBox, bidHBox, bidIn, setBtn, hitBtn, standBtn);
@@ -343,16 +353,17 @@ public class BlackJackTableController {
                 GameStateBlackjack.saveGame(game);
                 updateUI();
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     private Node createCardUI(int value, boolean hidden) {
         double w = 50;
         double h = 80;
 
-        if (hidden){
+        if (hidden) {
             Label card = new Label("?");
-            card.setPrefSize(w,h);
+            card.setPrefSize(w, h);
             card.setAlignment(Pos.CENTER);
             card.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-border-color: #333; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-weight: bold;");
             return card;
@@ -361,16 +372,9 @@ public class BlackJackTableController {
         int col = value % 13;
         int row = value / 13;
 
-        return CardSpriteSheet.createCardView(col,row,w,h);
+        return CardSpriteSheet.createCardView(col, row, w, h);
     }
 
-    private Button createTransparentButton(String text) {
-        Button btn = new Button(text);
-        btn.setMinWidth(100);
-        btn.setStyle("-fx-text-fill: black; -fx-font-weight: bold; -fx-cursor: hand;");
-        btn.setDisable(true);
-        return btn;
-    }
 
     private void checkIfRoundOver() {
         if (!game.isRoundActive()) {
@@ -396,14 +400,21 @@ public class BlackJackTableController {
     }
 
     private void clearLists() {
-        chipsLabels.clear(); bidLabels.clear(); cardContainers.clear();
-        totalLabels.clear(); bidFields.clear(); setBidButtons.clear();
-        hitButtons.clear(); standButtons.clear();
+        chipsLabels.clear();
+        bidLabels.clear();
+        cardContainers.clear();
+        totalLabels.clear();
+        bidFields.clear();
+        setBidButtons.clear();
+        hitButtons.clear();
+        standButtons.clear();
     }
 
     private void showAlert(String title, String content) {
         Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle(title); a.setHeaderText(null); a.setContentText(content);
+        a.setTitle(title);
+        a.setHeaderText(null);
+        a.setContentText(content);
         a.showAndWait();
     }
 }
