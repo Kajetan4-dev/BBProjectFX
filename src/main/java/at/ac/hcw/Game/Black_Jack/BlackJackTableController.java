@@ -6,6 +6,7 @@ import at.ac.hcw.Game.SettingsController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -194,6 +195,14 @@ public class BlackJackTableController {
             pBox.getChildren().addAll(cardsHBox, total, name, chips, bid, bidIn, setBtn, hitBtn, standBtn);
             playerContainer.getChildren().add(pBox);
         }
+    }
+
+    private Button createBlackButton(String text) {
+        Button btn = new Button(text);
+        btn.setMinWidth(100);
+        btn.setStyle("-fx-text-fill: black; -fx-font-weight: bold; -fx-cursor: hand;");
+        btn.setDisable(true);
+        return btn;
     }
 
     private void updateUI() {
