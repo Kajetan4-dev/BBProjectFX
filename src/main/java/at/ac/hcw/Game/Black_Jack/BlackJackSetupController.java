@@ -36,7 +36,6 @@ public class BlackJackSetupController {
     private void handleGoToSettings() throws IOException {
         AllSoundEffects.button();
 
-        SettingsController.setFromBlackjack(true);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Settings.fxml"));
         Parent root = loader.load();

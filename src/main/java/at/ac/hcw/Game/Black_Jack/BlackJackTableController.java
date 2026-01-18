@@ -130,7 +130,6 @@ public class BlackJackTableController {
     private void handleGoToSettings() throws IOException {
         AllSoundEffects.button();
         GameStateBlackjack.saveGame(game);
-        SettingsController.setFromBlackjack(true);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Settings.fxml"));
         Parent root = loader.load();
         SettingsController controller = loader.getController();

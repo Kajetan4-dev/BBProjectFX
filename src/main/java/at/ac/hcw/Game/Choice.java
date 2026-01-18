@@ -1,3 +1,5 @@
+//only used to start the game
+
 package at.ac.hcw.Game;
 
 import javafx.application.Application;
@@ -11,7 +13,6 @@ public class Choice extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        // This loads the FXML file you created in Step 1
         FXMLLoader fxmlLoader = new FXMLLoader(Choice.class.getResource("Choice.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load());

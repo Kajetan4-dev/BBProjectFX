@@ -9,18 +9,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-//Tim
+
 public class ChoiceController {
 
+    //Makes Music play
     @FXML
     public void initialize() {
         SoundManager.playMusic("/at/ac/hcw/Game/Media/Sounds/Music/the-free-jazz-music-459752.mp3");
     }
 
-
-//finish
-
-
+    //If Black jack Button is pressed it will go to the Player selection
     @FXML
     private void handleBlackjackStart(ActionEvent event) {
         AllSoundEffects.button();
@@ -35,12 +33,12 @@ public class ChoiceController {
             stage.show();
 
 
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    //If poker chip Starts the poker chip player selection screen
     @FXML
     private void handlePokerchipsStart(ActionEvent event) {
         AllSoundEffects.button();
@@ -58,6 +56,7 @@ public class ChoiceController {
         }
     }
 
+    //If the Beenden Button pressed the game stops
     @FXML
     private void handleExit(ActionEvent event) {
         AllSoundEffects.button();
