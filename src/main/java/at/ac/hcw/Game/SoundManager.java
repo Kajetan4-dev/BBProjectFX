@@ -23,9 +23,18 @@ public class SoundManager {
 
     //plays music in a loop
     public static void playMusic(String path) {
+        //Removes last music
+        if (musicPlayer != null) {
+            musicPlayer.stop();
+            musicPlayer.volumeProperty().unbind();
+            musicPlayer.dispose();
+            players.remove(musicPlayer);
+        }
+
         //Creates a media player to play the music in
         Media media = new Media(SoundManager.class.getResource(path).toExternalForm());
         musicPlayer = new MediaPlayer(media);
+
         //Loops music forever
         musicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
 

@@ -21,9 +21,7 @@ public class Dealer extends Player {
         hideCard = true;
     }
 
-    public void setCardHidden(boolean hidden) {
-        this.hideCard = hidden;
-    }
+
 
     @Override
     public void setCards(int[] cards) {

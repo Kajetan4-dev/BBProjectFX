@@ -17,8 +17,4 @@ public class GameStateBlackjack {
     public static boolean hasSavedGame() {
         return savedGame != null;
     }
-
-    public static void clear() {
-        savedGame = null;
-    }
 }

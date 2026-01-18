@@ -3,10 +3,9 @@
     import java.util.Arrays;
 
     public class Player {
-        private String name;
+        private final String name;
         private int[] cards;
         private int total;
-        private int aces;
         private int chips;
         private int bid;
         private boolean stand;
@@ -16,7 +15,6 @@
             this.cards = new int[9];
             Arrays.fill(this.cards,-1);
             this.total = 0;
-            this.aces = 0;
             this.chips = chips;
             this.stand = false;
         }
@@ -25,7 +23,6 @@
             this.cards = new int[9];
             Arrays.fill(this.cards,-1);
             this.total = 0;
-            this.aces = 0;
             this.stand = false;
         }
 
@@ -41,10 +38,6 @@
 
         public String getName() {
             return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
         }
 
         public int[] getCards() {
@@ -71,13 +64,6 @@
             this.total = total;
         }
 
-        public int getAces() {
-            return aces;
-        }
-
-        public void setAces(int aces) {
-            this.aces = aces;
-        }
 
         public int getBid() {
             return bid;
@@ -87,9 +73,6 @@
             this.bid = bid;
         }
 
-        public boolean isStand() {
-            return stand;
-        }
 
         public void setStand(boolean stand){
             this.stand = stand;

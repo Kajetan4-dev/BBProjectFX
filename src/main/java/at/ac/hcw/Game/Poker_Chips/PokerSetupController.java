@@ -1,5 +1,5 @@
 package at.ac.hcw.Game.Poker_Chips;
-//für tim
+
 import at.ac.hcw.Game.AllSoundEffects;
 import at.ac.hcw.Game.SettingsController;
 import javafx.fxml.FXML;
