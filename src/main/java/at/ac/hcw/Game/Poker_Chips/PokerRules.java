@@ -1,329 +1,141 @@
 package at.ac.hcw.Game.Poker_Chips;
 
 public class PokerRules {
-
+    // Variablen für Spieler, Pot-Größe und Blind-Einstellungen
     private PokerChipsPlayer[] players;
-
     private int pot;
     private final int bigBlind;
     private final int smallBlind;
-
-    private int currentBet;
-    private int currentPlayerIndex;
-
-    private boolean[] folded;
-
-    private int lastWinnerIndex = -1;
-    private int lastPotWon = 0;
-
-    // Runde-Logik
-    private boolean[] needsAction; // wer muss in dieser Runde noch handeln?
-    private int round;             // 0=Preflop,1=Flop,2=Turn,3=River
+    private int currentBet; // Der aktuell höchste Einsatz auf dem Tisch
+    private int currentPlayerIndex; // Wer ist gerade am Zug
+    private boolean[] folded; // Speichert, welcher Spieler ausgestiegen ist
+    private int handCount = 1; // Rundenzähler
+    private int dealerIndex = 0; // Position des Dealer-Buttons
 
     public PokerRules(int noPlayer, int bigBlind, int smallBlind) {
         this.players = new PokerChipsPlayer[noPlayer];
+        this.pot = 0;
         this.bigBlind = bigBlind;
         this.smallBlind = smallBlind;
-
-        this.pot = 0;
         this.currentBet = 0;
-        this.currentPlayerIndex = 0;
-
         this.folded = new boolean[noPlayer];
-        this.needsAction = new boolean[noPlayer];
-        this.round = 0;
     }
 
-    public void playerSetup(String[] playerName, int startingMoney) {
+    // Initialisiert die Spieler mit Namen und Chips
+    public void playerSetupWithChips(String[] playerName, int[] startingMoney) {
         for (int i = 0; i < players.length; i++) {
-            players[i] = new PokerChipsPlayer(playerName[i], startingMoney);
+            players[i] = new PokerChipsPlayer(playerName[i], startingMoney[i]);
         }
-
-        // 0 = big blind, 1 = small blind, 2 = kein blind
-        players[0].setBigBlind(0);
-        if (players.length > 1) players[1].setBigBlind(1);
-
-        folded = new boolean[players.length];
-        needsAction = new boolean[players.length];
-        currentPlayerIndex = 0;
+        startHand();
     }
 
+    // Bereitet eine neue Hand vor (Reset der Einsätze)
     public void startHand() {
         pot = 0;
         currentBet = 0;
-        currentPlayerIndex = 0;
-
         folded = new boolean[players.length];
+        for (PokerChipsPlayer p : players) p.setBet();
 
-        round = 0;
-        resetNeedsActionForRound();
-
-        for (PokerChipsPlayer p : players) {
-            p.setBet(); // bet = 0
-        }
-
+        // Der Dealer beginnt die Setzrunde
+        currentPlayerIndex = dealerIndex;
         postBlinds();
-
-        // Blinds gelten als "haben gehandelt" (damit man weiter kommt)
-        needsAction[0] = false;
-        if (players.length > 1) needsAction[1] = false;
     }
 
+    // Zieht die Pflichteinsätze (Blinds) automatisch ab
     private void postBlinds() {
-        // Big Blind Spieler 0
-        players[0].setBet(bigBlind);
-        players[0].setPlayerMoney(players[0].getPlayerMoney() - bigBlind);
-        pot += bigBlind;
+        // BB ist direkt neben dem Dealer (+1), SB daneben (+2)
+        int bbIdx = (dealerIndex + 1) % players.length;
+        int sbIdx = (dealerIndex + 2) % players.length;
 
-        // Small Blind Spieler 1
-        if (players.length > 1) {
-            players[1].setBet(smallBlind);
-            players[1].setPlayerMoney(players[1].getPlayerMoney() - smallBlind);
-            pot += smallBlind;
-        }
+        // Big Blind abziehen
+        players[bbIdx].setPlayerMoney(players[bbIdx].getPlayerMoney() - bigBlind);
+        players[bbIdx].setBet(bigBlind);
 
+        // Small Blind abziehen
+        players[sbIdx].setPlayerMoney(players[sbIdx].getPlayerMoney() - smallBlind);
+        players[sbIdx].setBet(smallBlind);
+
+        pot = smallBlind + bigBlind;
         currentBet = bigBlind;
     }
 
+    // Gleicht den Einsatz an (Mitgehen)
     public void callOrCheck() {
-        needsAction[currentPlayerIndex] = false;
-
         PokerChipsPlayer p = players[currentPlayerIndex];
-        int toCall = currentBet - p.getBet();
-
+        int toCall = currentBet - p.getBet(); // Differenz berechnen
         if (toCall > 0) {
             pot += toCall;
             p.setPlayerMoney(p.getPlayerMoney() - toCall);
-            p.setBet(toCall);
+            p.setBet(p.getBet() + toCall);
         }
-
-        if (isOnlyOnePlayerLeft()) {
-            awardPotToLastPlayer();
-            endHandAndPrepareNext();
-            return;
-        }
-
-        advanceToNextPlayer();
-        handleRoundProgress(); // -> nächste Runde wenn alle dran waren
+        checkEndOrAdvance();
     }
 
+    // Erhöht den aktuellen Einsatz
     public void raise(int raiseAmount) {
         if (raiseAmount <= 0) return;
-
         PokerChipsPlayer p = players[currentPlayerIndex];
         int toCall = currentBet - p.getBet();
         int total = toCall + raiseAmount;
 
         pot += total;
         p.setPlayerMoney(p.getPlayerMoney() - total);
-        p.setBet(total);
-
-        currentBet += raiseAmount;
-
-        // WICHTIG: Raise -> alle aktiven Spieler müssen wieder handeln
-        for (int i = 0; i < players.length; i++) {
-            if (!folded[i]) needsAction[i] = true;
-        }
-        needsAction[currentPlayerIndex] = false; // Raisender ist fertig
-
-        if (isOnlyOnePlayerLeft()) {
-            awardPotToLastPlayer();
-            endHandAndPrepareNext();
-            return;
-        }
-
-        advanceToNextPlayer();
-        handleRoundProgress();
+        p.setBet(p.getBet() + total);
+        currentBet += raiseAmount; // Neuen Standard setzen
+        checkEndOrAdvance();
     }
 
+    // Spieler steigt aus der aktuellen Runde aus
     public void fold() {
-        needsAction[currentPlayerIndex] = false;
         folded[currentPlayerIndex] = true;
+        checkEndOrAdvance();
+    }
 
+    // Prüft: Ist die Runde vorbei (nur noch einer übrig) oder kommt der nächste Spieler?
+    private void checkEndOrAdvance() {
         if (isOnlyOnePlayerLeft()) {
             awardPotToLastPlayer();
-            endHandAndPrepareNext();
-            return;
-        }
-
-        advanceToNextPlayer();
-        handleRoundProgress();
-    }
-
-    private void handleRoundProgress() {
-        if (!isRoundFinished()) return;
-
-        if (round < 3) {
-            nextRound();
+            handCount++;
+            dealerIndex = (dealerIndex + 1) % players.length; // Button rückt weiter
+            startHand();
         } else {
-            // River fertig -> Hand zu Ende (für euer Projekt reicht das)
-            awardPotToShowdownWinner();
-            endHandAndPrepareNext();
+            advanceToNextPlayer();
         }
     }
 
-    private boolean isRoundFinished() {
-        for (int i = 0; i < players.length; i++) {
-            if (!folded[i] && needsAction[i]) return false;
-        }
-        return true;
-    }
-
-    private void nextRound() {
-        round++;
-
-        // neue Runde: alle aktiven müssen wieder handeln
-        resetNeedsActionForRound();
-
-        // neue Runde: Einsatz zurücksetzen (einfacher)
-        currentBet = 0;
-        for (PokerChipsPlayer p : players) p.setBet();
-
-        // Startspieler wieder ab Index 0 suchen (einfach)
-        currentPlayerIndex = 0;
-        if (folded[currentPlayerIndex]) advanceToNextPlayer();
-    }
-
-    private void resetNeedsActionForRound() {
-        for (int i = 0; i < players.length; i++) {
-            needsAction[i] = !folded[i];
-        }
-    }
-
+    // Findet den nächsten Spieler, der nicht gefoldet hat
     private void advanceToNextPlayer() {
-        for (int i = 1; i <= players.length; i++) {
-            int next = (currentPlayerIndex + i) % players.length;
-            if (!folded[next]) {
-                currentPlayerIndex = next;
-                return;
-            }
-        }
+        int next = currentPlayerIndex;
+        do {
+            next = (next + 1) % players.length;
+        } while (folded[next]);
+        currentPlayerIndex = next;
     }
 
     private boolean isOnlyOnePlayerLeft() {
         int active = 0;
-        for (boolean f : folded) {
-            if (!f) active++;
-        }
+        for (boolean f : folded) if (!f) active++;
         return active == 1;
     }
 
-    private int getLastActivePlayerIndex() {
-        for (int i = 0; i < folded.length; i++) {
-            if (!folded[i]) return i;
-        }
-        return -1;
-    }
-
+    // Überweist den Pot an den Gewinner
     private void awardPotToLastPlayer() {
-        int winnerIndex = getLastActivePlayerIndex();
-        if (winnerIndex == -1) return;
-
-        PokerChipsPlayer winner = players[winnerIndex];
-        lastWinnerIndex = winnerIndex;
-        lastPotWon = pot;
-
-        winner.setPlayerMoney(winner.getPlayerMoney() + pot);
-        pot = 0;
-    }
-
-    private void awardPotToShowdownWinner(){
-        int winnerIndex = getRandomActivePlayer();
-        if (winnerIndex == -1) return;
-
-        PokerChipsPlayer winner = players[winnerIndex];
-        winner.setPlayerMoney(winner.getPlayerMoney() + pot);
-        pot = 0;
-    }
-
-    private int getRandomActivePlayer() {
-        int active = 0;
-
-        // 1️⃣ Anzahl aktiver Spieler zählen
         for (int i = 0; i < players.length; i++) {
             if (!folded[i]) {
-                active++;
+                players[i].setPlayerMoney(players[i].getPlayerMoney() + pot);
+                break;
             }
         }
-
-        // 2️⃣ Falls keiner aktiv ist
-        if (active == 0) return -1;
-
-        // 3️⃣ Zufälligen aktiven Spieler auswählen
-        int r = (int) (Math.random() * active);
-
-        for (int i = 0; i < players.length; i++) {
-            if (!folded[i]) {
-                if (r == 0) {
-                    return i;
-                }
-                r--;
-            }
-        }
-
-        return -1; // Sicherheitsfallback
     }
 
-    public void endHandAndPrepareNext() {
-        swapBlinds();
-
-        for (PokerChipsPlayer p : players) p.setBigBlind(2);
-        players[0].setBigBlind(0);
-        if (players.length > 1) players[1].setBigBlind(1);
-
-        startHand();
-    }
-
-    private void swapBlinds() {
-        PokerChipsPlayer[] temp = new PokerChipsPlayer[players.length];
-
-        for (int i = 0; i < players.length; i++) {
-            if (i == 0) temp[players.length - 1] = players[i];
-            else temp[i - 1] = players[i];
-        }
-
-        for (int i = 0; i < players.length; i++) {
-            players[i] = temp[i];
-        }
-    }
-
-    // ===== Getter für UI =====
-
+    // Getter für das UI
+    public int getDIndex() { return dealerIndex; }
+    public int getBBIndex() { return (dealerIndex + 1) % players.length; }
+    public int getSBIndex() { return (dealerIndex + 2) % players.length; }
     public int getPot() { return pot; }
-
     public int getCurrentBet() { return currentBet; }
-
     public int getCurrentPlayerIndex() { return currentPlayerIndex; }
-
-    public PokerChipsPlayer getCurrentPlayer() { return players[currentPlayerIndex]; }
-
     public PokerChipsPlayer[] getPlayers() { return players; }
-
     public boolean isFolded(int i) { return folded[i]; }
-
-    public int getRound() { return round; }
-
-    public String getRoundName() {
-        return switch (round) {
-            case 0 -> "PREFLOP";
-            case 1 -> "FLOP";
-            case 2 -> "TURN";
-            case 3 -> "RIVER";
-            default -> "ROUND";
-        };
-    }
-
-    public int getLastWinnerIndex() {
-        return lastWinnerIndex;
-    }
-
-    public int getLastPotWon() {
-        return lastPotWon;
-    }
-
-    public boolean hasRoundEnded() {
-        return lastWinnerIndex != -1;
-    }
-
-
+    public int getHandCount() { return handCount; }
 }

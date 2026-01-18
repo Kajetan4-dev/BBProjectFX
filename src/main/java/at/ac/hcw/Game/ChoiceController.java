@@ -9,11 +9,37 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
+//Tim
 public class ChoiceController {
 
     @FXML
+    public void initialize() {
+        SoundManager.playMusic("/at/ac/hcw/Game/Media/Sounds/Music/the-free-jazz-music-459752.mp3");
+    }
+
+    @FXML
+    private void handleOpenSettings(ActionEvent event) {
+        AllSoundEffects.button();
+        try {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            //SettingsController.setPreviousScene(stage.getScene());
+
+            Parent root = FXMLLoader.load(getClass().getResource("/at/ac/hcw/Game/Settings.fxml"));
+            stage.setScene(new Scene(root));
+            stage.setTitle("Settings");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+    @FXML
     private void handleBlackjackStart(ActionEvent event) {
+        AllSoundEffects.button();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Black_Jack/blackjack_setup.fxml"));
             Parent root = loader.load();
@@ -33,6 +59,7 @@ public class ChoiceController {
 
     @FXML
     private void handlePokerchipsStart(ActionEvent event) {
+        AllSoundEffects.button();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/at/ac/hcw/Game/Poker_Chips/poker_setup.fxml"));
             Parent root = loader.load();
@@ -49,6 +76,7 @@ public class ChoiceController {
 
     @FXML
     private void handleExit(ActionEvent event) {
+        AllSoundEffects.button();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }

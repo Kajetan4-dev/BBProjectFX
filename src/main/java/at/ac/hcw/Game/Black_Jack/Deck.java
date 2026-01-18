@@ -17,14 +17,13 @@ public class Deck {
     /* Erstellt ein Deck aus 2 Karten-Decks (104 Karten) */
 
     private void initDeck() {
+        cards.clear();
         for (int d = 0; d < 2; d++) {           // 2 Decks
-            for (int i = 0; i < 4; i++) {       // 4 Farben
-                cards.add(1);                   // Ass
-                for (int v = 2; v <= 9; v++) {
-                    cards.add(v);               // 2–9
-                }
-                for (int j = 0; j < 4; j++) {
-                    cards.add(10);              // 10, Bube, Dame, König
+            for (int suit = 0; suit < 4; suit++) {       // 4 Farben
+                for (int col = 0; col < 13; col++) {
+                   int cardId = suit * 13 + col;
+                   cards.add(cardId);
+
                 }
             }
         }
