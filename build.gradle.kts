@@ -4,6 +4,14 @@ plugins {
     id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
+configurations.all {
+    resolutionStrategy.force(
+        "org.openjfx:javafx-controls:23",
+        "org.openjfx:javafx-fxml:23"
+    )
+}
+
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)

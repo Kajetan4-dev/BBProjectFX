@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="800" prefWidth="1200" spacing="10" style="-fx-background-color: #f5f0e6;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.Game.Poker_Chips.PokerTableController">
+<VBox alignment="TOP_CENTER" prefHeight="800" prefWidth="1200" spacing="10" style="-fx-background-color: #f5f0e6;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.Game.Poker_Chips.PokerTableController">
    <HBox alignment="TOP_RIGHT" prefHeight="63.0" prefWidth="1155.0">
       <children>
       
