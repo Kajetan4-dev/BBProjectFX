@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public class BlackJackTableController {
 
