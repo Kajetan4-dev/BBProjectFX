@@ -133,6 +133,8 @@ public class PokerTableController {
         AllSoundEffects.button();
         //Saves Game State
 
+        GameStatePoker.setPokerGame(game);
+
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/at/ac/hcw/Game/Settings.fxml")
         );
