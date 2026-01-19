@@ -176,7 +176,6 @@ public class PokerTableController {
         //Saves Game State
         GameStatePoker.setPokerGame(game);
 
-        SettingsController.setFromBlackjack(false);
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/at/ac/hcw/Game/Settings.fxml")
         );
