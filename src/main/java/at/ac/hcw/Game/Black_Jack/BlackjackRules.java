@@ -5,9 +5,9 @@ import java.util.Arrays;
 public class BlackjackRules {
 
     // Spielobjekte: Kartendeck, Dealer und die Liste der Spieler
-    private Deck deck;
-    private Dealer dealer;
-    private Player[] players;
+    private final Deck deck;
+    private final Dealer dealer;
+    private final Player[] players;
 
     // Statusvariablen für den aktuellen Spieler und ob die Runde läuft
     private int currentPlayerIndex = 0;
@@ -174,14 +174,4 @@ public class BlackjackRules {
         while (total > 21 && aces > 0) { total -= 10; aces--; }
         return total;
     }
-
-    public void setCurrentPlayerIndex(int index) {
-        this.currentPlayerIndex = index;
-    }
-
-    public void setRoundActive(boolean active) {
-        this.roundActive = active;
-    }
-
-
 }
