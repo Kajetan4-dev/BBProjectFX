@@ -51,7 +51,7 @@ public class BlackJackSetupController {
 
 
 
-
+    // Adds Players
     @FXML
     private void handleAddPlayer() {
         AllSoundEffects.button();
@@ -78,6 +78,7 @@ public class BlackJackSetupController {
         playerListContainer.getChildren().add(playerColumn);
     }
 
+    //removes Player duh
     @FXML
     private void handleRemovePlayer() {
         AllSoundEffects.button();
@@ -89,6 +90,7 @@ public class BlackJackSetupController {
         }
     }
 
+    // starts Game duh
     @FXML
     private void startGame() {
         AllSoundEffects.button();
@@ -104,14 +106,15 @@ public class BlackJackSetupController {
 
     private StackPane createCardIcon(int number) {
         int col =(number - 1) % 13;
-        int row = 0;
+        int row = 3;
 
-        var cardImage = CardSpriteSheet.createCardView(col,row,55,85);
+        var cardImage = CardSpriteSheet.createCardView(col,row,70,85);
 
         StackPane card = new StackPane(cardImage);
         return card;
     }
 
+    //normal text style
     private TextField createStyledTextField(String prompt) {
         TextField tf = new TextField();
         tf.setPromptText(prompt);
