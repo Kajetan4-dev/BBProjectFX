@@ -184,15 +184,6 @@ public class PokerRules {
         }
     }
 
-    /*
-     * Gibt den Gewinner der letzten beendeten Hand zurück (oder null, wenn keiner vorhanden).
-     * (Wird z.B. für Alerts genutzt.)
-     */
-    public PokerChipsPlayer getRoundWinner() {
-        if (lastWinnerIndex < 0) return null;
-        return players[lastWinnerIndex];
-    }
-
     /* True, wenn eine Hand beendet wurde und Gewinnerdaten bereitstehen. */
     public boolean hasRoundEnded() {
         return lastWinnerIndex != -1;

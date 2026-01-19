@@ -3,6 +3,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<!--
+    Winning Popup Overlay
+    - Wird über StackPane gelegt
+    - Halbtransparenter Hintergrund
+-->
 <StackPane xmlns="http://javafx.com/javafx/23"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="at.ac.hcw.Game.Poker_Chips.WinningPopupController"
@@ -14,17 +19,21 @@
           maxWidth="420"
           styleClass="card">
 
+        <!-- Titel -->
         <Label text="🎉 RUNDENSIEGER 🎉"
                styleClass="popup-title"/>
 
+        <!-- Gewinner -->
         <Label fx:id="winnerLabel"
                text="Player X"
                styleClass="popup-winner"/>
 
+        <!-- Gewinn -->
         <Label fx:id="chipsLabel"
                text="+0 Chips"
                styleClass="popup-chips"/>
 
+        <!-- Schließen -->
         <HBox spacing="10" alignment="CENTER">
             <Button text="Weiter"
                     styleClass="btn,btn-green"
